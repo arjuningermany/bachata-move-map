@@ -53,9 +53,9 @@
   }
   .panel h2 { font-family:"Fraunces",Georgia,serif; font-size: 22px; margin: 0 0 2px; font-weight:600; }
   .panel .psub { color:#b9a6ae; font-size: 12.5px; margin: 0 0 14px; }
-  .panel .sect { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color:#e8a13a; margin: 14px 0 8px; }
-  .panel ul { list-style: none; margin: 0; padding: 0; }
-  .panel li { font-size: 13.5px; color:#f3e9de; margin-bottom: 7px; display:flex; align-items:baseline; gap:9px; }
+  .panel .sect, .mbody .sect { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color:#e8a13a; margin: 14px 0 8px; }
+  .panel ul, .mbody ul { list-style: none; margin: 0; padding: 0; }
+  .panel li, .mbody li { font-size: 13.5px; color:#f3e9de; margin-bottom: 7px; display:flex; align-items:baseline; gap:9px; }
   .tag { flex:0 0 auto; font-size: 9.5px; letter-spacing:.03em; padding: 2px 7px; border-radius: 999px; font-weight:600; }
   .t1 { background: rgba(108,192,138,.16); color:#8fd6ac; }
   .t2 { background: rgba(232,161,58,.16); color:#eeb968; }
@@ -71,6 +71,20 @@
   footer.credit p { margin: 0 0 8px; font-size: 13px; color: #cdb9c0; }
   footer.credit p strong { color: #f3e9de; font-weight: 600; }
   footer.credit .fine { font-size: 11.5px; color: #8a7580; line-height: 1.55; }
+  #mobileList { display: none; }
+  .mcard { border: 1px solid #4a3a4e; border-radius: 14px; background: #241829; margin-bottom: 10px; overflow: hidden; }
+  .mhead { width: 100%; text-align: left; background: transparent; border: 0; color: #f3e9de; font-family: inherit; padding: 15px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: pointer; }
+  .mname { font-family: "Fraunces", Georgia, serif; font-size: 18px; font-weight: 600; }
+  .msub { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: #b9a6ae; font-weight: 400; margin-left: 8px; }
+  .chev { color: #e8a13a; transition: transform .15s ease; font-size: 12px; }
+  .mcard.open .chev { transform: rotate(90deg); }
+  .mbody { padding: 2px 16px 16px; }
+  @media (max-width: 680px) {
+    .stage { display: none; }
+    #panel { display: none; }
+    #mobileList { display: block; }
+    h1 { font-size: 26px; }
+  }
 </style>
 </head>
 <body>
@@ -90,8 +104,10 @@
 
   <div class="stage">
     <svg id="graph" viewBox="0 0 1000 660" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Interactive bachata position map"></svg>
-    <div class="hint" id="hint">Tap a position above to explore it · best viewed on a larger screen</div>
+    <div class="hint" id="hint">Tap a position above to explore it</div>
   </div>
+
+  <div id="mobileList"></div>
 
   <div class="panel" id="panel"></div>
 
@@ -156,6 +172,7 @@ const TNAME  = {1:'FUND', 2:'INT', 3:'ADV'};
 
 let active = new Set([1,2,3]);
 let selected = null;
+let mobileOpen = 'open1';
 
 const byId = {};
 NODES.forEach(n => byId[n.id] = n);
@@ -261,13 +278,47 @@ function buildPanel(){
   return html;
 }
 
+function sectionsFor(id){
+  const inplace = (INPLACE[id] || []).filter(x => active.has(x[1]));
+  const outs = EDGES.filter(e => edgeVisible(e) && (e.f === id || (e.bidir && e.t === id)))
+                    .map(e => ({ to: (e.f===id? e.t : e.f), l:e.l, tier:e.tier }));
+  const ins = EDGES.filter(e => edgeVisible(e) && !e.bidir && e.t === id)
+                   .map(e => ({ from: e.f, l:e.l, tier:e.tier }));
+  let html = '';
+  html += `<div class="sect">In place here</div>`;
+  html += inplace.length ? '<ul>' + inplace.map(x => `<li>${tagFor(x[1])}<span>${x[0]}</span></li>`).join('') + '</ul>'
+                         : `<p class="placeholder">Nothing at the visible levels — enable more above.</p>`;
+  html += `<div class="sect">Opens up &rarr;</div>`;
+  html += outs.length ? '<ul>' + outs.map(o => `<li>${tagFor(o.tier)}<span>${o.l} <span class="arrow">&rarr;</span> <span class="to">${byId[o.to].label} · ${byId[o.to].sub}</span></span></li>`).join('') + '</ul>'
+                      : `<p class="placeholder">A finishing position — recover and start again.</p>`;
+  if(ins.length){
+    html += `<div class="sect">Get here from</div>`;
+    html += '<ul>' + ins.map(o => `<li>${tagFor(o.tier)}<span><span class="to">${byId[o.from].label}</span> <span class="arrow">&rarr;</span> ${o.l}</span></li>`).join('') + '</ul>';
+  }
+  return html;
+}
+
+function buildMobileList(){
+  return NODES.map(n => {
+    const open = mobileOpen === n.id;
+    return `<div class="mcard${open?' open':''}">`
+      + `<button class="mhead" data-mnode="${n.id}" aria-expanded="${open}">`
+      + `<span class="mname">${n.label}<span class="msub">${n.sub}</span></span>`
+      + `<span class="chev">\u25B8</span></button>`
+      + (open ? `<div class="mbody">${sectionsFor(n.id)}</div>` : '')
+      + `</div>`;
+  }).join('');
+}
+
 function render(){
   const g = document.getElementById('graph');
   if(g) g.innerHTML = buildSVG();
   const p = document.getElementById('panel');
   if(p) p.innerHTML = buildPanel();
+  const ml = document.getElementById('mobileList');
+  if(ml) ml.innerHTML = buildMobileList();
   const hint = document.getElementById('hint');
-  if(hint) hint.textContent = selected ? (byId[selected].label + ' selected · tap another, or Clear' ) : 'Tap a position to explore it · best viewed on a larger screen';
+  if(hint) hint.textContent = selected ? (byId[selected].label + ' selected · tap another, or Clear' ) : 'Tap a position to explore it';
 }
 
 function init(){
@@ -288,6 +339,14 @@ function init(){
     });
   });
   document.getElementById('reset').addEventListener('click', () => { selected = null; render(); });
+  const mlEl = document.getElementById('mobileList');
+  if(mlEl) mlEl.addEventListener('click', ev => {
+    const h = ev.target.closest('[data-mnode]');
+    if(!h) return;
+    const id = h.getAttribute('data-mnode');
+    mobileOpen = (mobileOpen === id) ? null : id;
+    render();
+  });
   render();
 }
 

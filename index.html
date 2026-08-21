@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<!--
+  Bachata — The Full Move Map
+  Created by Arjun · © 2026 Arjun · All rights reserved.
+  Original compilation, structure, and interactive design by Arjun.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bachata Move Map — by Arjun</title>
+<meta name="author" content="Arjun" />
+<meta name="copyright" content="© 2026 Arjun. All rights reserved." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: radial-gradient(120% 70% at 50% -10%, #2a1d30 0%, #1e1520 55%);
+    color: #f3e9de;
+    font-family: "IBM Plex Mono", ui-monospace, "Courier New", monospace;
+    line-height: 1.5;
+    padding: 30px 16px 52px;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; }
+  .eyebrow { font-size: 11.5px; letter-spacing: 0.22em; text-transform: uppercase; color: #e8a13a; margin: 0 0 10px; }
+  h1 { font-family: "Fraunces", Georgia, serif; font-weight: 900; font-size: 32px; line-height: 1.05; letter-spacing: -0.015em; margin: 0 0 10px; }
+  .sub { color: #b9a6ae; font-size: 13.5px; margin: 0 0 18px; }
+  .sub b { color: #f3e9de; font-weight: 600; }
+
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
+  .controls .lbl { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #8a7580; margin-right: 2px; }
+  .pill {
+    font-family: inherit; font-size: 12px; cursor: pointer;
+    border-radius: 999px; padding: 6px 13px; border: 1.5px solid #4a3a4e;
+    background: transparent; color: #b9a6ae; transition: all .15s ease;
+  }
+  .pill .dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:7px; vertical-align:middle; }
+  .pill.on[data-tier="1"] { border-color:#6cc08a; color:#0f130f; background:#6cc08a; }
+  .pill.on[data-tier="2"] { border-color:#e8a13a; color:#1e1520; background:#e8a13a; }
+  .pill.on[data-tier="3"] { border-color:#e6748b; color:#1e1520; background:#e6748b; }
+  .pill.ghost { margin-left: auto; }
+
+  .stage { border: 1px solid #4a3a4e; border-radius: 18px; background: #241829; overflow: hidden; }
+  svg { width: 100%; height: auto; display: block; }
+  .hint { text-align:center; color:#8a7580; font-size:12px; padding: 0 0 12px; }
+
+  .panel {
+    margin-top: 16px; border: 1px solid #4a3a4e; border-radius: 16px;
+    background: #2a1e2e; padding: 18px 20px; min-height: 150px;
+  }
+  .panel h2 { font-family:"Fraunces",Georgia,serif; font-size: 22px; margin: 0 0 2px; font-weight:600; }
+  .panel .psub { color:#b9a6ae; font-size: 12.5px; margin: 0 0 14px; }
+  .panel .sect { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color:#e8a13a; margin: 14px 0 8px; }
+  .panel ul { list-style: none; margin: 0; padding: 0; }
+  .panel li { font-size: 13.5px; color:#f3e9de; margin-bottom: 7px; display:flex; align-items:baseline; gap:9px; }
+  .tag { flex:0 0 auto; font-size: 9.5px; letter-spacing:.03em; padding: 2px 7px; border-radius: 999px; font-weight:600; }
+  .t1 { background: rgba(108,192,138,.16); color:#8fd6ac; }
+  .t2 { background: rgba(232,161,58,.16); color:#eeb968; }
+  .t3 { background: rgba(230,116,139,.16); color:#ef94a6; }
+  .arrow { color:#8a7580; }
+  .to { color:#e8a13a; }
+  .placeholder { color:#b9a6ae; font-size: 13.5px; }
+  .placeholder b { color:#f3e9de; }
+  .note { color:#8a7580; font-size: 12px; margin-top: 18px; }
+  .byline { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: 0.06em; color: #e8a13a; margin: 0 0 16px; }
+  footer.credit { margin-top: 34px; }
+  footer.credit .rule { height: 1px; background: #4a3a4e; margin: 0 0 16px; }
+  footer.credit p { margin: 0 0 8px; font-size: 13px; color: #cdb9c0; }
+  footer.credit p strong { color: #f3e9de; font-weight: 600; }
+  footer.credit .fine { font-size: 11.5px; color: #8a7580; line-height: 1.55; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Bachata · the full move map</p>
+  <h1>How one position opens the next</h1>
+  <p class="byline">Made by Arjun · © 2026</p>
+  <p class="sub"><b>Tap any position</b> to see what it lets you do and where it leads. Positions are the states you can be in; the moves between them are the arrows. Use the filters to layer in harder material.</p>
+
+  <div class="controls">
+    <span class="lbl">Show:</span>
+    <button class="pill on" data-tier="1"><span class="dot" style="background:#0f130f"></span>Fundamental</button>
+    <button class="pill on" data-tier="2"><span class="dot" style="background:#1e1520"></span>Intermediate</button>
+    <button class="pill on" data-tier="3"><span class="dot" style="background:#1e1520"></span>Advanced</button>
+    <button class="pill ghost" id="reset">Clear selection</button>
+  </div>
+
+  <div class="stage">
+    <svg id="graph" viewBox="0 0 1000 660" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Interactive bachata position map"></svg>
+    <div class="hint" id="hint">Tap a position above to explore it · best viewed on a larger screen</div>
+  </div>
+
+  <div class="panel" id="panel"></div>
+
+  <p class="note">A mental model, not gospel — names for these moves vary by teacher and scene (sensual, Dominican, moderna). What matters is the structure: get into a position, and it opens a specific set of options.</p>
+
+  <footer class="credit">
+    <div class="rule"></div>
+    <p><strong>Made by Arjun.</strong> &copy; 2026 Arjun &middot; All rights reserved.</p>
+    <p class="fine">This compilation, structure, and interactive design are the original work of Arjun. The underlying bachata moves are common dance knowledge; this particular arrangement and tool are mine.</p>
+  </footer>
+</div>
+
+<script>
+const NODES = [
+  {id:'open2',  label:'OPEN',        sub:'two hands',            x:180, y:150},
+  {id:'open1',  label:'OPEN',        sub:'one hand · the hub',   x:405, y:300},
+  {id:'hshake', label:'HANDSHAKE',   sub:'same-hand hold',       x:200, y:438},
+  {id:'hammer', label:'HAMMERLOCK',  sub:'arm wrapped behind',   x:180, y:588},
+  {id:'closed', label:'CLOSED',      sub:'bodies close',         x:660, y:158},
+  {id:'semi',   label:'SEMI-CLOSED', sub:'promenade / travel',   x:858, y:238},
+  {id:'shadow', label:'SHADOW',      sub:'you behind her',       x:688, y:422},
+  {id:'cuddle', label:'CUDDLE',      sub:'wrapped at your side', x:445, y:560},
+  {id:'dip',    label:'DIP / DROP',  sub:'a finish',             x:878, y:540},
+];
+
+const EDGES = [
+  {f:'open2', t:'open1',  l:'one hand \u21c4 two hands', tier:1, bidir:true},
+  {f:'open1', t:'closed', l:'open \u21c4 closed (the door)', tier:1, bidir:true},
+  {f:'open1', t:'hshake', l:'change of hands', tier:2, bidir:true},
+  {f:'hshake',t:'hammer', l:'turn into hammerlock', tier:2},
+  {f:'hammer',t:'open1',  l:'unwind out', tier:2},
+  {f:'open1', t:'shadow', l:'turn, don\u2019t resolve', tier:2},
+  {f:'shadow',t:'open1',  l:'roll out to face', tier:2},
+  {f:'open1', t:'cuddle', l:'copa / cuddle wrap', tier:2},
+  {f:'cuddle',t:'open1',  l:'unwrap', tier:2},
+  {f:'closed',t:'semi',   l:'promenade / travel', tier:2, bidir:true},
+  {f:'semi',  t:'open1',  l:'promenade turn-out', tier:2},
+  {f:'cuddle',t:'shadow', l:'settle into shadow', tier:2},
+  {f:'shadow',t:'cuddle', l:'wrap to cuddle', tier:2},
+  {f:'hshake',t:'shadow', l:'behind-the-back pass', tier:3},
+  {f:'closed',t:'dip',    l:'dip / drop', tier:3},
+  {f:'semi',  t:'dip',    l:'travelling dip', tier:3},
+  {f:'shadow',t:'dip',    l:'leaning drop', tier:3},
+  {f:'open1', t:'dip',    l:'drop from open', tier:3},
+  {f:'cuddle',t:'dip',    l:'cuddle drop', tier:3},
+];
+
+const INPLACE = {
+  open1:  [['basic \u2014 mark time & reset',1],['cross-body lead (swap places)',1],['right / left / underarm turn',1],['cross-body with inside or outside turn',2],['double & travelling turns',2],['continuous / triple spins',3]],
+  open2:  [['basic \u2014 two-hand',1],['hand tosses / arm styling',2]],
+  hshake: [['switch which turn you set up',2]],
+  hammer: [['double hammerlock (deeper wrap)',3]],
+  closed: [['basic + body movement',1],['body waves / contra-body',2],['sensual lean',2]],
+  semi:   [['travelling basic around the floor',1]],
+  shadow: [['basic',1],['hair comb / cape styling',2],['shadow turns (stay behind)',3]],
+  cuddle: [['rock / sway in the wrap',1]],
+  dip:    [['recover back up to standing',1]],
+};
+
+const TCOLOR = {1:'#6cc08a', 2:'#e8a13a', 3:'#e6748b'};
+const TNAME  = {1:'FUND', 2:'INT', 3:'ADV'};
+
+let active = new Set([1,2,3]);
+let selected = null;
+
+const byId = {};
+NODES.forEach(n => byId[n.id] = n);
+
+function edgeVisible(e){ return active.has(e.tier); }
+function isFocusEdge(e){ return selected && (e.f === selected || (e.bidir && e.t === selected)); }
+
+function edgeGeometry(e){
+  const a = byId[e.f], b = byId[e.t];
+  const dx = b.x - a.x, dy = b.y - a.y;
+  const len = Math.hypot(dx, dy) || 1;
+  const ux = dx/len, uy = dy/len;      // unit along
+  const nx = -uy, ny = ux;             // perpendicular
+  const sign = e.f < e.t ? 1 : -1;
+  const off = (e.bidir ? 0 : 34) * sign;
+  const mx = (a.x+b.x)/2 + nx*off;
+  const my = (a.y+b.y)/2 + ny*off;
+  // back off endpoints so arrowheads clear the node boxes
+  const backA = 52, backB = 56;
+  const ax = a.x + ux*backA, ay = a.y + uy*backA;
+  const bx = b.x - ux*backB, by = b.y - uy*backB;
+  // quadratic control ~ (mx,my); label point at t=0.5
+  const lx = 0.25*ax + 0.5*mx + 0.25*bx;
+  const ly = 0.25*ay + 0.5*my + 0.25*by;
+  return {ax, ay, bx, by, mx, my, lx, ly};
+}
+
+function buildSVG(){
+  let defs = '<defs>';
+  [1,2,3].forEach(tr => {
+    defs += `<marker id="ae${tr}" markerWidth="9" markerHeight="9" refX="7.2" refY="3" orient="auto"><path d="M0,0 L7.2,3 L0,6 Z" fill="${TCOLOR[tr]}"/></marker>`;
+    defs += `<marker id="as${tr}" markerWidth="9" markerHeight="9" refX="1.8" refY="3" orient="auto"><path d="M7.2,0 L0,3 L7.2,6 Z" fill="${TCOLOR[tr]}"/></marker>`;
+  });
+  defs += '</defs>';
+
+  let edgesSvg = '';
+  let labelsSvg = '';
+  EDGES.forEach(e => {
+    if(!edgeVisible(e)) return;
+    const g = edgeGeometry(e);
+    const focus = isFocusEdge(e);
+    const dim = selected && !focus;
+    const op = focus ? 1 : (dim ? 0.12 : 0.5);
+    const w = focus ? 3 : 1.6;
+    const col = TCOLOR[e.tier];
+    const me = `marker-end="url(#ae${e.tier})"`;
+    const ms = e.bidir ? `marker-start="url(#as${e.tier})"` : '';
+    edgesSvg += `<path d="M${g.ax.toFixed(1)},${g.ay.toFixed(1)} Q${g.mx.toFixed(1)},${g.my.toFixed(1)} ${g.bx.toFixed(1)},${g.by.toFixed(1)}" fill="none" stroke="${col}" stroke-width="${w}" stroke-opacity="${op}" ${me} ${ms}/>`;
+    if(focus){
+      const tw = e.l.length * 6.6 + 12;
+      labelsSvg += `<g><rect x="${(g.lx - tw/2).toFixed(1)}" y="${(g.ly-10).toFixed(1)}" width="${tw.toFixed(1)}" height="19" rx="5" fill="#1e1520" stroke="${col}" stroke-opacity="0.5"/>`;
+      labelsSvg += `<text x="${g.lx.toFixed(1)}" y="${(g.ly+3.5).toFixed(1)}" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="11" fill="${col}">${e.l}</text></g>`;
+    }
+  });
+
+  let nodesSvg = '';
+  NODES.forEach(n => {
+    const w = 158, h = 56;
+    const sel = selected === n.id;
+    const relatedToSel = selected && EDGES.some(e => edgeVisible(e) && isFocusEdge(e) && (e.t === n.id || e.f === n.id));
+    const dim = selected && !sel && !relatedToSel;
+    const stroke = sel ? '#f3e9de' : '#e8a13a';
+    const sw = sel ? 2.8 : 1.8;
+    const fill = sel ? '#3a2b40' : '#2c2033';
+    const opacity = dim ? 0.4 : 1;
+    nodesSvg += `<g data-node="${n.id}" style="cursor:pointer" opacity="${opacity}">`;
+    nodesSvg += `<rect x="${n.x - w/2}" y="${n.y - h/2}" width="${w}" height="${h}" rx="16" fill="${fill}" stroke="${stroke}" stroke-width="${sw}"/>`;
+    nodesSvg += `<text x="${n.x}" y="${n.y - 3}" text-anchor="middle" font-family="Fraunces,Georgia,serif" font-size="18" font-weight="600" fill="#f3e9de">${n.label}</text>`;
+    nodesSvg += `<text x="${n.x}" y="${n.y + 15}" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#b9a6ae">${n.sub}</text>`;
+    nodesSvg += `</g>`;
+  });
+
+  return defs + edgesSvg + nodesSvg + labelsSvg;
+}
+
+function tagFor(tier){ return `<span class="tag t${tier}">${TNAME[tier]}</span>`; }
+
+function buildPanel(){
+  if(!selected){
+    return `<p class="placeholder"><b>Tap a position</b> to see the moves you can do there and where each one takes you. Start with <b>OPEN · one hand</b> — it's the hub almost everything flows through. Then follow a chain: OPEN &rarr; HANDSHAKE &rarr; HAMMERLOCK, or OPEN &rarr; SHADOW &rarr; CUDDLE.</p>`;
+  }
+  const n = byId[selected];
+  const inplace = (INPLACE[selected] || []).filter(x => active.has(x[1]));
+  const outs = EDGES.filter(e => edgeVisible(e) && (e.f === selected || (e.bidir && e.t === selected)))
+                    .map(e => ({ to: (e.f===selected? e.t : e.f), l:e.l, tier:e.tier }));
+  const ins = EDGES.filter(e => edgeVisible(e) && !e.bidir && e.t === selected)
+                   .map(e => ({ from: e.f, l:e.l, tier:e.tier }));
+
+  let html = `<h2>${n.label}</h2><p class="psub">${n.sub}</p>`;
+
+  html += `<div class="sect">In place here</div>`;
+  html += inplace.length ? '<ul>' + inplace.map(x => `<li>${tagFor(x[1])}<span>${x[0]}</span></li>`).join('') + '</ul>'
+                         : `<p class="placeholder">Nothing at the visible levels — try enabling more.</p>`;
+
+  html += `<div class="sect">Opens up &rarr;</div>`;
+  html += outs.length ? '<ul>' + outs.map(o => `<li>${tagFor(o.tier)}<span>${o.l} <span class="arrow">&rarr;</span> <span class="to">${byId[o.to].label} · ${byId[o.to].sub}</span></span></li>`).join('') + '</ul>'
+                      : `<p class="placeholder">A finishing position — recover and start again.</p>`;
+
+  if(ins.length){
+    html += `<div class="sect">Get here from</div>`;
+    html += '<ul>' + ins.map(o => `<li>${tagFor(o.tier)}<span><span class="to">${byId[o.from].label}</span> <span class="arrow">&rarr;</span> ${o.l}</span></li>`).join('') + '</ul>';
+  }
+  return html;
+}
+
+function render(){
+  const g = document.getElementById('graph');
+  if(g) g.innerHTML = buildSVG();
+  const p = document.getElementById('panel');
+  if(p) p.innerHTML = buildPanel();
+  const hint = document.getElementById('hint');
+  if(hint) hint.textContent = selected ? (byId[selected].label + ' selected · tap another, or Clear' ) : 'Tap a position to explore it · best viewed on a larger screen';
+}
+
+function init(){
+  const g = document.getElementById('graph');
+  g.addEventListener('click', ev => {
+    const grp = ev.target.closest('[data-node]');
+    if(!grp) return;
+    const id = grp.getAttribute('data-node');
+    selected = (selected === id) ? null : id;
+    render();
+  });
+  document.querySelectorAll('.pill[data-tier]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tr = parseInt(btn.getAttribute('data-tier'), 10);
+      if(active.has(tr)){ active.delete(tr); btn.classList.remove('on'); }
+      else { active.add(tr); btn.classList.add('on'); }
+      render();
+    });
+  });
+  document.getElementById('reset').addEventListener('click', () => { selected = null; render(); });
+  render();
+}
+
+if (typeof document !== 'undefined' && document.getElementById('graph')) {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+}
+</script>
+</body>
+</html>

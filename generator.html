@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<!--
+  Bachata — Combo Generator
+  Created by Arjun · © 2026 Arjun · All rights reserved.
+  Original compilation, structure, and interactive design by Arjun.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Combo generator — Bachata tools by Arjun</title>
+<meta name="author" content="Arjun" />
+<meta name="copyright" content="© 2026 Arjun. All rights reserved." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: radial-gradient(120% 70% at 50% -10%, #2a1d30 0%, #1e1520 55%);
+    color: #f3e9de;
+    font-family: "IBM Plex Mono", ui-monospace, "Courier New", monospace;
+    line-height: 1.5;
+    padding: 30px 16px 56px;
+  }
+  .wrap { max-width: 660px; margin: 0 auto; }
+  .eyebrow { font-size: 11.5px; letter-spacing: 0.22em; text-transform: uppercase; color: #e8a13a; margin: 0 0 10px; }
+  h1 { font-family: "Fraunces", Georgia, serif; font-weight: 900; font-size: 32px; line-height: 1.05; letter-spacing: -0.015em; margin: 0 0 10px; }
+  h1 em { font-style: italic; font-weight: 400; color: #e6748b; }
+  .lede { color: #b9a6ae; font-size: 13.5px; margin: 0 0 12px; }
+  .byline { font-size: 12.5px; letter-spacing: 0.06em; color: #e8a13a; margin: 0 0 6px; }
+  .backlink { margin: 0 0 22px; }
+  .backlink a { color: #b9a6ae; font-size: 12.5px; text-decoration: none; border-bottom: 1px solid #4a3a4e; padding-bottom: 1px; }
+  .backlink a:hover { color: #e8a13a; }
+
+  .ctrls { border: 1px solid #4a3a4e; border-radius: 16px; background: #241829; padding: 16px 16px 18px; }
+  .row { margin-bottom: 14px; }
+  .row:last-of-type { margin-bottom: 0; }
+  .lbl { display: block; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #8a7580; margin-bottom: 8px; }
+  .opts { display: flex; flex-wrap: wrap; gap: 7px; }
+  .opt {
+    font-family: inherit; font-size: 12.5px; cursor: pointer;
+    border-radius: 999px; padding: 7px 14px; border: 1.5px solid #4a3a4e;
+    background: transparent; color: #b9a6ae; transition: all .14s ease;
+  }
+  .opt:hover { border-color: #6b5570; color: #f3e9de; }
+  .opt.on { border-color: #e8a13a; background: #e8a13a; color: #1e1520; font-weight: 600; }
+  select.opt { color: #f3e9de; padding-right: 10px; }
+  select.opt option { background: #241829; color: #f3e9de; }
+
+  .gen {
+    width: 100%; margin-top: 18px; font-family: "Fraunces", Georgia, serif;
+    font-size: 20px; font-weight: 600; letter-spacing: 0.01em;
+    background: #e8a13a; color: #1e1520; border: 0; border-radius: 14px;
+    padding: 15px 18px; cursor: pointer; transition: transform .1s ease, background .14s ease;
+  }
+  .gen:hover { background: #f0b055; }
+  .gen:active { transform: scale(0.985); }
+
+  .out { margin-top: 22px; }
+  .route {
+    border: 1px solid #4a3a4e; border-radius: 14px; background: #2a1e2e;
+    padding: 13px 15px; margin-bottom: 16px; font-size: 12.5px; line-height: 1.9; color: #cdb9c0;
+  }
+  .route .rl { color: #8a7580; letter-spacing: 0.14em; text-transform: uppercase; font-size: 10px; display: block; margin-bottom: 5px; }
+  .route b { color: #f3e9de; font-weight: 600; }
+  .route .sep { color: #e8a13a; margin: 0 5px; }
+
+  .step {
+    display: flex; align-items: flex-start; gap: 13px;
+    border: 1px solid #4a3a4e; border-radius: 14px; background: #241829;
+    padding: 13px 15px; margin-bottom: 9px;
+  }
+  .step.finish { border-color: rgba(230,116,139,.55); }
+  .cnt {
+    flex: 0 0 auto; min-width: 52px; text-align: center;
+    font-size: 11.5px; color: #e8a13a; background: rgba(232,161,58,.12);
+    border-radius: 8px; padding: 5px 6px; line-height: 1.25;
+  }
+  .cnt small { display: block; font-size: 9px; color: #8a7580; letter-spacing: .08em; }
+  .sbody { flex: 1 1 auto; min-width: 0; }
+  .smove { font-size: 14px; color: #f3e9de; margin: 1px 0 3px; }
+  .sto { font-size: 11.5px; color: #b9a6ae; }
+  .sto b { color: #e8a13a; font-weight: 600; }
+  .tag { font-size: 9px; letter-spacing: .04em; padding: 2px 7px; border-radius: 999px; font-weight: 600; margin-left: 7px; vertical-align: 1px; }
+  .t1 { background: rgba(108,192,138,.16); color: #8fd6ac; }
+  .t2 { background: rgba(232,161,58,.16); color: #eeb968; }
+  .t3 { background: rgba(230,116,139,.16); color: #ef94a6; }
+
+  .after { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; align-items: center; }
+  .mini { font-family: inherit; font-size: 12px; cursor: pointer; border: 1.5px solid #4a3a4e; background: transparent; color: #b9a6ae; border-radius: 10px; padding: 8px 13px; }
+  .mini:hover { border-color: #e8a13a; color: #e8a13a; }
+  .said { font-size: 12px; color: #6cc08a; }
+
+  .tip { color: #8a7580; font-size: 12px; margin-top: 16px; line-height: 1.65; }
+  .empty { color: #b9a6ae; font-size: 13.5px; text-align: center; padding: 26px 10px; border: 1px dashed #4a3a4e; border-radius: 14px; }
+
+  footer.credit { margin-top: 34px; }
+  footer.credit .rule { height: 1px; background: #4a3a4e; margin: 0 0 16px; }
+  footer.credit p { margin: 0 0 8px; font-size: 13px; color: #cdb9c0; }
+  footer.credit p strong { color: #f3e9de; font-weight: 600; }
+  footer.credit .fine { font-size: 11.5px; color: #8a7580; line-height: 1.55; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">Bachata · combo generator</p>
+  <h1>A fresh combo, <em>every time.</em></h1>
+  <p class="lede">Built by walking the position map — so every combo is actually danceable. It opens with a basic, moves through real transitions, and resolves back home.</p>
+  <p class="byline">Made by Arjun · © 2026</p>
+  <p class="backlink"><a href="./">&larr;&nbsp; All tools</a></p>
+
+  <div class="ctrls">
+    <div class="row">
+      <span class="lbl">Level</span>
+      <div class="opts" id="lvl">
+        <button class="opt" data-v="1">Fundamental</button>
+        <button class="opt on" data-v="2">+ Intermediate</button>
+        <button class="opt" data-v="3">+ Advanced</button>
+      </div>
+    </div>
+    <div class="row">
+      <span class="lbl">Length</span>
+      <div class="opts" id="len">
+        <button class="opt" data-v="4">Short</button>
+        <button class="opt on" data-v="6">Medium</button>
+        <button class="opt" data-v="9">Long</button>
+      </div>
+    </div>
+    <div class="row">
+      <span class="lbl">Start from</span>
+      <div class="opts">
+        <select class="opt" id="start"></select>
+      </div>
+    </div>
+    <button class="gen" id="go">Generate a combo</button>
+  </div>
+
+  <div class="out" id="out"></div>
+
+  <p class="tip" id="tip"></p>
+
+  <footer class="credit">
+    <div class="rule"></div>
+    <p><strong>Made by Arjun.</strong> &copy; 2026 Arjun &middot; All rights reserved.</p>
+    <p class="fine">This compilation, structure, and interactive design are the original work of Arjun. The underlying bachata moves are common dance knowledge; this particular arrangement and these tools are mine.</p>
+  </footer>
+
+</div>
+
+<script>
+const NODES = [
+  {id:'open2',  label:'OPEN',        sub:'two hands',            x:180, y:150},
+  {id:'open1',  label:'OPEN',        sub:'one hand · the hub',   x:405, y:300},
+  {id:'hshake', label:'HANDSHAKE',   sub:'same-hand hold',       x:200, y:438},
+  {id:'hammer', label:'HAMMERLOCK',  sub:'arm wrapped behind',   x:180, y:588},
+  {id:'closed', label:'CLOSED',      sub:'bodies close',         x:660, y:158},
+  {id:'semi',   label:'SEMI-CLOSED', sub:'promenade / travel',   x:858, y:238},
+  {id:'shadow', label:'SHADOW',      sub:'you behind her',       x:688, y:422},
+  {id:'cuddle', label:'CUDDLE',      sub:'wrapped at your side', x:445, y:560},
+  {id:'dip',    label:'DIP / DROP',  sub:'a finish',             x:878, y:540},
+];
+
+const EDGES = [
+  {f:'open2', t:'open1',  l:'one hand \u21c4 two hands', tier:1, bidir:true},
+  {f:'open1', t:'closed', l:'open \u21c4 closed (the door)', tier:1, bidir:true},
+  {f:'open1', t:'hshake', l:'change of hands', tier:2, bidir:true},
+  {f:'hshake',t:'hammer', l:'turn into hammerlock', tier:2},
+  {f:'hammer',t:'open1',  l:'unwind out', tier:2},
+  {f:'open1', t:'shadow', l:'turn, don\u2019t resolve', tier:2},
+  {f:'shadow',t:'open1',  l:'roll out to face', tier:2},
+  {f:'open1', t:'cuddle', l:'copa / cuddle wrap', tier:2},
+  {f:'cuddle',t:'open1',  l:'unwrap', tier:2},
+  {f:'closed',t:'semi',   l:'promenade / travel', tier:2, bidir:true},
+  {f:'semi',  t:'open1',  l:'promenade turn-out', tier:2},
+  {f:'cuddle',t:'shadow', l:'settle into shadow', tier:2},
+  {f:'shadow',t:'cuddle', l:'wrap to cuddle', tier:2},
+  {f:'hshake',t:'shadow', l:'behind-the-back pass', tier:3},
+  {f:'closed',t:'dip',    l:'dip / drop', tier:3},
+  {f:'semi',  t:'dip',    l:'travelling dip', tier:3},
+  {f:'shadow',t:'dip',    l:'leaning drop', tier:3},
+  {f:'open1', t:'dip',    l:'drop from open', tier:3},
+  {f:'cuddle',t:'dip',    l:'cuddle drop', tier:3},
+];
+
+const INPLACE = {
+  open1:  [['basic \u2014 mark time & reset',1],['cross-body lead (swap places)',1],['right / left / underarm turn',1],['cross-body with inside or outside turn',2],['double & travelling turns',2],['continuous / triple spins',3]],
+  open2:  [['basic \u2014 two-hand',1],['hand tosses / arm styling',2]],
+  hshake: [['switch which turn you set up',2]],
+  hammer: [['double hammerlock (deeper wrap)',3]],
+  closed: [['basic + body movement',1],['body waves / contra-body',2],['sensual lean',2]],
+  semi:   [['travelling basic around the floor',1]],
+  shadow: [['basic',1],['hair comb / cape styling',2],['shadow turns (stay behind)',3]],
+  cuddle: [['rock / sway in the wrap',1]],
+  dip:    [['recover back up to standing',1]],
+};
+
+const TCOLOR = {1:'#6cc08a', 2:'#e8a13a', 3:'#e6748b'};
+const TNAME  = {1:'FUND', 2:'INT', 3:'ADV'};
+
+const byId = {};
+NODES.forEach(n => byId[n.id] = n);
+
+let level = 2, steps = 6, startPos = 'open1', current = null;
+
+function allowedTiers(){
+  const s = new Set([1]);
+  if(level >= 2) s.add(2);
+  if(level >= 3) s.add(3);
+  return s;
+}
+function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
+
+function outsFrom(node, allowed){
+  return EDGES.filter(e => allowed.has(e.tier) && (e.f === node || (e.bidir && e.t === node)))
+              .map(e => ({ type:'edge', l:e.l, tier:e.tier, to:(e.f === node ? e.t : e.f) }));
+}
+function inplaceAt(node, allowed){
+  return (INPLACE[node] || []).filter(x => allowed.has(x[1]))
+                              .map(x => ({ type:'inplace', l:x[0], tier:x[1], to:node }));
+}
+
+function routeTo(from, to, allowed){
+  if(from === to) return [];
+  const q = [[from, []]], seen = new Set([from]);
+  while(q.length){
+    const [node, path] = q.shift();
+    for(const e of outsFrom(node, allowed)){
+      if(seen.has(e.to)) continue;
+      const np = path.concat([{ l:e.l, tier:e.tier, from:node, to:e.to }]);
+      if(e.to === to) return np;
+      seen.add(e.to); q.push([e.to, np]);
+    }
+  }
+  return null;
+}
+
+function generate(){
+  const allowed = allowedTiers();
+  let cur = startPos, prev = null, lastLabel = null;
+  const seq = [{ l:'Basic — settle in, find the beat', tier:1, at:cur, to:cur, kind:'inplace' }];
+
+  for(let i = 0; i < steps; i++){
+    let outs = outsFrom(cur, allowed);
+    const ins = inplaceAt(cur, allowed);
+
+    let pool = outs.filter(c => c.to !== prev);
+    if(!pool.length) pool = outs;
+    pool = pool.filter(c => c.l !== lastLabel);
+    if(!pool.length) pool = outs.filter(c => c.l !== lastLabel);
+
+    const useIn = ins.length && (!pool.length || Math.random() < 0.26);
+    let ch = null;
+    if(useIn){
+      const ip = ins.filter(c => c.l !== lastLabel);
+      ch = pick(ip.length ? ip : ins);
+    } else if(pool.length){
+      ch = pick(pool);
+    } else if(ins.length){
+      ch = pick(ins);
+    } else break;
+
+    seq.push({ l:ch.l, tier:ch.tier, at:cur, to:ch.to, kind:ch.type });
+    if(ch.to !== cur){ prev = cur; cur = ch.to; }
+    lastLabel = ch.l;
+    if(cur === 'dip') break;
+  }
+
+  let finisher = false;
+  if(cur === 'dip'){
+    seq.push({ l:'Hold it, then recover up — that\'s your ending', tier:1, at:cur, to:cur, kind:'inplace' });
+    finisher = true;
+  } else {
+    if(cur !== 'open1'){
+      let path = routeTo(cur, 'open1', allowed);
+      if(!path) path = routeTo(cur, 'open1', new Set([1,2,3]));
+      if(path){
+        path.forEach(p => seq.push({ l:p.l, tier:p.tier, at:p.from, to:p.to, kind:'edge' }));
+        cur = 'open1';
+      }
+    }
+    seq.push({ l:'Basic — resolve and breathe', tier:1, at:cur, to:cur, kind:'inplace' });
+  }
+  return { seq, finisher };
+}
+
+function tagFor(t){
+  const names = {1:'FUND', 2:'INT', 3:'ADV'};
+  return '<span class="tag t' + t + '">' + names[t] + '</span>';
+}
+
+function routeLine(seq){
+  const path = [byId[seq[0].at].label];
+  seq.forEach(s => { if(s.to !== s.at) path.push(byId[s.to].label); });
+  const uniq = path.filter((v, i) => i === 0 || v !== path[i-1]);
+  return uniq.map(p => '<b>' + p + '</b>').join('<span class="sep">&rarr;</span>');
+}
+
+function render(){
+  const out = document.getElementById('out');
+  const tip = document.getElementById('tip');
+  if(!current){
+    out.innerHTML = '<div class="empty">Pick your level and length, then hit generate.</div>';
+    tip.textContent = '';
+    return;
+  }
+  const { seq, finisher } = current;
+  let html = '<div class="route"><span class="rl">Where it takes you</span>' + routeLine(seq) + '</div>';
+
+  seq.forEach((s, i) => {
+    const a = i * 8 + 1, b = i * 8 + 8;
+    const moved = s.to !== s.at;
+    const isFin = finisher && i === seq.length - 1;
+    html += '<div class="step' + (isFin ? ' finish' : '') + '">';
+    html += '<div class="cnt">' + a + '&ndash;' + b + '<small>counts</small></div>';
+    html += '<div class="sbody"><div class="smove">' + s.l + tagFor(s.tier) + '</div>';
+    html += '<div class="sto">' + (moved
+        ? 'lands in <b>' + byId[s.to].label + '</b> · ' + byId[s.to].sub
+        : 'stay in <b>' + byId[s.at].label + '</b>') + '</div></div></div>';
+  });
+
+  html += '<div class="after">';
+  html += '<button class="mini" id="again">Generate another</button>';
+  html += '<button class="mini" id="copy">Copy as text</button>';
+  html += '<span class="said" id="said"></span></div>';
+  out.innerHTML = html;
+
+  tip.textContent = 'That\'s ' + (seq.length * 8) + ' counts — about ' + seq.length +
+    ' eight-counts. Walk it slow without music first, then run it at tempo.';
+
+  document.getElementById('again').addEventListener('click', run);
+  document.getElementById('copy').addEventListener('click', copyText);
+}
+
+function asText(){
+  const { seq } = current;
+  let t = 'Bachata combo\n';
+  seq.forEach((s, i) => {
+    t += (i + 1) + '. ' + s.l + (s.to !== s.at ? '  ->  ' + byId[s.to].label : '') + '\n';
+  });
+  return t;
+}
+
+function copyText(){
+  const said = document.getElementById('said');
+  const txt = asText();
+  const done = () => { if(said){ said.textContent = 'Copied'; setTimeout(() => { said.textContent = ''; }, 1800); } };
+  try {
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(done, fallback);
+    } else { fallback(); }
+  } catch(e){ fallback(); }
+  function fallback(){
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta); done();
+    } catch(err){ if(said) said.textContent = 'Copy failed — select it manually'; }
+  }
+}
+
+function run(){ current = generate(); render(); }
+
+function reachableStarts(){
+  const allowed = allowedTiers();
+  const seen = new Set(['open1']);
+  const q = ['open1'];
+  while(q.length){
+    const n = q.shift();
+    outsFrom(n, allowed).forEach(e => { if(!seen.has(e.to)){ seen.add(e.to); q.push(e.to); } });
+  }
+  seen.delete('dip');
+  return NODES.filter(n => seen.has(n.id));
+}
+
+function refreshStart(){
+  const sel = document.getElementById('start');
+  if(!sel) return;
+  const opts = reachableStarts();
+  if(!opts.some(o => o.id === startPos)) startPos = 'open1';
+  sel.innerHTML = opts.map(n => '<option value="' + n.id + '"' + (n.id === startPos ? ' selected' : '') + '>' +
+              n.label + ' · ' + n.sub + '</option>').join('');
+}
+
+function initStart(){
+  const sel = document.getElementById('start');
+  if(!sel) return;
+  refreshStart();
+  sel.addEventListener('change', () => { startPos = sel.value; });
+}
+
+function initGroup(id, setter){
+  const box = document.getElementById(id);
+  if(!box) return;
+  box.addEventListener('click', ev => {
+    const b = ev.target.closest('.opt');
+    if(!b) return;
+    box.querySelectorAll('.opt').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    setter(parseInt(b.getAttribute('data-v'), 10));
+  });
+}
+
+function init(){
+  initStart();
+  initGroup('lvl', v => { level = v; refreshStart(); });
+  initGroup('len', v => { steps = v; });
+  const go = document.getElementById('go');
+  if(go) go.addEventListener('click', run);
+  render();
+}
+
+if (typeof document !== 'undefined' && document.getElementById('go')) {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+}
+</script>
+</body>
+</html>

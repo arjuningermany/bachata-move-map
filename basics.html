@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-  Bachata — Start Here: the basic step
+  Bachata — Footwork Lab
   Created by Arjun · © 2026 Arjun · All rights reserved.
   Original compilation, structure, and interactive design by Arjun.
 -->
@@ -8,7 +8,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Start here — Bachata tools by Arjun</title>
+<title>Footwork lab — Bachata tools by Arjun</title>
 <meta name="author" content="Arjun" />
 <meta name="copyright" content="© 2026 Arjun. All rights reserved." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -21,10 +21,9 @@
     background: radial-gradient(120% 70% at 50% -10%, #2a1d30 0%, #1e1520 55%);
     color: #f3e9de;
     font-family: "IBM Plex Mono", ui-monospace, "Courier New", monospace;
-    line-height: 1.5;
-    padding: 30px 16px 56px;
+    line-height: 1.5; padding: 30px 16px 56px;
   }
-  .wrap { max-width: 660px; margin: 0 auto; }
+  .wrap { max-width: 680px; margin: 0 auto; }
   .eyebrow { font-size: 11.5px; letter-spacing: 0.22em; text-transform: uppercase; color: #e8a13a; margin: 0 0 10px; }
   h1 { font-family: "Fraunces", Georgia, serif; font-weight: 900; font-size: 33px; line-height: 1.05; letter-spacing: -0.015em; margin: 0 0 10px; }
   h1 em { font-style: italic; font-weight: 400; color: #e6748b; }
@@ -36,29 +35,42 @@
   h2 { font-family: "Fraunces", Georgia, serif; font-size: 21px; font-weight: 600; margin: 30px 0 10px; }
   .card { border: 1px solid #4a3a4e; border-radius: 16px; background: #241829; padding: 16px; margin-bottom: 14px; }
 
+  .fam { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #8a7580; margin: 12px 0 7px; }
+  .fam:first-child { margin-top: 0; }
+  .picker { display: flex; gap: 7px; flex-wrap: wrap; }
+  .pk { flex: 1 1 150px; font-family: inherit; font-size: 11.5px; cursor: pointer; border-radius: 13px;
+        padding: 10px 9px; border: 1.5px solid #4a3a4e; background: #241829; color: #8a7580; text-align: left; line-height: 1.35; }
+  .pk b { display: block; font-family: "Fraunces", Georgia, serif; font-size: 15px; font-weight: 600; color: #cdb9c0; margin-bottom: 1px; }
+  .pk.on { border-color: #e8a13a; background: rgba(232,161,58,.13); }
+  .pk.on b { color: #e8a13a; }
+
   .floor { border: 1px solid #4a3a4e; border-radius: 18px; background: #2a1e2e; padding: 14px 10px 16px; text-align: center; }
   svg#feet { width: 100%; height: auto; display: block; }
-  .foot { transition: transform .17s cubic-bezier(.4,0,.2,1); }
+  .foot, #ring { transition: transform .15s cubic-bezier(.4,0,.2,1); }
+  .vhint { font-size: 11.5px; color: #8a7580; margin: 2px 0 6px; min-height: 16px; }
+  .rhythm { font-size: 11.5px; color: #e6748b; margin: 0 0 6px; min-height: 16px; }
 
   .countline { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 4px 0 2px; }
-  .bignum { font-family: "Fraunces", Georgia, serif; font-size: 54px; line-height: 1; font-weight: 900; min-width: 44px; }
+  .bignum { font-family: "Fraunces", Georgia, serif; font-size: 50px; line-height: 1; font-weight: 900; min-width: 46px; }
   .bignum.accent { color: #e8a13a; }
-  .cue { text-align: left; max-width: 260px; }
+  .bignum.quick { color: #e6748b; font-size: 40px; }
+  .cue { text-align: left; max-width: 250px; }
   .cue .what { font-size: 14px; color: #f3e9de; }
   .cue .why { font-size: 11.5px; color: #8a7580; margin-top: 2px; }
 
-  .dots { display: flex; justify-content: center; gap: 6px; margin: 10px 0 2px; }
-  .dot { width: 25px; height: 25px; border-radius: 50%; border: 1.5px solid #4a3a4e; display: grid; place-items: center; font-size: 10.5px; color: #8a7580; }
+  .dots { display: flex; justify-content: center; gap: 5px; margin: 10px 0 2px; flex-wrap: wrap; }
+  .dot { min-width: 25px; height: 25px; padding: 0 5px; border-radius: 13px; border: 1.5px solid #4a3a4e; display: grid; place-items: center; font-size: 10.5px; color: #8a7580; }
   .dot.hip { border-color: #6b5570; color: #b9a6ae; }
+  .dot.amp { border-style: dashed; border-color: #6b4550; }
   .dot.on { background: #f3e9de; border-color: #f3e9de; color: #1e1520; font-weight: 600; }
   .dot.on.hip { background: #e8a13a; border-color: #e8a13a; color: #1e1520; }
+  .dot.on.amp { background: #e6748b; border-color: #e6748b; color: #1e1520; }
 
   .controls { display: flex; gap: 9px; margin-top: 14px; flex-wrap: wrap; }
   .go { flex: 1 1 140px; font-family: "Fraunces", Georgia, serif; font-size: 18px; font-weight: 600;
         background: #e8a13a; color: #1e1520; border: 0; border-radius: 13px; padding: 13px; cursor: pointer; }
   .go.stop { background: #e6748b; }
   .go.ghost { background: transparent; color: #e8a13a; border: 1.5px solid #4a3a4e; }
-  .go.ghost:hover { border-color: #e8a13a; }
 
   .lbl { display: block; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #8a7580; margin-bottom: 8px; }
   .opts { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
@@ -72,13 +84,14 @@
   input[type=range] { flex: 1 1 150px; min-width: 130px; accent-color: #e8a13a; }
   .row { margin-bottom: 13px; } .row:last-child { margin-bottom: 0; }
 
-  ol.steps { list-style: none; counter-reset: s; margin: 0; padding: 0; }
-  ol.steps li { counter-increment: s; position: relative; padding: 10px 0 10px 42px; border-bottom: 1px solid #3a2c3f; font-size: 13.5px; color: #cdb9c0; }
+  ol.steps { list-style: none; margin: 0; padding: 0; }
+  ol.steps li { position: relative; padding: 9px 0 9px 46px; border-bottom: 1px solid #3a2c3f; font-size: 13.5px; color: #cdb9c0; }
   ol.steps li:last-child { border-bottom: 0; }
-  ol.steps li::before { content: counter(s); position: absolute; left: 0; top: 10px; width: 27px; height: 27px;
-    border-radius: 50%; background: rgba(232,161,58,.14); color: #e8a13a; display: grid; place-items: center; font-size: 12px; }
+  ol.steps li .cnum { position: absolute; left: 0; top: 9px; min-width: 32px; height: 24px; padding: 0 6px;
+    border-radius: 12px; background: rgba(232,161,58,.14); color: #e8a13a; display: grid; place-items: center; font-size: 11.5px; }
+  ol.steps li.pop .cnum { background: #e8a13a; color: #1e1520; font-weight: 600; }
+  ol.steps li.qk .cnum { background: rgba(230,116,139,.2); color: #ef94a6; }
   ol.steps li b { color: #f3e9de; font-weight: 600; }
-  ol.steps li.pop::before { background: #e8a13a; color: #1e1520; font-weight: 600; }
 
   ul.checks { list-style: none; margin: 0; padding: 0; }
   ul.checks li { padding: 9px 0 9px 26px; position: relative; font-size: 13.5px; color: #cdb9c0; border-bottom: 1px solid #3a2c3f; }
@@ -91,6 +104,8 @@
   .nextup { border: 1px solid #4a3a4e; border-radius: 16px; background: #241829; padding: 15px 16px; margin-top: 26px; }
   .nextup a { color: #e8a13a; text-decoration: none; font-size: 13.5px; border-bottom: 1px solid rgba(232,161,58,.4); }
   .nextup p { margin: 0 0 8px; font-size: 13px; color: #b9a6ae; }
+  .src { font-size: 11.5px; color: #8a7580; line-height: 1.6; }
+  .src a { color: #8a7580; }
 
   footer.credit { margin-top: 34px; }
   footer.credit .rule { height: 1px; background: #4a3a4e; margin: 0 0 16px; }
@@ -102,26 +117,35 @@
 <body>
 <div class="wrap">
 
-  <p class="eyebrow">Bachata · start here</p>
-  <h1>The basic step, <em>one count at a time.</em></h1>
-  <p class="lede">Never danced bachata? This is the only thing you need. Watch the feet move in time, or tap through it count by count until it clicks.</p>
+  <p class="eyebrow">Bachata · footwork lab</p>
+  <h1>Six footworks, <em>count by count.</em></h1>
+  <p class="lede">From the plain basic to Dominican box steps, syncopated cha-cha triples and travelling grapevines. Watch the feet, or tap through one count at a time — leader or follower.</p>
   <p class="byline">Made by Arjun · © 2026</p>
   <p class="backlink"><a href="./">&larr;&nbsp; All tools</a></p>
 
+  <div class="card">
+    <div id="pickerHost"></div>
+  </div>
+
   <div class="floor">
-    <svg id="feet" viewBox="0 0 400 200" role="img" aria-label="Top-down animated view of the feet doing the bachata basic step">
-      <line x1="20" y1="150" x2="380" y2="150" stroke="#3a2c3f" stroke-width="1"/>
-      <text x="200" y="26" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#8a7580">looking down at your own feet</text>
+    <p class="vhint" id="vhint">&nbsp;</p>
+    <p class="rhythm" id="rhythm">&nbsp;</p>
+    <svg id="feet" viewBox="0 0 400 250" role="img" aria-label="Top-down animated view of bachata footwork">
+      <text x="200" y="19" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#8a7580">looking down at your own feet</text>
+      <line x1="24" y1="226" x2="376" y2="226" stroke="#3a2c3f" stroke-width="1"/>
+      <g id="ring" opacity="0">
+        <ellipse cx="0" cy="150" rx="21" ry="31" fill="none" stroke="#e6748b" stroke-width="1.6" stroke-dasharray="4 4"/>
+      </g>
       <g id="gL" class="foot">
-        <ellipse cx="0" cy="100" rx="14" ry="24" id="eL" fill="#e8a13a" stroke="#e8a13a" stroke-width="2"/>
-        <text x="0" y="105" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="600" id="tL" fill="#1e1520">L</text>
+        <ellipse cx="0" cy="150" rx="14" ry="24" id="eL" fill="#e8a13a" stroke="#e8a13a" stroke-width="2"/>
+        <text x="0" y="155" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="600" id="tL" fill="#1e1520">L</text>
       </g>
       <g id="gR" class="foot">
-        <ellipse cx="0" cy="100" rx="14" ry="24" id="eR" fill="#e8a13a" stroke="#e8a13a" stroke-width="2"/>
-        <text x="0" y="105" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="600" id="tR" fill="#1e1520">R</text>
+        <ellipse cx="0" cy="150" rx="14" ry="24" id="eR" fill="#e8a13a" stroke="#e8a13a" stroke-width="2"/>
+        <text x="0" y="155" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="600" id="tR" fill="#1e1520">R</text>
       </g>
       <g id="pop" opacity="0">
-        <text x="200" y="180" text-anchor="middle" font-family="Fraunces,Georgia,serif" font-size="19" font-weight="600" fill="#e8a13a">hip pop</text>
+        <text x="200" y="245" text-anchor="middle" font-family="Fraunces,Georgia,serif" font-size="18" font-weight="600" fill="#e8a13a">hip pop</text>
       </g>
     </svg>
 
@@ -170,6 +194,17 @@
     <ol class="steps" id="written"></ol>
   </div>
 
+  <h2>How they fit together</h2>
+  <div class="card">
+    <ul class="checks">
+      <li><b>They all share one rhythm.</b> Three steps and a tap, twice — except the triple, which fills the tap with two quick steps instead.</li>
+      <li><b>Side basic is your default.</b> Most of a song lives there. In place holds your spot on a crowded floor.</li>
+      <li><b>Box and diagonal patterns are the Dominican root.</b> Same count, but you travel in a square instead of a line.</li>
+      <li><b>The triple is a rhythm swap, not a new step.</b> Once you have it, you can drop it into any of the others wherever a tap falls.</li>
+      <li><b>Grapevine travels.</b> Use it when there's floor space and you want to cover ground.</li>
+    </ul>
+  </div>
+
   <h2>Before you step</h2>
   <div class="card">
     <ul class="checks">
@@ -189,8 +224,12 @@
     </ul>
   </div>
 
+  <div class="card">
+    <p class="src"><b style="color:#cdb9c0">A note on names and variants.</b> Bachata footwork is a living folk tradition — schools disagree on names and on which foot starts. This follows the convention that the leader's basic travels left first (starting left foot) and the follower mirrors it. If your school teaches the opposite, just use the Follower toggle. Pattern descriptions cross-checked against iASO Records' Dominican bachata guide and the Library of Dance bachata syllabus.</p>
+  </div>
+
   <div class="nextup">
-    <p>Once the basic is automatic and you can hold it without thinking:</p>
+    <p>Once the footwork is automatic and you can hold it without thinking:</p>
     <a href="map.html">See how moves connect &rarr;</a><br/>
     <a href="player.html">Practise combos in time &rarr;</a>
   </div>
@@ -204,37 +243,144 @@
 </div>
 
 <script>
-/* ---------- the basic step, as data ----------
-   x positions are in SVG units; feet travel right on 1-4, back left on 5-8.
-   weight: which foot carries you. tap: a foot touching with no weight.        */
-const OX = 145;                      // svg x-offset so the travel sits centred
-const LEAD = [
-  { L:-13, R: 63, w:'R', tap:null, what:'Right foot steps right',      why:'weight lands on it' },
-  { L: 37, R: 63, w:'L', tap:null, what:'Left foot closes in',          why:'weight changes over' },
-  { L: 37, R:113, w:'R', tap:null, what:'Right foot steps right again', why:'weight lands on it' },
-  { L: 87, R:113, w:'R', tap:'L',  what:'Left foot taps beside',        why:'no weight — hip pops here' },
-  { L: 37, R:113, w:'L', tap:null, what:'Left foot steps left',         why:'weight lands on it' },
-  { L: 37, R: 63, w:'R', tap:null, what:'Right foot closes in',         why:'weight changes over' },
-  { L:-13, R: 63, w:'L', tap:null, what:'Left foot steps left again',   why:'weight lands on it' },
-  { L:-13, R: 13, w:'L', tap:'R',  what:'Right foot taps beside',       why:'no weight — hip pops here' }
-];
+/* =========================================================
+   FOOTWORK DATA
+   dur = length in half-beats (2 = a full count, 1 = an "and")
+   L/R = [x, y]   x: + is right   y: - is forward (away from you)
+   w   = which foot carries the weight
+   tap = the acting foot touches without taking weight
+   ========================================================= */
 
-/* follower mirrors the leader: opposite side, opposite foot */
-function frames(role){
-  if(role === 'lead') return LEAD;
-  return LEAD.map(f => ({
-    L: -f.R, R: -f.L,
-    w: f.w === 'R' ? 'L' : 'R',
-    tap: f.tap === 'L' ? 'R' : (f.tap === 'R' ? 'L' : null),
-    what: f.what.replace('Right', '\u0000').replace('Left', 'Right').replace('\u0000', 'Left')
-             .replace('right', '\u0000').replace('left', 'right').replace('\u0000', 'left'),
-    why: f.why
-  }));
+const VARIATIONS = {
+  side: {
+    name:'Side basic', note:'the default — most of a song', family:'Foundation',
+    hint:'travels left on 1&ndash;4, back right on 5&ndash;8', rhythm:'', ox:250, cross:false,
+    steps:[
+      {label:'1',dur:2,act:'L',dir:'left',  L:[-63,0], R:[ 13,0], w:'L',tap:false},
+      {label:'2',dur:2,act:'R',dir:'in',    L:[-63,0], R:[-37,0], w:'R',tap:false},
+      {label:'3',dur:2,act:'L',dir:'left',  L:[-113,0],R:[-37,0], w:'L',tap:false},
+      {label:'4',dur:2,act:'R',dir:'tap',   L:[-113,0],R:[-87,0], w:'L',tap:true },
+      {label:'5',dur:2,act:'R',dir:'right', L:[-113,0],R:[-37,0], w:'R',tap:false},
+      {label:'6',dur:2,act:'L',dir:'in',    L:[-63,0], R:[-37,0], w:'L',tap:false},
+      {label:'7',dur:2,act:'R',dir:'right', L:[-63,0], R:[ 13,0], w:'R',tap:false},
+      {label:'8',dur:2,act:'L',dir:'tap',   L:[-13,0], R:[ 13,0], w:'R',tap:true }
+    ]
+  },
+  place: {
+    name:'In place', note:'holds your spot when it is crowded', family:'Foundation',
+    hint:'no travel &mdash; only the weight moves', rhythm:'', ox:200, cross:false,
+    steps:[
+      {label:'1',dur:2,act:'L',dir:'place',L:[-13,0],R:[13,0],w:'L',tap:false},
+      {label:'2',dur:2,act:'R',dir:'place',L:[-13,0],R:[13,0],w:'R',tap:false},
+      {label:'3',dur:2,act:'L',dir:'place',L:[-13,0],R:[13,0],w:'L',tap:false},
+      {label:'4',dur:2,act:'R',dir:'tap',  L:[-13,0],R:[13,0],w:'L',tap:true },
+      {label:'5',dur:2,act:'R',dir:'place',L:[-13,0],R:[13,0],w:'R',tap:false},
+      {label:'6',dur:2,act:'L',dir:'place',L:[-13,0],R:[13,0],w:'L',tap:false},
+      {label:'7',dur:2,act:'R',dir:'place',L:[-13,0],R:[13,0],w:'R',tap:false},
+      {label:'8',dur:2,act:'L',dir:'tap',  L:[-13,0],R:[13,0],w:'R',tap:true }
+    ]
+  },
+  fwd: {
+    name:'Forward & back', note:'travels — when there is room', family:'Foundation',
+    hint:'forward on 1&ndash;4, back on 5&ndash;8', rhythm:'', ox:200, cross:false,
+    steps:[
+      {label:'1',dur:2,act:'L',dir:'forward',L:[-13,-28],R:[13,  0],w:'L',tap:false},
+      {label:'2',dur:2,act:'R',dir:'in',     L:[-13,-28],R:[13,-28],w:'R',tap:false},
+      {label:'3',dur:2,act:'L',dir:'forward',L:[-13,-56],R:[13,-28],w:'L',tap:false},
+      {label:'4',dur:2,act:'R',dir:'tap',    L:[-13,-56],R:[13,-56],w:'L',tap:true },
+      {label:'5',dur:2,act:'R',dir:'back',   L:[-13,-56],R:[13,-28],w:'R',tap:false},
+      {label:'6',dur:2,act:'L',dir:'in',     L:[-13,-28],R:[13,-28],w:'L',tap:false},
+      {label:'7',dur:2,act:'R',dir:'back',   L:[-13,-28],R:[13,  0],w:'R',tap:false},
+      {label:'8',dur:2,act:'L',dir:'tap',    L:[-13,  0],R:[13,  0],w:'R',tap:true }
+    ]
+  },
+  box: {
+    name:'Box step', note:'the traditional Dominican square', family:'Dominican',
+    hint:'side, side, forward, tap &mdash; then side, side, back, tap', rhythm:'', ox:220, cross:false,
+    steps:[
+      {label:'1',dur:2,act:'L',dir:'left',   L:[-53,  0],R:[ 13,  0],w:'L',tap:false},
+      {label:'2',dur:2,act:'R',dir:'in',     L:[-53,  0],R:[-27,  0],w:'R',tap:false},
+      {label:'3',dur:2,act:'L',dir:'forward',L:[-53,-34],R:[-27,  0],w:'L',tap:false},
+      {label:'4',dur:2,act:'R',dir:'tap',    L:[-53,-34],R:[-27,-34],w:'L',tap:true },
+      {label:'5',dur:2,act:'R',dir:'right',  L:[-53,-34],R:[ 13,-34],w:'R',tap:false},
+      {label:'6',dur:2,act:'L',dir:'in',     L:[-13,-34],R:[ 13,-34],w:'L',tap:false},
+      {label:'7',dur:2,act:'R',dir:'back',   L:[-13,-34],R:[ 13,  0],w:'R',tap:false},
+      {label:'8',dur:2,act:'L',dir:'tap',    L:[-13,  0],R:[ 13,  0],w:'R',tap:true }
+    ]
+  },
+  triple: {
+    name:'Triple / cha-cha', note:'the tap becomes two quick steps', family:'Dominican',
+    hint:'a rhythm swap you can drop into any pattern', rhythm:'1 &middot; 2 &middot; 3 &middot; 4-and &middot; 5 &middot; 6 &middot; 7 &middot; 8-and', ox:250, cross:false,
+    steps:[
+      {label:'1',dur:2,act:'L',dir:'left', L:[-63,0], R:[ 13,0], w:'L',tap:false},
+      {label:'2',dur:2,act:'R',dir:'in',   L:[-63,0], R:[-37,0], w:'R',tap:false},
+      {label:'3',dur:2,act:'L',dir:'left', L:[-113,0],R:[-37,0], w:'L',tap:false},
+      {label:'4',dur:1,act:'R',dir:'quick',L:[-113,0],R:[-87,0], w:'R',tap:false},
+      {label:'&',dur:1,act:'L',dir:'quick',L:[-100,0],R:[-87,0], w:'L',tap:false},
+      {label:'5',dur:2,act:'R',dir:'right',L:[-100,0],R:[-50,0], w:'R',tap:false},
+      {label:'6',dur:2,act:'L',dir:'in',   L:[-76,0], R:[-50,0], w:'L',tap:false},
+      {label:'7',dur:2,act:'R',dir:'right',L:[-76,0], R:[  0,0], w:'R',tap:false},
+      {label:'8',dur:1,act:'L',dir:'quick',L:[-13,0], R:[  0,0], w:'L',tap:false},
+      {label:'&',dur:1,act:'R',dir:'quick',L:[-13,0], R:[ 13,0], w:'R',tap:false}
+    ]
+  },
+  grape: {
+    name:'Grapevine', note:'crossing steps that cover ground', family:'Travelling',
+    hint:'side, cross, side, tap &mdash; crossing behind, then in front', rhythm:'', ox:253, cross:true,
+    steps:[
+      {label:'1',dur:2,act:'L',dir:'left',       L:[-53,  0],R:[ 13,  0],w:'L',tap:false},
+      {label:'2',dur:2,act:'R',dir:'crossBehind',L:[-53,  0],R:[-79, 20],w:'R',tap:false},
+      {label:'3',dur:2,act:'L',dir:'left',       L:[-119, 0],R:[-79, 20],w:'L',tap:false},
+      {label:'4',dur:2,act:'R',dir:'tap',        L:[-119, 0],R:[-93,  0],w:'L',tap:true },
+      {label:'5',dur:2,act:'R',dir:'right',      L:[-119, 0],R:[-53,  0],w:'R',tap:false},
+      {label:'6',dur:2,act:'L',dir:'crossFront', L:[-27, -20],R:[-53, 0],w:'L',tap:false},
+      {label:'7',dur:2,act:'R',dir:'right',      L:[-27, -20],R:[ 13, 0],w:'R',tap:false},
+      {label:'8',dur:2,act:'L',dir:'tap',        L:[-13,  0],R:[ 13, 0],w:'R',tap:true }
+    ]
+  }
+};
+
+const ORDER = ['side','place','fwd','box','triple','grape'];
+const FAMILIES = ['Foundation','Dominican','Travelling'];
+const FOOTNAME = { L:'Left', R:'Right' };
+const DIRTEXT = {
+  right:'steps right', left:'steps left', forward:'steps forward', back:'steps back',
+  in:'closes in', place:'steps in place', tap:'taps beside', quick:'quick step',
+  crossBehind:'crosses behind', crossFront:'crosses in front'
+};
+const MIRDIR = {
+  right:'left', left:'right', forward:'back', back:'forward', in:'in',
+  place:'place', tap:'tap', quick:'quick', crossBehind:'crossBehind', crossFront:'crossFront'
+};
+
+function mirrorStep(s){
+  return {
+    label:s.label, dur:s.dur,
+    act: s.act === 'L' ? 'R' : 'L',
+    dir: MIRDIR[s.dir],
+    L: [-s.R[0], -s.R[1]],
+    R: [-s.L[0], -s.L[1]],
+    w:  s.w === 'L' ? 'R' : 'L',
+    tap: s.tap
+  };
+}
+function stepsFor(vid, role){
+  const s = VARIATIONS[vid].steps;
+  return role === 'lead' ? s : s.map(mirrorStep);
+}
+function whatText(s){ return FOOTNAME[s.act] + ' foot ' + DIRTEXT[s.dir]; }
+function whyText(s){
+  if(s.tap) return 'no weight — hip pops here';
+  if(s.dir === 'quick') return 'half a beat — weight still changes';
+  if(s.dir === 'in') return 'weight changes over';
+  if(s.dir === 'crossBehind') return 'crossing behind the other foot';
+  if(s.dir === 'crossFront') return 'crossing in front of the other foot';
+  return 'weight lands on it';
 }
 
-let bpm = 70, role = 'lead', soundOn = true, beat = 0, playing = false;
-function F(){ return frames(role); }
-function isHip(i){ return i === 3 || i === 7; }
+let variation = 'side', bpm = 70, role = 'lead', soundOn = true, idx = 0, playing = false;
+function S(){ return stepsFor(variation, role); }
+function isHipStep(s){ return s.tap; }
 
 /* ---------- audio ---------- */
 let actx = null, nextTime = 0, timerId = null, rafId = null;
@@ -245,21 +391,29 @@ function click(time, kind){
   let f = 620, peak = 0.16, dur = 0.045;
   if(kind === 'one'){ f = 1250; peak = 0.32; dur = 0.07; }
   else if(kind === 'hip'){ f = 880; peak = 0.27; dur = 0.075; }
+  else if(kind === 'quick'){ f = 1500; peak = 0.13; dur = 0.03; }
   o.type = 'square'; o.frequency.value = f;
   g.gain.setValueAtTime(0.0001, time);
-  g.gain.exponentialRampToValueAtTime(peak, time + 0.005);
+  g.gain.exponentialRampToValueAtTime(peak, time + 0.004);
   g.gain.exponentialRampToValueAtTime(0.0001, time + dur);
   o.connect(g); g.connect(actx.destination);
   o.start(time); o.stop(time + dur + 0.02);
 }
+function kindFor(s){
+  if(s.label === '1') return 'one';
+  if(s.tap) return 'hip';
+  if(s.dur === 1) return 'quick';
+  return 'tick';
+}
 function scheduler(){
   if(!playing || !actx) return;
-  while(nextTime < actx.currentTime + 0.12){
-    const b = beat % 8;
-    click(nextTime, b === 0 ? 'one' : (isHip(b) ? 'hip' : 'tick'));
-    queue.push({ t: nextTime, b: b });
-    nextTime += 60.0 / bpm;
-    beat++;
+  const list = S();
+  while(nextTime < actx.currentTime + 0.14){
+    const s = list[idx % list.length];
+    click(nextTime, kindFor(s));
+    queue.push({ t: nextTime, i: idx % list.length });
+    nextTime += (60.0 / bpm) * (s.dur / 2);
+    idx = (idx + 1) % list.length;
   }
   timerId = setTimeout(scheduler, 25);
 }
@@ -268,51 +422,69 @@ function draw(){
   const now = actx ? actx.currentTime : 0;
   let cur = null;
   while(queue.length && queue[0].t <= now){ cur = queue.shift(); }
-  if(cur) paint(cur.b);
+  if(cur) paint(cur.i);
   rafId = requestAnimationFrame(draw);
 }
 
 /* ---------- painting ---------- */
 function paint(i){
-  const f = F()[i];
-  const gL = document.getElementById('gL'), gR = document.getElementById('gR');
-  gL.style.transform = 'translateX(' + (OX + f.L) + 'px)';
-  gR.style.transform = 'translateX(' + (OX + f.R) + 'px)';
+  const list = S();
+  const s = list[i];
+  const ox = VARIATIONS[variation].ox;
 
-  const eL = document.getElementById('eL'), eR = document.getElementById('eR');
-  const tL = document.getElementById('tL'), tR = document.getElementById('tR');
-  const setFoot = (el, txt, carrying) => {
-    if(carrying){ el.setAttribute('fill', '#e8a13a'); el.setAttribute('stroke', '#e8a13a'); txt.setAttribute('fill', '#1e1520'); }
-    else { el.setAttribute('fill', 'none'); el.setAttribute('stroke', '#8a7580'); txt.setAttribute('fill', '#8a7580'); }
+  const place = (id, pos) => {
+    document.getElementById(id).style.transform = 'translate(' + (ox + pos[0]) + 'px,' + pos[1] + 'px)';
   };
-  setFoot(eL, tL, f.w === 'L');
-  setFoot(eR, tR, f.w === 'R');
+  place('gL', s.L); place('gR', s.R);
 
-  document.getElementById('pop').setAttribute('opacity', isHip(i) ? '1' : '0');
+  const ring = document.getElementById('ring');
+  ring.style.transform = 'translate(' + (ox + s[s.act][0]) + 'px,' + s[s.act][1] + 'px)';
+  ring.setAttribute('opacity','1');
+
+  const setFoot = (eid, tid, carrying) => {
+    const el = document.getElementById(eid), tx = document.getElementById(tid);
+    if(carrying){ el.setAttribute('fill','#e8a13a'); el.setAttribute('stroke','#e8a13a'); tx.setAttribute('fill','#1e1520'); }
+    else { el.setAttribute('fill','none'); el.setAttribute('stroke','#8a7580'); tx.setAttribute('fill','#8a7580'); }
+  };
+  setFoot('eL','tL', s.w === 'L');
+  setFoot('eR','tR', s.w === 'R');
+
+  document.getElementById('pop').setAttribute('opacity', s.tap ? '1' : '0');
 
   const big = document.getElementById('big');
-  big.textContent = i + 1;
-  big.className = 'bignum' + (isHip(i) || i === 0 ? ' accent' : '');
-  document.getElementById('what').textContent = f.what;
-  document.getElementById('why').textContent = f.why;
+  big.textContent = s.label;
+  big.className = 'bignum' + (s.dur === 1 ? ' quick' : (s.tap || s.label === '1' ? ' accent' : ''));
+  document.getElementById('what').textContent = whatText(s);
+  document.getElementById('why').textContent = whyText(s);
 
-  let d = '';
-  for(let k = 0; k < 8; k++){
-    d += '<div class="dot' + (isHip(k) ? ' hip' : '') + (k === i ? ' on' : '') + '">' + (k + 1) + '</div>';
-  }
-  document.getElementById('dots').innerHTML = d;
+  document.getElementById('dots').innerHTML = list.map((x, k) =>
+    '<div class="dot' + (x.tap ? ' hip' : '') + (x.dur === 1 ? ' amp' : '') + (k === i ? ' on' : '') + '">' + x.label + '</div>'
+  ).join('');
   markWritten(i);
 }
 
+function renderPicker(){
+  let h = '';
+  FAMILIES.forEach(fam => {
+    const ids = ORDER.filter(id => VARIATIONS[id].family === fam);
+    if(!ids.length) return;
+    h += '<p class="fam">' + fam + '</p><div class="picker">';
+    h += ids.map(id => '<button class="pk' + (id === variation ? ' on' : '') + '" data-v="' + id + '">' +
+         '<b>' + VARIATIONS[id].name + '</b>' + VARIATIONS[id].note + '</button>').join('');
+    h += '</div>';
+  });
+  document.getElementById('pickerHost').innerHTML = h;
+}
 function renderWritten(){
-  const f = F();
-  document.getElementById('written').innerHTML = f.map((s, i) =>
-    '<li class="' + (isHip(i) ? 'pop' : '') + '"><b>' + s.what + '</b> — ' + s.why + '</li>'
-  ).join('');
+  const list = S();
+  document.getElementById('written').innerHTML = list.map((s, i) =>
+    '<li class="' + (s.tap ? 'pop' : '') + (s.dur === 1 ? ' qk' : '') + '">' +
+    '<span class="cnum">' + s.label + '</span><b>' + whatText(s) + '</b> — ' + whyText(s) + '</li>').join('');
+  document.getElementById('vhint').innerHTML = VARIATIONS[variation].hint;
+  document.getElementById('rhythm').innerHTML = VARIATIONS[variation].rhythm || '&nbsp;';
 }
 function markWritten(i){
-  const items = document.querySelectorAll('#written li');
-  items.forEach((el, k) => { el.style.color = (k === i) ? '#f3e9de' : ''; });
+  document.querySelectorAll('#written li').forEach((el, k) => { el.style.color = (k === i) ? '#f3e9de' : ''; });
 }
 
 /* ---------- transport ---------- */
@@ -321,7 +493,7 @@ function start(){
     if(!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
     if(actx.state === 'suspended') actx.resume();
   } catch(e){ actx = null; }
-  playing = true; beat = 0; queue.length = 0;
+  playing = true; idx = 0; queue.length = 0;
   nextTime = actx ? actx.currentTime + 0.08 : 0;
   const p = document.getElementById('play');
   p.textContent = 'Stop'; p.classList.add('stop');
@@ -339,13 +511,14 @@ function stop(){
 }
 function stepOnce(){
   if(playing) stop();
-  beat = (beat + 1) % 8;
-  paint(beat);
+  const list = S();
+  idx = (idx + 1) % list.length;
+  paint(idx);
   if(soundOn){
     try {
       if(!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
       if(actx.state === 'suspended') actx.resume();
-      click(actx.currentTime + 0.01, beat === 0 ? 'one' : (isHip(beat) ? 'hip' : 'tick'));
+      click(actx.currentTime + 0.01, kindFor(list[idx]));
     } catch(e){}
   }
 }
@@ -355,24 +528,35 @@ function setBpm(v){
   const el = document.getElementById('bpmv');
   if(el) el.innerHTML = bpm + '<small>BPM</small>';
   const r = document.getElementById('bpmr');
-  if(r && parseInt(r.value, 10) !== bpm) r.value = bpm;
+  if(r && parseInt(r.value,10) !== bpm) r.value = bpm;
   const n = document.getElementById('bpmnote');
   if(n) n.textContent = bpm < 65 ? 'very slow — place each foot deliberately'
                      : bpm < 95 ? 'learning pace — this is the right place to start'
-                     : bpm < 120 ? 'building up'
-                     : 'real song tempo';
+                     : bpm < 120 ? 'building up' : 'real song tempo';
+}
+
+function switchTo(vid){
+  variation = vid; idx = 0;
+  document.querySelectorAll('#pickerHost .pk').forEach(b => {
+    b.classList.toggle('on', b.getAttribute('data-v') === vid);
+  });
+  renderWritten(); paint(0);
 }
 
 function init(){
-  renderWritten();
-  paint(0);
-  setBpm(70);
+  renderPicker(); renderWritten(); paint(0); setBpm(70);
 
+  document.getElementById('pickerHost').addEventListener('click', ev => {
+    const b = ev.target.closest('.pk');
+    if(!b) return;
+    if(playing) stop();
+    switchTo(b.getAttribute('data-v'));
+  });
   document.getElementById('play').addEventListener('click', () => { playing ? stop() : start(); });
   document.getElementById('step').addEventListener('click', stepOnce);
   document.getElementById('bup').addEventListener('click', () => setBpm(bpm + 5));
   document.getElementById('bdn').addEventListener('click', () => setBpm(bpm - 5));
-  document.getElementById('bpmr').addEventListener('input', e => setBpm(parseInt(e.target.value, 10)));
+  document.getElementById('bpmr').addEventListener('input', e => setBpm(parseInt(e.target.value,10)));
 
   const rb = document.getElementById('role');
   rb.addEventListener('click', ev => {
@@ -381,10 +565,8 @@ function init(){
     rb.querySelectorAll('.opt').forEach(x => x.classList.remove('on'));
     b.classList.add('on');
     role = b.getAttribute('data-v');
-    renderWritten();
-    paint(playing ? (beat % 8) : beat);
+    renderWritten(); paint(idx % S().length);
   });
-
   const sd = document.getElementById('snd');
   sd.addEventListener('click', () => {
     soundOn = !soundOn;

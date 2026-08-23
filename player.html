@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<!--
+  Bachata — Practice Player
+  Created by Arjun · © 2026 Arjun · All rights reserved.
+  Original compilation, structure, and interactive design by Arjun.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Practice player — Bachata tools by Arjun</title>
+<meta name="author" content="Arjun" />
+<meta name="copyright" content="© 2026 Arjun. All rights reserved." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: radial-gradient(120% 70% at 50% -10%, #2a1d30 0%, #1e1520 55%);
+    color: #f3e9de;
+    font-family: "IBM Plex Mono", ui-monospace, "Courier New", monospace;
+    line-height: 1.5;
+    padding: 30px 16px 56px;
+    -webkit-user-select: none; user-select: none;
+  }
+  .wrap { max-width: 660px; margin: 0 auto; }
+  .eyebrow { font-size: 11.5px; letter-spacing: 0.22em; text-transform: uppercase; color: #e8a13a; margin: 0 0 10px; }
+  h1 { font-family: "Fraunces", Georgia, serif; font-weight: 900; font-size: 32px; line-height: 1.05; letter-spacing: -0.015em; margin: 0 0 10px; }
+  h1 em { font-style: italic; font-weight: 400; color: #e6748b; }
+  .lede { color: #b9a6ae; font-size: 13.5px; margin: 0 0 12px; }
+  .byline { font-size: 12.5px; letter-spacing: 0.06em; color: #e8a13a; margin: 0 0 6px; }
+  .backlink { margin: 0 0 22px; }
+  .backlink a { color: #b9a6ae; font-size: 12.5px; text-decoration: none; border-bottom: 1px solid #4a3a4e; padding-bottom: 1px; }
+
+  .card { border: 1px solid #4a3a4e; border-radius: 16px; background: #241829; padding: 16px; margin-bottom: 16px; }
+  .row { margin-bottom: 13px; }
+  .row:last-child { margin-bottom: 0; }
+  .lbl { display: block; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #8a7580; margin-bottom: 8px; }
+  .opts { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+  .opt { font-family: inherit; font-size: 12.5px; cursor: pointer; border-radius: 999px; padding: 7px 14px;
+         border: 1.5px solid #4a3a4e; background: transparent; color: #b9a6ae; transition: all .14s ease; }
+  .opt.on { border-color: #e8a13a; background: #e8a13a; color: #1e1520; font-weight: 600; }
+  select.opt { color: #f3e9de; }
+  select.opt option { background: #241829; color: #f3e9de; }
+
+  .bpmrow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .bpmbtn { font-family: inherit; font-size: 17px; line-height: 1; cursor: pointer; border: 1.5px solid #4a3a4e;
+            background: transparent; color: #e8a13a; border-radius: 10px; width: 40px; height: 36px; }
+  .bpmval { font-family: "Fraunces", Georgia, serif; font-size: 27px; font-weight: 600; min-width: 62px; text-align: center; }
+  .bpmval small { font-family: "IBM Plex Mono", monospace; font-size: 10px; color: #8a7580; display: block; letter-spacing: .12em; margin-top: -4px; }
+  .bpmnote { font-size: 11.5px; color: #8a7580; }
+  input[type=range] { flex: 1 1 160px; min-width: 140px; accent-color: #e8a13a; }
+
+  .go { width: 100%; font-family: "Fraunces", Georgia, serif; font-size: 20px; font-weight: 600;
+        background: #e8a13a; color: #1e1520; border: 0; border-radius: 14px; padding: 15px; cursor: pointer; }
+  .go:hover { background: #f0b055; }
+  .go.stop { background: #e6748b; }
+  .go.stop:hover { background: #ec8699; }
+  .go:disabled { opacity: .45; cursor: default; }
+
+  .stage { border: 1px solid #4a3a4e; border-radius: 18px; background: #2a1e2e; padding: 20px 16px 22px; text-align: center; margin-bottom: 16px; }
+  .phase { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #8a7580; margin-bottom: 6px; min-height: 15px; }
+  .bigcount { font-family: "Fraunces", Georgia, serif; font-size: 72px; line-height: 1; font-weight: 900; color: #f3e9de; margin: 2px 0 4px; }
+  .bigcount.accent { color: #e8a13a; }
+  .dots { display: flex; justify-content: center; gap: 7px; margin: 12px 0 4px; flex-wrap: wrap; }
+  .dot { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid #4a3a4e; display: grid; place-items: center;
+         font-size: 11px; color: #8a7580; }
+  .dot.hip { border-color: #6b5570; color: #b9a6ae; }
+  .dot.on { background: #f3e9de; border-color: #f3e9de; color: #1e1520; font-weight: 600; }
+  .dot.on.hip { background: #e8a13a; border-color: #e8a13a; color: #1e1520; }
+  .hipnote { font-size: 11px; color: #8a7580; margin-top: 2px; }
+
+  .nowbox { margin-top: 16px; }
+  .nowlbl { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: #8a7580; margin-bottom: 4px; }
+  .nowmove { font-family: "Fraunces", Georgia, serif; font-size: 23px; font-weight: 600; line-height: 1.2; color: #f3e9de; }
+  .nowpos { font-size: 11.5px; color: #b9a6ae; margin-top: 4px; }
+  .nowpos b { color: #e8a13a; font-weight: 600; }
+  .nextmove { font-size: 12.5px; color: #8a7580; margin-top: 13px; padding-top: 12px; border-top: 1px solid #3a2c3f; }
+  .nextmove b { color: #cdb9c0; font-weight: 500; }
+  .prog { font-size: 11px; color: #8a7580; letter-spacing: .1em; margin-top: 12px; }
+
+  .list { border: 1px solid #4a3a4e; border-radius: 16px; background: #241829; padding: 6px 6px; }
+  .li { display: flex; gap: 11px; align-items: baseline; padding: 9px 11px; border-radius: 10px; font-size: 13px; color: #b9a6ae; }
+  .li.cur { background: rgba(232,161,58,.13); color: #f3e9de; }
+  .li .n { flex: 0 0 auto; font-size: 10.5px; color: #8a7580; min-width: 46px; }
+  .li.cur .n { color: #e8a13a; }
+  .tag { font-size: 9px; padding: 2px 6px; border-radius: 999px; margin-left: 6px; font-weight: 600; }
+  .t1 { background: rgba(108,192,138,.16); color:#8fd6ac; } .t2 { background: rgba(232,161,58,.16); color:#eeb968; } .t3 { background: rgba(230,116,139,.16); color:#ef94a6; }
+
+  .tip { color: #8a7580; font-size: 12px; margin-top: 16px; line-height: 1.65; }
+  footer.credit { margin-top: 34px; }
+  footer.credit .rule { height: 1px; background: #4a3a4e; margin: 0 0 16px; }
+  footer.credit p { margin: 0 0 8px; font-size: 13px; color: #cdb9c0; }
+  footer.credit p strong { color: #f3e9de; font-weight: 600; }
+  footer.credit .fine { font-size: 11.5px; color: #8a7580; line-height: 1.55; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">Bachata · practice player</p>
+  <h1>Dance it <em>in time.</em></h1>
+  <p class="lede">Generates a combo, counts you in, then calls each move on the beat. The 4 and the 8 are marked — that's where your hip pop lands.</p>
+  <p class="byline">Made by Arjun · © 2026</p>
+  <p class="backlink"><a href="./">&larr;&nbsp; All tools</a></p>
+
+  <div class="card">
+    <div class="row">
+      <span class="lbl">Level</span>
+      <div class="opts" id="lvl">
+        <button class="opt" data-v="1">Fundamental</button>
+        <button class="opt on" data-v="2">+ Intermediate</button>
+        <button class="opt" data-v="3">+ Advanced</button>
+      </div>
+    </div>
+    <div class="row">
+      <span class="lbl">Length</span>
+      <div class="opts" id="len">
+        <button class="opt" data-v="4">Short</button>
+        <button class="opt on" data-v="6">Medium</button>
+        <button class="opt" data-v="9">Long</button>
+      </div>
+    </div>
+    <div class="row">
+      <span class="lbl">Start from</span>
+      <div class="opts"><select class="opt" id="start"></select></div>
+    </div>
+    <div class="row">
+      <span class="lbl">Tempo</span>
+      <div class="bpmrow">
+        <button class="bpmbtn" id="bdn" aria-label="Slower">&minus;</button>
+        <span class="bpmval" id="bpmv">100<small>BPM</small></span>
+        <button class="bpmbtn" id="bup" aria-label="Faster">+</button>
+        <input type="range" id="bpmr" min="60" max="150" step="1" value="100" aria-label="Tempo" />
+      </div>
+      <p class="bpmnote" id="bpmnote"></p>
+    </div>
+    <div class="row">
+      <span class="lbl">Options</span>
+      <div class="opts">
+        <button class="opt on" id="loop">Loop</button>
+        <button class="opt on" id="snd">Sound</button>
+        <button class="opt" id="newc">New combo</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="go" id="play">Play</button>
+
+  <div class="stage" id="stage" style="margin-top:16px">
+    <div class="phase" id="phase">ready</div>
+    <div class="bigcount" id="big">&ndash;</div>
+    <div class="dots" id="dots"></div>
+    <div class="hipnote">4 and 8 are your hip accents</div>
+    <div class="nowbox">
+      <div class="nowlbl">Now</div>
+      <div class="nowmove" id="now">Press play</div>
+      <div class="nowpos" id="nowpos"></div>
+      <div class="nextmove" id="next"></div>
+      <div class="prog" id="prog"></div>
+    </div>
+  </div>
+
+  <div class="list" id="list"></div>
+
+  <p class="tip">Start slow — around 80 BPM — and only speed up once the transitions feel automatic. Real bachata songs sit near 120–130.</p>
+
+  <footer class="credit">
+    <div class="rule"></div>
+    <p><strong>Made by Arjun.</strong> &copy; 2026 Arjun &middot; All rights reserved.</p>
+    <p class="fine">This compilation, structure, and interactive design are the original work of Arjun. The underlying bachata moves are common dance knowledge; this particular arrangement and these tools are mine.</p>
+  </footer>
+
+</div>
+
+<script>
+const NODES = [
+  {id:'open2',  label:'OPEN',        sub:'two hands',            x:180, y:150},
+  {id:'open1',  label:'OPEN',        sub:'one hand · the hub',   x:405, y:300},
+  {id:'hshake', label:'HANDSHAKE',   sub:'same-hand hold',       x:200, y:438},
+  {id:'hammer', label:'HAMMERLOCK',  sub:'arm wrapped behind',   x:180, y:588},
+  {id:'closed', label:'CLOSED',      sub:'bodies close',         x:660, y:158},
+  {id:'semi',   label:'SEMI-CLOSED', sub:'promenade / travel',   x:858, y:238},
+  {id:'shadow', label:'SHADOW',      sub:'you behind her',       x:688, y:422},
+  {id:'cuddle', label:'CUDDLE',      sub:'wrapped at your side', x:445, y:560},
+  {id:'dip',    label:'DIP / DROP',  sub:'a finish',             x:878, y:540},
+];
+
+const EDGES = [
+  {f:'open2', t:'open1',  l:'one hand \u21c4 two hands', tier:1, bidir:true},
+  {f:'open1', t:'closed', l:'open \u21c4 closed (the door)', tier:1, bidir:true},
+  {f:'open1', t:'hshake', l:'change of hands', tier:2, bidir:true},
+  {f:'hshake',t:'hammer', l:'turn into hammerlock', tier:2},
+  {f:'hammer',t:'open1',  l:'unwind out', tier:2},
+  {f:'open1', t:'shadow', l:'turn, don\u2019t resolve', tier:2},
+  {f:'shadow',t:'open1',  l:'roll out to face', tier:2},
+  {f:'open1', t:'cuddle', l:'copa / cuddle wrap', tier:2},
+  {f:'cuddle',t:'open1',  l:'unwrap', tier:2},
+  {f:'closed',t:'semi',   l:'promenade / travel', tier:2, bidir:true},
+  {f:'semi',  t:'open1',  l:'promenade turn-out', tier:2},
+  {f:'cuddle',t:'shadow', l:'settle into shadow', tier:2},
+  {f:'shadow',t:'cuddle', l:'wrap to cuddle', tier:2},
+  {f:'hshake',t:'shadow', l:'behind-the-back pass', tier:3},
+  {f:'closed',t:'dip',    l:'dip / drop', tier:3},
+  {f:'semi',  t:'dip',    l:'travelling dip', tier:3},
+  {f:'shadow',t:'dip',    l:'leaning drop', tier:3},
+  {f:'open1', t:'dip',    l:'drop from open', tier:3},
+  {f:'cuddle',t:'dip',    l:'cuddle drop', tier:3},
+];
+
+const INPLACE = {
+  open1:  [['basic \u2014 mark time & reset',1],['cross-body lead (swap places)',1],['right / left / underarm turn',1],['cross-body with inside or outside turn',2],['double & travelling turns',2],['continuous / triple spins',3]],
+  open2:  [['basic \u2014 two-hand',1],['hand tosses / arm styling',2]],
+  hshake: [['switch which turn you set up',2]],
+  hammer: [['double hammerlock (deeper wrap)',3]],
+  closed: [['basic + body movement',1],['body waves / contra-body',2],['sensual lean',2]],
+  semi:   [['travelling basic around the floor',1]],
+  shadow: [['basic',1],['hair comb / cape styling',2],['shadow turns (stay behind)',3]],
+  cuddle: [['rock / sway in the wrap',1]],
+  dip:    [['recover back up to standing',1]],
+};
+
+const TCOLOR = {1:'#6cc08a', 2:'#e8a13a', 3:'#e6748b'};
+const TNAME  = {1:'FUND', 2:'INT', 3:'ADV'};
+
+const byId = {};
+NODES.forEach(n => byId[n.id] = n);
+
+let level = 2, steps = 6, startPos = 'open1', current = null;
+
+function allowedTiers(){
+  const s = new Set([1]);
+  if(level >= 2) s.add(2);
+  if(level >= 3) s.add(3);
+  return s;
+}
+function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
+
+function outsFrom(node, allowed){
+  return EDGES.filter(e => allowed.has(e.tier) && (e.f === node || (e.bidir && e.t === node)))
+              .map(e => ({ type:'edge', l:e.l, tier:e.tier, to:(e.f === node ? e.t : e.f) }));
+}
+function inplaceAt(node, allowed){
+  return (INPLACE[node] || []).filter(x => allowed.has(x[1]))
+                              .map(x => ({ type:'inplace', l:x[0], tier:x[1], to:node }));
+}
+
+function routeTo(from, to, allowed){
+  if(from === to) return [];
+  const q = [[from, []]], seen = new Set([from]);
+  while(q.length){
+    const [node, path] = q.shift();
+    for(const e of outsFrom(node, allowed)){
+      if(seen.has(e.to)) continue;
+      const np = path.concat([{ l:e.l, tier:e.tier, from:node, to:e.to }]);
+      if(e.to === to) return np;
+      seen.add(e.to); q.push([e.to, np]);
+    }
+  }
+  return null;
+}
+
+function generate(){
+  const allowed = allowedTiers();
+  let cur = startPos, prev = null, lastLabel = null;
+  const seq = [{ l:'Basic — settle in, find the beat', tier:1, at:cur, to:cur, kind:'inplace' }];
+
+  for(let i = 0; i < steps; i++){
+    let outs = outsFrom(cur, allowed);
+    const ins = inplaceAt(cur, allowed);
+
+    let pool = outs.filter(c => c.to !== prev);
+    if(!pool.length) pool = outs;
+    pool = pool.filter(c => c.l !== lastLabel);
+    if(!pool.length) pool = outs.filter(c => c.l !== lastLabel);
+
+    const useIn = ins.length && (!pool.length || Math.random() < 0.26);
+    let ch = null;
+    if(useIn){
+      const ip = ins.filter(c => c.l !== lastLabel);
+      ch = pick(ip.length ? ip : ins);
+    } else if(pool.length){
+      ch = pick(pool);
+    } else if(ins.length){
+      ch = pick(ins);
+    } else break;
+
+    seq.push({ l:ch.l, tier:ch.tier, at:cur, to:ch.to, kind:ch.type });
+    if(ch.to !== cur){ prev = cur; cur = ch.to; }
+    lastLabel = ch.l;
+    if(cur === 'dip') break;
+  }
+
+  let finisher = false;
+  if(cur === 'dip'){
+    seq.push({ l:'Hold it, then recover up — that\'s your ending', tier:1, at:cur, to:cur, kind:'inplace' });
+    finisher = true;
+  } else {
+    if(cur !== 'open1'){
+      let path = routeTo(cur, 'open1', allowed);
+      if(!path) path = routeTo(cur, 'open1', new Set([1,2,3]));
+      if(path){
+        path.forEach(p => seq.push({ l:p.l, tier:p.tier, at:p.from, to:p.to, kind:'edge' }));
+        cur = 'open1';
+      }
+    }
+    seq.push({ l:'Basic — resolve and breathe', tier:1, at:cur, to:cur, kind:'inplace' });
+  }
+  return { seq, finisher };
+}
+
+function reachableStarts(){
+  const allowed = allowedTiers();
+  const seen = new Set(['open1']);
+  const q = ['open1'];
+  while(q.length){
+    const n = q.shift();
+    outsFrom(n, allowed).forEach(e => { if(!seen.has(e.to)){ seen.add(e.to); q.push(e.to); } });
+  }
+  seen.delete('dip');
+  return NODES.filter(n => seen.has(n.id));
+}
+
+
+/* ---------- player state ---------- */
+let bpm = 100, loopOn = true, soundOn = true;
+let combo = null;
+const COUNT_IN = 8;
+
+/* pure timing plan — testable */
+function planBeat(n, countIn, moveCount){
+  if(n < countIn) return { phase:'countin', beatInBar: n % 8, moveIndex: -1 };
+  const k = n - countIn;
+  const moveIndex = Math.floor(k / 8);
+  if(moveIndex >= moveCount) return { phase:'done', beatInBar: 0, moveIndex: -1 };
+  return { phase:'play', beatInBar: k % 8, moveIndex: moveIndex };
+}
+function isHip(beatInBar){ return beatInBar === 3 || beatInBar === 7; }
+function isOne(beatInBar){ return beatInBar === 0; }
+
+/* ---------- audio ---------- */
+let actx = null, playing = false, globalBeat = 0, nextTime = 0, timerId = null, rafId = null;
+const queue = [];
+const LOOKAHEAD = 25, AHEAD = 0.12;
+
+function clickAt(time, kind){
+  if(!soundOn || !actx) return;
+  const o = actx.createOscillator(), g = actx.createGain();
+  let f = 620, peak = 0.16, dur = 0.045;
+  if(kind === 'one'){ f = 1250; peak = 0.34; dur = 0.07; }
+  else if(kind === 'hip'){ f = 880; peak = 0.28; dur = 0.075; }
+  else if(kind === 'countin'){ f = 500; peak = 0.2; dur = 0.05; }
+  o.type = 'square'; o.frequency.value = f;
+  g.gain.setValueAtTime(0.0001, time);
+  g.gain.exponentialRampToValueAtTime(peak, time + 0.005);
+  g.gain.exponentialRampToValueAtTime(0.0001, time + dur);
+  o.connect(g); g.connect(actx.destination);
+  o.start(time); o.stop(time + dur + 0.02);
+}
+
+function scheduler(){
+  if(!playing || !actx) return;
+  while(nextTime < actx.currentTime + AHEAD){
+    const p = planBeat(globalBeat, COUNT_IN, combo.seq.length);
+    if(p.phase === 'done'){
+      if(loopOn){ globalBeat = COUNT_IN; continue; }
+      stop(true); return;
+    }
+    let kind = 'tick';
+    if(p.phase === 'countin') kind = 'countin';
+    else if(isOne(p.beatInBar)) kind = 'one';
+    else if(isHip(p.beatInBar)) kind = 'hip';
+    clickAt(nextTime, kind);
+    queue.push({ t: nextTime, p: p });
+    nextTime += 60.0 / bpm;
+    globalBeat++;
+  }
+  timerId = setTimeout(scheduler, LOOKAHEAD);
+}
+
+function draw(){
+  if(!playing){ return; }
+  const now = actx ? actx.currentTime : 0;
+  let cur = null;
+  while(queue.length && queue[0].t <= now){ cur = queue.shift(); }
+  if(cur) paint(cur.p);
+  rafId = requestAnimationFrame(draw);
+}
+
+/* ---------- painting ---------- */
+function dotsHtml(active, phase){
+  let h = '';
+  for(let i = 0; i < 8; i++){
+    const cls = 'dot' + (isHip(i) ? ' hip' : '') + (active === i && phase !== 'idle' ? ' on' : '');
+    h += '<div class="' + cls + '">' + (i + 1) + '</div>';
+  }
+  return h;
+}
+
+function paint(p){
+  const big = document.getElementById('big');
+  const phase = document.getElementById('phase');
+  const dots = document.getElementById('dots');
+  const now = document.getElementById('now');
+  const nowpos = document.getElementById('nowpos');
+  const next = document.getElementById('next');
+  const prog = document.getElementById('prog');
+
+  dots.innerHTML = dotsHtml(p.beatInBar, p.phase);
+  big.textContent = p.beatInBar + 1;
+  big.className = 'bigcount' + (isHip(p.beatInBar) || isOne(p.beatInBar) ? ' accent' : '');
+
+  if(p.phase === 'countin'){
+    phase.textContent = 'count in';
+    now.textContent = 'Get ready';
+    nowpos.textContent = '';
+    const first = combo.seq[0];
+    next.innerHTML = 'first up &middot; <b>' + first.l + '</b>';
+    prog.textContent = '';
+    highlight(-1);
+    return;
+  }
+  const s = combo.seq[p.moveIndex];
+  phase.textContent = 'dancing';
+  now.textContent = s.l;
+  nowpos.innerHTML = (s.to !== s.at)
+      ? 'lands in <b>' + byId[s.to].label + '</b>'
+      : 'stay in <b>' + byId[s.at].label + '</b>';
+  const nx = combo.seq[p.moveIndex + 1];
+  next.innerHTML = nx ? ('next &middot; <b>' + nx.l + '</b>')
+                      : (loopOn ? 'next &middot; <b>back to the top</b>' : 'last one');
+  prog.textContent = 'move ' + (p.moveIndex + 1) + ' of ' + combo.seq.length;
+  highlight(p.moveIndex);
+}
+
+function highlight(i){
+  const items = document.querySelectorAll('#list .li');
+  items.forEach((el, k) => { el.classList.toggle('cur', k === i); });
+}
+
+function renderList(){
+  const list = document.getElementById('list');
+  if(!combo){ list.innerHTML = ''; return; }
+  const names = {1:'FUND',2:'INT',3:'ADV'};
+  list.innerHTML = combo.seq.map((s, i) =>
+    '<div class="li"><span class="n">' + (i*8+1) + '&ndash;' + (i*8+8) + '</span>' +
+    '<span>' + s.l + '<span class="tag t' + s.tier + '">' + names[s.tier] + '</span></span></div>'
+  ).join('');
+}
+
+function resetStage(){
+  document.getElementById('phase').textContent = 'ready';
+  document.getElementById('big').textContent = '\u2013';
+  document.getElementById('big').className = 'bigcount';
+  document.getElementById('dots').innerHTML = dotsHtml(-1, 'idle');
+  document.getElementById('now').textContent = combo ? 'Press play' : 'Press play';
+  document.getElementById('nowpos').textContent = '';
+  document.getElementById('next').innerHTML = combo ? ('starts with &middot; <b>' + combo.seq[0].l + '</b>') : '';
+  document.getElementById('prog').textContent = '';
+  highlight(-1);
+}
+
+/* ---------- transport ---------- */
+function start(){
+  if(!combo) newCombo();
+  try {
+    if(!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    if(actx.state === 'suspended') actx.resume();
+  } catch(e){ actx = null; }
+  playing = true;
+  globalBeat = 0;
+  queue.length = 0;
+  nextTime = actx ? actx.currentTime + 0.08 : 0;
+  document.getElementById('play').textContent = 'Stop';
+  document.getElementById('play').classList.add('stop');
+  scheduler();
+  rafId = requestAnimationFrame(draw);
+}
+
+function stop(finished){
+  playing = false;
+  if(timerId) clearTimeout(timerId);
+  if(rafId) cancelAnimationFrame(rafId);
+  timerId = null; rafId = null;
+  queue.length = 0;
+  document.getElementById('play').textContent = 'Play';
+  document.getElementById('play').classList.remove('stop');
+  resetStage();
+  if(finished) document.getElementById('phase').textContent = 'done';
+}
+
+function newCombo(){
+  combo = generate();
+  renderList();
+  resetStage();
+}
+
+/* ---------- controls ---------- */
+function setBpm(v){
+  bpm = Math.max(60, Math.min(150, v));
+  const el = document.getElementById('bpmv');
+  if(el) el.innerHTML = bpm + '<small>BPM</small>';
+  const r = document.getElementById('bpmr');
+  if(r && parseInt(r.value, 10) !== bpm) r.value = bpm;
+  const note = document.getElementById('bpmnote');
+  if(note){
+    note.textContent = bpm < 85 ? 'slow — good for learning the transitions'
+                    : bpm < 110 ? 'moderate — building it up'
+                    : bpm < 130 ? 'close to real song tempo'
+                    : 'fast — social floor speed';
+  }
+}
+
+function initGroup(id, setter){
+  const box = document.getElementById(id);
+  if(!box) return;
+  box.addEventListener('click', ev => {
+    const b = ev.target.closest('.opt');
+    if(!b) return;
+    box.querySelectorAll('.opt').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    setter(parseInt(b.getAttribute('data-v'), 10));
+  });
+}
+
+function refreshStart(){
+  const sel = document.getElementById('start');
+  if(!sel) return;
+  const opts = reachableStarts();
+  if(!opts.some(o => o.id === startPos)) startPos = 'open1';
+  sel.innerHTML = opts.map(n => '<option value="' + n.id + '"' + (n.id === startPos ? ' selected' : '') + '>' +
+      n.label + ' \u00b7 ' + n.sub + '</option>').join('');
+}
+
+function init(){
+  refreshStart();
+  const sel = document.getElementById('start');
+  if(sel) sel.addEventListener('change', () => { startPos = sel.value; newCombo(); });
+
+  initGroup('lvl', v => { level = v; refreshStart(); newCombo(); });
+  initGroup('len', v => { steps = v; newCombo(); });
+
+  document.getElementById('bup').addEventListener('click', () => setBpm(bpm + 5));
+  document.getElementById('bdn').addEventListener('click', () => setBpm(bpm - 5));
+  document.getElementById('bpmr').addEventListener('input', e => setBpm(parseInt(e.target.value, 10)));
+
+  const lp = document.getElementById('loop');
+  lp.addEventListener('click', () => { loopOn = !loopOn; lp.classList.toggle('on', loopOn); });
+  const sd = document.getElementById('snd');
+  sd.addEventListener('click', () => { soundOn = !soundOn; sd.classList.toggle('on', soundOn); });
+  document.getElementById('newc').addEventListener('click', () => { if(playing) stop(false); newCombo(); });
+
+  document.getElementById('play').addEventListener('click', () => { playing ? stop(false) : start(); });
+
+  setBpm(100);
+  newCombo();
+}
+
+if (typeof document !== 'undefined' && document.getElementById('play')) {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+}
+</script>
+</body>
+</html>

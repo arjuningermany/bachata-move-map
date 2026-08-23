@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<!--
+  Bachata — Start Here: the basic step
+  Created by Arjun · © 2026 Arjun · All rights reserved.
+  Original compilation, structure, and interactive design by Arjun.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Start here — Bachata tools by Arjun</title>
+<meta name="author" content="Arjun" />
+<meta name="copyright" content="© 2026 Arjun. All rights reserved." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: radial-gradient(120% 70% at 50% -10%, #2a1d30 0%, #1e1520 55%);
+    color: #f3e9de;
+    font-family: "IBM Plex Mono", ui-monospace, "Courier New", monospace;
+    line-height: 1.5;
+    padding: 30px 16px 56px;
+  }
+  .wrap { max-width: 660px; margin: 0 auto; }
+  .eyebrow { font-size: 11.5px; letter-spacing: 0.22em; text-transform: uppercase; color: #e8a13a; margin: 0 0 10px; }
+  h1 { font-family: "Fraunces", Georgia, serif; font-weight: 900; font-size: 33px; line-height: 1.05; letter-spacing: -0.015em; margin: 0 0 10px; }
+  h1 em { font-style: italic; font-weight: 400; color: #e6748b; }
+  .lede { color: #b9a6ae; font-size: 13.5px; margin: 0 0 12px; }
+  .byline { font-size: 12.5px; letter-spacing: 0.06em; color: #e8a13a; margin: 0 0 6px; }
+  .backlink { margin: 0 0 22px; }
+  .backlink a { color: #b9a6ae; font-size: 12.5px; text-decoration: none; border-bottom: 1px solid #4a3a4e; padding-bottom: 1px; }
+
+  h2 { font-family: "Fraunces", Georgia, serif; font-size: 21px; font-weight: 600; margin: 30px 0 10px; }
+  .card { border: 1px solid #4a3a4e; border-radius: 16px; background: #241829; padding: 16px; margin-bottom: 14px; }
+
+  .floor { border: 1px solid #4a3a4e; border-radius: 18px; background: #2a1e2e; padding: 14px 10px 16px; text-align: center; }
+  svg#feet { width: 100%; height: auto; display: block; }
+  .foot { transition: transform .17s cubic-bezier(.4,0,.2,1); }
+
+  .countline { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 4px 0 2px; }
+  .bignum { font-family: "Fraunces", Georgia, serif; font-size: 54px; line-height: 1; font-weight: 900; min-width: 44px; }
+  .bignum.accent { color: #e8a13a; }
+  .cue { text-align: left; max-width: 260px; }
+  .cue .what { font-size: 14px; color: #f3e9de; }
+  .cue .why { font-size: 11.5px; color: #8a7580; margin-top: 2px; }
+
+  .dots { display: flex; justify-content: center; gap: 6px; margin: 10px 0 2px; }
+  .dot { width: 25px; height: 25px; border-radius: 50%; border: 1.5px solid #4a3a4e; display: grid; place-items: center; font-size: 10.5px; color: #8a7580; }
+  .dot.hip { border-color: #6b5570; color: #b9a6ae; }
+  .dot.on { background: #f3e9de; border-color: #f3e9de; color: #1e1520; font-weight: 600; }
+  .dot.on.hip { background: #e8a13a; border-color: #e8a13a; color: #1e1520; }
+
+  .controls { display: flex; gap: 9px; margin-top: 14px; flex-wrap: wrap; }
+  .go { flex: 1 1 140px; font-family: "Fraunces", Georgia, serif; font-size: 18px; font-weight: 600;
+        background: #e8a13a; color: #1e1520; border: 0; border-radius: 13px; padding: 13px; cursor: pointer; }
+  .go.stop { background: #e6748b; }
+  .go.ghost { background: transparent; color: #e8a13a; border: 1.5px solid #4a3a4e; }
+  .go.ghost:hover { border-color: #e8a13a; }
+
+  .lbl { display: block; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #8a7580; margin-bottom: 8px; }
+  .opts { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+  .opt { font-family: inherit; font-size: 12.5px; cursor: pointer; border-radius: 999px; padding: 7px 14px;
+         border: 1.5px solid #4a3a4e; background: transparent; color: #b9a6ae; }
+  .opt.on { border-color: #e8a13a; background: #e8a13a; color: #1e1520; font-weight: 600; }
+  .bpmrow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .bpmbtn { font-family: inherit; font-size: 17px; cursor: pointer; border: 1.5px solid #4a3a4e; background: transparent; color: #e8a13a; border-radius: 10px; width: 40px; height: 36px; }
+  .bpmval { font-family: "Fraunces", Georgia, serif; font-size: 25px; font-weight: 600; min-width: 58px; text-align: center; }
+  .bpmval small { font-family: "IBM Plex Mono", monospace; font-size: 9.5px; color: #8a7580; display: block; letter-spacing: .12em; margin-top: -3px; }
+  input[type=range] { flex: 1 1 150px; min-width: 130px; accent-color: #e8a13a; }
+  .row { margin-bottom: 13px; } .row:last-child { margin-bottom: 0; }
+
+  ol.steps { list-style: none; counter-reset: s; margin: 0; padding: 0; }
+  ol.steps li { counter-increment: s; position: relative; padding: 10px 0 10px 42px; border-bottom: 1px solid #3a2c3f; font-size: 13.5px; color: #cdb9c0; }
+  ol.steps li:last-child { border-bottom: 0; }
+  ol.steps li::before { content: counter(s); position: absolute; left: 0; top: 10px; width: 27px; height: 27px;
+    border-radius: 50%; background: rgba(232,161,58,.14); color: #e8a13a; display: grid; place-items: center; font-size: 12px; }
+  ol.steps li b { color: #f3e9de; font-weight: 600; }
+  ol.steps li.pop::before { background: #e8a13a; color: #1e1520; font-weight: 600; }
+
+  ul.checks { list-style: none; margin: 0; padding: 0; }
+  ul.checks li { padding: 9px 0 9px 26px; position: relative; font-size: 13.5px; color: #cdb9c0; border-bottom: 1px solid #3a2c3f; }
+  ul.checks li:last-child { border-bottom: 0; }
+  ul.checks li::before { content: "✓"; position: absolute; left: 0; color: #6cc08a; font-size: 13px; }
+  ul.checks li b { color: #f3e9de; font-weight: 600; }
+  ul.no li::before { content: "✕"; color: #e6748b; }
+
+  .tip { color: #8a7580; font-size: 12px; margin-top: 14px; line-height: 1.65; }
+  .nextup { border: 1px solid #4a3a4e; border-radius: 16px; background: #241829; padding: 15px 16px; margin-top: 26px; }
+  .nextup a { color: #e8a13a; text-decoration: none; font-size: 13.5px; border-bottom: 1px solid rgba(232,161,58,.4); }
+  .nextup p { margin: 0 0 8px; font-size: 13px; color: #b9a6ae; }
+
+  footer.credit { margin-top: 34px; }
+  footer.credit .rule { height: 1px; background: #4a3a4e; margin: 0 0 16px; }
+  footer.credit p { margin: 0 0 8px; font-size: 13px; color: #cdb9c0; }
+  footer.credit p strong { color: #f3e9de; font-weight: 600; }
+  footer.credit .fine { font-size: 11.5px; color: #8a7580; line-height: 1.55; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">Bachata · start here</p>
+  <h1>The basic step, <em>one count at a time.</em></h1>
+  <p class="lede">Never danced bachata? This is the only thing you need. Watch the feet move in time, or tap through it count by count until it clicks.</p>
+  <p class="byline">Made by Arjun · © 2026</p>
+  <p class="backlink"><a href="./">&larr;&nbsp; All tools</a></p>
+
+  <div class="floor">
+    <svg id="feet" viewBox="0 0 400 200" role="img" aria-label="Top-down animated view of the feet doing the bachata basic step">
+      <line x1="20" y1="150" x2="380" y2="150" stroke="#3a2c3f" stroke-width="1"/>
+      <text x="200" y="26" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#8a7580">looking down at your own feet</text>
+      <g id="gL" class="foot">
+        <ellipse cx="0" cy="100" rx="14" ry="24" id="eL" fill="#e8a13a" stroke="#e8a13a" stroke-width="2"/>
+        <text x="0" y="105" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="600" id="tL" fill="#1e1520">L</text>
+      </g>
+      <g id="gR" class="foot">
+        <ellipse cx="0" cy="100" rx="14" ry="24" id="eR" fill="#e8a13a" stroke="#e8a13a" stroke-width="2"/>
+        <text x="0" y="105" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="600" id="tR" fill="#1e1520">R</text>
+      </g>
+      <g id="pop" opacity="0">
+        <text x="200" y="180" text-anchor="middle" font-family="Fraunces,Georgia,serif" font-size="19" font-weight="600" fill="#e8a13a">hip pop</text>
+      </g>
+    </svg>
+
+    <div class="dots" id="dots"></div>
+
+    <div class="countline">
+      <div class="bignum" id="big">1</div>
+      <div class="cue">
+        <div class="what" id="what">&nbsp;</div>
+        <div class="why" id="why">&nbsp;</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="go" id="play">Play</button>
+      <button class="go ghost" id="step">Next count &rarr;</button>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <div class="row">
+      <span class="lbl">Tempo</span>
+      <div class="bpmrow">
+        <button class="bpmbtn" id="bdn">&minus;</button>
+        <span class="bpmval" id="bpmv">70<small>BPM</small></span>
+        <button class="bpmbtn" id="bup">+</button>
+        <input type="range" id="bpmr" min="40" max="140" step="1" value="70" />
+      </div>
+      <p class="tip" id="bpmnote" style="margin-top:8px"></p>
+    </div>
+    <div class="row">
+      <span class="lbl">Your role</span>
+      <div class="opts" id="role">
+        <button class="opt on" data-v="lead">Leader</button>
+        <button class="opt" data-v="follow">Follower</button>
+      </div>
+    </div>
+    <div class="row">
+      <span class="lbl">Sound</span>
+      <div class="opts"><button class="opt on" id="snd">Click on</button></div>
+    </div>
+  </div>
+
+  <h2>What's happening</h2>
+  <div class="card">
+    <ol class="steps" id="written"></ol>
+  </div>
+
+  <h2>Before you step</h2>
+  <div class="card">
+    <ul class="checks">
+      <li><b>Soft knees.</b> Stay slightly down the whole time. Never lock them straight — this is what makes it look like dancing instead of walking.</li>
+      <li><b>Chest up, shoulders back.</b> Tall spine. You lead from the chest, so this is your steering.</li>
+      <li><b>Weight fully on one foot.</b> Commit. Half-and-half is what a partner feels as hesitant.</li>
+      <li><b>Eyes up.</b> Not at your feet — looking down collapses everything above it.</li>
+    </ul>
+  </div>
+
+  <h2>The three beginner mistakes</h2>
+  <div class="card">
+    <ul class="checks no">
+      <li><b>Locked knees.</b> The hip movement comes from bending and straightening the knees. Straight legs, no hips — it's that simple.</li>
+      <li><b>Forcing the hips.</b> Don't push them. Let them happen from the weight shift and the knees.</li>
+      <li><b>Watching your feet.</b> Learn it here, then look up. On the floor your eyes belong up.</li>
+    </ul>
+  </div>
+
+  <div class="nextup">
+    <p>Once the basic is automatic and you can hold it without thinking:</p>
+    <a href="map.html">See how moves connect &rarr;</a><br/>
+    <a href="player.html">Practise combos in time &rarr;</a>
+  </div>
+
+  <footer class="credit">
+    <div class="rule"></div>
+    <p><strong>Made by Arjun.</strong> &copy; 2026 Arjun &middot; All rights reserved.</p>
+    <p class="fine">This compilation, structure, and interactive design are the original work of Arjun. The underlying bachata moves are common dance knowledge; this particular arrangement and these tools are mine.</p>
+  </footer>
+
+</div>
+
+<script>
+/* ---------- the basic step, as data ----------
+   x positions are in SVG units; feet travel right on 1-4, back left on 5-8.
+   weight: which foot carries you. tap: a foot touching with no weight.        */
+const OX = 145;                      // svg x-offset so the travel sits centred
+const LEAD = [
+  { L:-13, R: 63, w:'R', tap:null, what:'Right foot steps right',      why:'weight lands on it' },
+  { L: 37, R: 63, w:'L', tap:null, what:'Left foot closes in',          why:'weight changes over' },
+  { L: 37, R:113, w:'R', tap:null, what:'Right foot steps right again', why:'weight lands on it' },
+  { L: 87, R:113, w:'R', tap:'L',  what:'Left foot taps beside',        why:'no weight — hip pops here' },
+  { L: 37, R:113, w:'L', tap:null, what:'Left foot steps left',         why:'weight lands on it' },
+  { L: 37, R: 63, w:'R', tap:null, what:'Right foot closes in',         why:'weight changes over' },
+  { L:-13, R: 63, w:'L', tap:null, what:'Left foot steps left again',   why:'weight lands on it' },
+  { L:-13, R: 13, w:'L', tap:'R',  what:'Right foot taps beside',       why:'no weight — hip pops here' }
+];
+
+/* follower mirrors the leader: opposite side, opposite foot */
+function frames(role){
+  if(role === 'lead') return LEAD;
+  return LEAD.map(f => ({
+    L: -f.R, R: -f.L,
+    w: f.w === 'R' ? 'L' : 'R',
+    tap: f.tap === 'L' ? 'R' : (f.tap === 'R' ? 'L' : null),
+    what: f.what.replace('Right', '\u0000').replace('Left', 'Right').replace('\u0000', 'Left')
+             .replace('right', '\u0000').replace('left', 'right').replace('\u0000', 'left'),
+    why: f.why
+  }));
+}
+
+let bpm = 70, role = 'lead', soundOn = true, beat = 0, playing = false;
+function F(){ return frames(role); }
+function isHip(i){ return i === 3 || i === 7; }
+
+/* ---------- audio ---------- */
+let actx = null, nextTime = 0, timerId = null, rafId = null;
+const queue = [];
+function click(time, kind){
+  if(!soundOn || !actx) return;
+  const o = actx.createOscillator(), g = actx.createGain();
+  let f = 620, peak = 0.16, dur = 0.045;
+  if(kind === 'one'){ f = 1250; peak = 0.32; dur = 0.07; }
+  else if(kind === 'hip'){ f = 880; peak = 0.27; dur = 0.075; }
+  o.type = 'square'; o.frequency.value = f;
+  g.gain.setValueAtTime(0.0001, time);
+  g.gain.exponentialRampToValueAtTime(peak, time + 0.005);
+  g.gain.exponentialRampToValueAtTime(0.0001, time + dur);
+  o.connect(g); g.connect(actx.destination);
+  o.start(time); o.stop(time + dur + 0.02);
+}
+function scheduler(){
+  if(!playing || !actx) return;
+  while(nextTime < actx.currentTime + 0.12){
+    const b = beat % 8;
+    click(nextTime, b === 0 ? 'one' : (isHip(b) ? 'hip' : 'tick'));
+    queue.push({ t: nextTime, b: b });
+    nextTime += 60.0 / bpm;
+    beat++;
+  }
+  timerId = setTimeout(scheduler, 25);
+}
+function draw(){
+  if(!playing) return;
+  const now = actx ? actx.currentTime : 0;
+  let cur = null;
+  while(queue.length && queue[0].t <= now){ cur = queue.shift(); }
+  if(cur) paint(cur.b);
+  rafId = requestAnimationFrame(draw);
+}
+
+/* ---------- painting ---------- */
+function paint(i){
+  const f = F()[i];
+  const gL = document.getElementById('gL'), gR = document.getElementById('gR');
+  gL.style.transform = 'translateX(' + (OX + f.L) + 'px)';
+  gR.style.transform = 'translateX(' + (OX + f.R) + 'px)';
+
+  const eL = document.getElementById('eL'), eR = document.getElementById('eR');
+  const tL = document.getElementById('tL'), tR = document.getElementById('tR');
+  const setFoot = (el, txt, carrying) => {
+    if(carrying){ el.setAttribute('fill', '#e8a13a'); el.setAttribute('stroke', '#e8a13a'); txt.setAttribute('fill', '#1e1520'); }
+    else { el.setAttribute('fill', 'none'); el.setAttribute('stroke', '#8a7580'); txt.setAttribute('fill', '#8a7580'); }
+  };
+  setFoot(eL, tL, f.w === 'L');
+  setFoot(eR, tR, f.w === 'R');
+
+  document.getElementById('pop').setAttribute('opacity', isHip(i) ? '1' : '0');
+
+  const big = document.getElementById('big');
+  big.textContent = i + 1;
+  big.className = 'bignum' + (isHip(i) || i === 0 ? ' accent' : '');
+  document.getElementById('what').textContent = f.what;
+  document.getElementById('why').textContent = f.why;
+
+  let d = '';
+  for(let k = 0; k < 8; k++){
+    d += '<div class="dot' + (isHip(k) ? ' hip' : '') + (k === i ? ' on' : '') + '">' + (k + 1) + '</div>';
+  }
+  document.getElementById('dots').innerHTML = d;
+  markWritten(i);
+}
+
+function renderWritten(){
+  const f = F();
+  document.getElementById('written').innerHTML = f.map((s, i) =>
+    '<li class="' + (isHip(i) ? 'pop' : '') + '"><b>' + s.what + '</b> — ' + s.why + '</li>'
+  ).join('');
+}
+function markWritten(i){
+  const items = document.querySelectorAll('#written li');
+  items.forEach((el, k) => { el.style.color = (k === i) ? '#f3e9de' : ''; });
+}
+
+/* ---------- transport ---------- */
+function start(){
+  try {
+    if(!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    if(actx.state === 'suspended') actx.resume();
+  } catch(e){ actx = null; }
+  playing = true; beat = 0; queue.length = 0;
+  nextTime = actx ? actx.currentTime + 0.08 : 0;
+  const p = document.getElementById('play');
+  p.textContent = 'Stop'; p.classList.add('stop');
+  document.getElementById('step').disabled = true;
+  scheduler(); rafId = requestAnimationFrame(draw);
+}
+function stop(){
+  playing = false;
+  if(timerId) clearTimeout(timerId);
+  if(rafId) cancelAnimationFrame(rafId);
+  timerId = null; rafId = null; queue.length = 0;
+  const p = document.getElementById('play');
+  p.textContent = 'Play'; p.classList.remove('stop');
+  document.getElementById('step').disabled = false;
+}
+function stepOnce(){
+  if(playing) stop();
+  beat = (beat + 1) % 8;
+  paint(beat);
+  if(soundOn){
+    try {
+      if(!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+      if(actx.state === 'suspended') actx.resume();
+      click(actx.currentTime + 0.01, beat === 0 ? 'one' : (isHip(beat) ? 'hip' : 'tick'));
+    } catch(e){}
+  }
+}
+
+function setBpm(v){
+  bpm = Math.max(40, Math.min(140, v));
+  const el = document.getElementById('bpmv');
+  if(el) el.innerHTML = bpm + '<small>BPM</small>';
+  const r = document.getElementById('bpmr');
+  if(r && parseInt(r.value, 10) !== bpm) r.value = bpm;
+  const n = document.getElementById('bpmnote');
+  if(n) n.textContent = bpm < 65 ? 'very slow — place each foot deliberately'
+                     : bpm < 95 ? 'learning pace — this is the right place to start'
+                     : bpm < 120 ? 'building up'
+                     : 'real song tempo';
+}
+
+function init(){
+  renderWritten();
+  paint(0);
+  setBpm(70);
+
+  document.getElementById('play').addEventListener('click', () => { playing ? stop() : start(); });
+  document.getElementById('step').addEventListener('click', stepOnce);
+  document.getElementById('bup').addEventListener('click', () => setBpm(bpm + 5));
+  document.getElementById('bdn').addEventListener('click', () => setBpm(bpm - 5));
+  document.getElementById('bpmr').addEventListener('input', e => setBpm(parseInt(e.target.value, 10)));
+
+  const rb = document.getElementById('role');
+  rb.addEventListener('click', ev => {
+    const b = ev.target.closest('.opt');
+    if(!b) return;
+    rb.querySelectorAll('.opt').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    role = b.getAttribute('data-v');
+    renderWritten();
+    paint(playing ? (beat % 8) : beat);
+  });
+
+  const sd = document.getElementById('snd');
+  sd.addEventListener('click', () => {
+    soundOn = !soundOn;
+    sd.classList.toggle('on', soundOn);
+    sd.textContent = soundOn ? 'Click on' : 'Click off';
+  });
+}
+
+if (typeof document !== 'undefined' && document.getElementById('play')) {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+}
+</script>
+</body>
+</html>

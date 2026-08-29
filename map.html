@@ -70,23 +70,30 @@
   .placeholder { color:#b9a6ae; font-size: 13.5px; }
   .placeholder b { color:#f3e9de; }
   .note { color:#8a7580; font-size: 12px; margin-top: 18px; }
-  .silo { border: 1px solid #4a3a4e; border-radius: 18px; background: #241829; margin-top: 16px; padding: 12px 10px 14px; }
+  .newhere { border: 1px solid #4a3a4e; border-left: 3px solid #6cc08a; border-radius: 12px;
+             background: rgba(108,192,138,.07); padding: 11px 14px; margin: 0 0 18px; font-size: 12.5px; color: #b9a6ae; }
+  .newhere a { color: #8fd6ac; text-decoration: none; border-bottom: 1px solid rgba(143,214,172,.45); }
+  .newhere b { color: #f3e9de; font-weight: 600; }
+  .silo { border: 1px solid #4a3a4e; border-radius: 16px; background: #241829; margin-top: 14px; padding: 9px 10px 10px; }
   .silo svg { width: 100%; height: auto; display: block; }
-  .silo-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 2px 6px 8px; flex-wrap: wrap; }
-  .silo-title { font-family: "Fraunces", Georgia, serif; font-size: 17px; font-weight: 600; color: #f3e9de; }
+  .silo-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 1px 4px 6px; flex-wrap: wrap; }
+  .silo-title { font-family: "Fraunces", Georgia, serif; font-size: 15.5px; font-weight: 600; color: #f3e9de; }
   .silo-title span { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: #b9a6ae; font-weight: 400; margin-left: 7px; }
   .silo-key { font-size: 10.5px; color: #8a7580; letter-spacing: .04em; }
   .silo-key b.l { color: #e8a13a; font-weight: 600; }
   .silo-key b.f { color: #5ed3c6; font-weight: 600; }
-  .silo-note { font-size: 11.5px; color: #8a7580; padding: 7px 6px 0; line-height: 1.55; }
-  .rolebar { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; padding: 0 6px 10px; }
+  .silo-note { font-size: 11px; color: #8a7580; padding: 5px 4px 0; line-height: 1.5; }
+  .rolebar { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding: 0 4px 7px; }
   .rolebar .rl { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: #8a7580; margin-right: 2px; }
-  .rolebtn { font-family: "IBM Plex Mono", monospace; font-size: 12px; cursor: pointer; border-radius: 999px;
-             padding: 6px 13px; border: 1.5px solid #4a3a4e; background: transparent; color: #b9a6ae; }
+  .rolebtn { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; cursor: pointer; border-radius: 999px;
+             padding: 5px 11px; border: 1.5px solid #4a3a4e; background: transparent; color: #b9a6ae; }
   .rolebtn.on[data-r="lead"] { border-color: #e8a13a; background: #e8a13a; color: #1e1520; font-weight: 600; }
   .rolebtn.on[data-r="follow"] { border-color: #5ed3c6; background: #5ed3c6; color: #12201e; font-weight: 600; }
   .rolebtn.on[data-r="both"] { border-color: #cdb9c0; background: #cdb9c0; color: #1e1520; font-weight: 600; }
-  .yourbit { font-size: 12px; color: #f3e9de; padding: 8px 6px 0; line-height: 1.6; }
+  .yourbit { font-size: 11.5px; color: #f3e9de; padding: 6px 4px 0; line-height: 1.55; }
+  .siloflag { display: inline-block; font-family: "IBM Plex Mono", monospace; font-size: 10.5px;
+    letter-spacing: .04em; color: #eeb968; background: rgba(232,161,58,.12);
+    border: 1px solid rgba(232,161,58,.35); border-radius: 999px; padding: 4px 10px; margin: 6px 4px 0; }
   .yourbit b { color: #e8a13a; font-weight: 600; }
   .yourbit.f b { color: #5ed3c6; }
 
@@ -108,6 +115,7 @@
   <p class="byline">Made by Arjun · © 2026</p>
   <p class="backlink"><a href="./">&larr;&nbsp; All tools</a></p>
   <p class="sub"><b>Pick a role, then tap any position</b> to see what it opens up and where it leads. Positions are the states you can be in; the moves between them are the arrows. Use the filters to layer in harder material.</p>
+  <p class="newhere"><b>New to bachata?</b> This map assumes you already know the basic step. Start at the <a href="basics.html">footwork lab</a> and come back once it feels automatic.</p>
 
   <div class="controls">
     <span class="lbl">Show:</span>
@@ -140,7 +148,7 @@
       <button class="rolebtn" data-r="follow">Follower</button>
       <button class="rolebtn" data-r="both">Both</button>
     </div>
-    <svg id="silo" viewBox="0 0 420 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Silhouettes of leader and follower in the selected position"></svg>
+    <svg id="silo" viewBox="0 0 400 184" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Silhouettes of leader and follower in the selected position"></svg>
     <p class="silo-note" id="siloNote"></p>
     <p class="yourbit" id="siloRole"></p>
   </div>
@@ -328,95 +336,103 @@ function sizeGraph(){
 /* ============================================================
    SILHOUETTES: two parametric figures, tweened between poses.
 
-   Geometry notes (learned the hard way):
+   Geometry notes:
    * SVG rotate() is CLOCKWISE for positive angles in screen space.
      A limb drawn pointing DOWN therefore swings toward the viewer's
      LEFT on a positive angle, and toward the RIGHT on a negative one.
      So the leader (drawn on the left) reaches the follower with
      NEGATIVE angles, and the follower reaches back with POSITIVE ones.
-   * Legs sit outside the tilt group, so leaning the torso doesn't
-     swing the feet off the floor.
+   * Legs are articulated (hip + knee) and sit outside the torso tilt,
+     so a lean bends the body without lifting the feet.
    * Both figures face the viewer, the standard dance-diagram
-     convention. The joining lines and dots show how hands connect.
+     convention. Joining lines and dots show how the hands connect.
    ============================================================ */
-const HIPY = 150, UPPER = 34, FORE = 30, SHX = 18, SHY = -58;
+const HIPY = 92, UPPER = 29, FORE = 26, SHX = 13, SHY = -43;
+const THIGH = 38, SHIN = 36, HIPX = 8, FLOOR = HIPY + THIGH + SHIN + 3;
 
-function P(x, yoff, tilt, Ash, Ael, Bsh, Bel){
-  return { x:x, yoff:yoff, tilt:tilt, Ash:Ash, Ael:Ael, Bsh:Bsh, Bel:Bel };
+/* x, yoff, tilt, arms (shoulder/elbow), legs (hip/knee) */
+function P(x, yoff, tilt, Ash, Ael, Bsh, Bel, Ahip, Akne, Bhip, Bkne){
+  return { x:x, yoff:yoff, tilt:tilt, Ash:Ash, Ael:Ael, Bsh:Bsh, Bel:Bel,
+           Ahip:(Ahip===undefined?6:Ahip), Akne:(Akne===undefined?0:Akne),
+           Bhip:(Bhip===undefined?-6:Bhip), Bkne:(Bkne===undefined?0:Bkne) };
 }
 
 const POSES = {
   open2: {
     roleLead:'Both arms stay live. Keep a light, even tone so a change of direction reads instantly.',
     roleFollow:'Two connections mean two sources of information. Follow the one that moves first and let the other stay soft.',
-    lead:  P(150, 0, 0, -46, -34, -54, -28),
-    follow:P(270, 0, 0,  54,  28,  46,  34),
+    lead:  P(152, 0, 0, -46, -34, -54, -28),
+    follow:P(248, 0, 0,  54,  28,  46,  34),
     conns:[['lead','A','follow','A'],['lead','B','follow','B']],
     note:'Both hands joined at arm\u2019s length. The widest, safest shape: easy to see each other, and the clearest place to read a lead.'
   },
   open1: {
     roleLead:'The single hand carries everything. Prep early, then move, so the signal arrives before the beat.',
     roleFollow:'One connection only, so the rest of the information comes from the body. Keep the arm springy, not rigid.',
-    lead:  P(125, 0, 0,  14,   8, -50, -30),
-    follow:P(295, 0, 0,  50,  30, -14,  -8),
+    lead:  P(139, 0, 0,  14,   8, -50, -30),
+    follow:P(261, 0, 0,  50,  30, -14,  -8),
     conns:[['lead','B','follow','A']],
     note:'One connection: the leader\u2019s left hand to the follower\u2019s right. Home base, since almost everything starts and resolves here.'
   },
   hshake: {
     roleLead:'The unusual grip is the point. Set it up on a clear beat or it reads as a mistake.',
     roleFollow:'Expect the hand to feel wrong. It normally means a wrap or hammerlock is coming, so keep the elbow soft.',
-    lead:  P(132, 0, 0, -58, -26,  -8,  -5),
-    follow:P(288, 0, 0,  58,  26,   8,   5),
+    lead:  P(150, 0, 0, -58, -26,  -8,  -5),
+    follow:P(250, 0, 0,  58,  26,   8,   5),
     conns:[['lead','A','follow','A']],
     note:'Same-hand hold: the leader\u2019s right hand to the follower\u2019s right. It feels awkward on purpose, since it sets up hammerlocks and wraps the normal hold cannot reach.'
   },
   hammer: {
     roleLead:'Lead it gently and stop where the shoulder stops. Never push past the natural range.',
     roleFollow:'The arm folds behind the back. Keep it relaxed and speak up straight away if the angle pinches.',
-    lead:  P(168, 0, 0,  12,   7, -40, -30),
-    follow:P(252, 0, 0,  20, -40, -10,  -6),
+    lead:  P(178, 0, 0,  12,   7, -12, -14),
+    follow:P(222, 0, 0,  20, -40, -10,  -6),
     conns:[['lead','B','follow','A']],
     note:'The follower\u2019s forearm folds behind their own back, with the leader\u2019s hand holding it there. Comfortable only when led gently. Never force the angle.'
   },
   closed: {
     roleLead:'The hand on the shoulder blade steers. Move the chest and the couple moves with it.',
     roleFollow:'Close contact means the lead comes from the torso, not the arms. Stay tall and keep the frame there to be felt.',
-    lead:  P(182, 0, 0, -62, -22, -78,  -6),
-    follow:P(244, 0, 0, -58, -22,  48,  30),
+    lead:  P(184, 0, 0, -62, -16, -78,  -6,  5, 0, -2, 0),
+    follow:P(222, 0, 0, -58, -22,  48,  30,  2, 0, -5, 0),
     conns:[['lead','A','follow','torso'],['lead','B','follow','A']],
     note:'Bodies close and slightly offset. The leader\u2019s right hand on the follower\u2019s shoulder blade is the steering wheel, the follower\u2019s left hand rests on the leader\u2019s shoulder, and the lead hand stays out to the side.'
   },
   semi: {
     roleLead:'Both point the same way, so this is where the couple covers ground. Watch the floor ahead.',
     roleFollow:'Travelling position, so expect to walk rather than turn. Match the stride instead of holding a spot.',
-    lead:  P(140, 0, 11,  12,   7, -50, -30),
-    follow:P(280, 0, 11,  50,  30, -12,  -7),
+    lead:  P(144, 0, 11,  12,   7, -48, -60, 12, 4, -10, 6),
+    follow:P(262, 0, 11,  52,   0, -12,  -7, 12, 4, -10, 6),
     conns:[['lead','B','follow','A']],
     note:'Promenade. Both dancers angled the same way, so the couple travels together across the floor instead of turning on the spot.'
   },
   shadow: {
     roleLead:'No eye contact here, so leads must be clearer and softer than usual.',
     roleFollow:'Nothing is visible behind, so everything arrives through the hands and frame. Trust it and stay upright.',
-    lead:  P(205, 0, 0, -34, -48,  34,  48),
-    follow:P(205, 18, 0, -34, -48,  34,  48),
+    lead:  P(191, 0, 0, -34, -48,  34,  48,  6, 0, -6, 0),
+    follow:P(203, 0, 0, -30, -44,  30,  44,  5, 0, -5, 0),
     conns:[['lead','A','follow','A'],['lead','B','follow','B']],
     note:'The follower is in front, the leader behind, both facing the same way. The frame comes over the follower\u2019s shoulders. The follower cannot see the leader here, so leads have to be clear and gentle.'
   },
   cuddle: {
     roleLead:'A resting shape. Use it in a slow passage, then unwrap on a clean phrase.',
     roleFollow:'A wrapped, close shape. Keep your own balance rather than leaning into the wrap.',
-    lead:  P(180, 0, 0,  12,   7, -70, -16),
-    follow:P(234, 8, 0,  20, -10, -10,  -6),
+    lead:  P(175, 0, 0,  12,   7, -58, -30,  6, 0, -3, 0),
+    follow:P(221, 0, 0,  40,  40, -10,  -6,  4, 0, -7, 0),
     conns:[['lead','B','follow','torso'],['follow','A','lead','torso']],
     note:'The follower is wrapped in at the leader\u2019s side. A resting shape, good for a slow passage before unwrapping back out to open.'
   },
   dip: {
-    roleLead:'Steady, never catch. If the weight is not already supported, do not start it.',
-    roleFollow:'Your own bent leg carries you. Only go as far as your own balance allows.',
-    lead:  P(196, 0, -8, -54, -26, -70, -14),
-    follow:P(252, 0, 42,  34,  22, -18,  -8),
+    roleLead:'Support the upper back and steady only, never take the weight. If the preparation does not feel solid, simply do not go into the drop.',
+    roleFollow:'Your own legs carry you the whole way. Go only as far as your own balance allows, and decline any drop you have not been taught.',
+    /* Deliberately drawn as the PREPARATION, both dancers upright.
+       A flat front-on view cannot distinguish leaning back from bending
+       sideways, so drawing the drop itself always reads wrong.          */
+    lead:  P(188, 0, 0, -60, -18,  14,   8,   7, 2,  -7, 2),
+    follow:P(232, 0, 0,  16,  10, -14,  -7,   9, 3, -11, 4),
     conns:[['lead','A','follow','torso']],
-    note:'A finish, not a transition. The follower carries their own weight on a bent supporting leg. The leader steadies, never catches.'
+    flag:'preparation shown, not the drop itself',
+    note:'Shown here as the preparation: upright, close, with the leader\u2019s hand supporting the upper back. The drop itself is a finishing move that carries real injury risk, so learn it from a teacher in person rather than from a diagram.'
   }
 };
 
@@ -424,18 +440,27 @@ function figureSVG(prefix, color){
   const st = 'stroke-linecap="round" fill="none" stroke="' + color + '"';
   const arm = (side, sx) =>
     '<g transform="translate(' + sx + ',' + SHY + ')"><g id="' + prefix + side + 'up">' +
-      '<line x1="0" y1="0" x2="0" y2="' + UPPER + '" stroke-width="9" ' + st + '/>' +
+      '<line x1="0" y1="0" x2="0" y2="' + UPPER + '" stroke-width="7.5" ' + st + '/>' +
       '<g transform="translate(0,' + UPPER + ')"><g id="' + prefix + side + 'fore">' +
-        '<line x1="0" y1="0" x2="0" y2="' + FORE + '" stroke-width="8" ' + st + '/>' +
-        '<circle cx="0" cy="' + FORE + '" r="5.5" fill="' + color + '"/>' +
+        '<line x1="0" y1="0" x2="0" y2="' + FORE + '" stroke-width="6.5" ' + st + '/>' +
+        '<circle cx="0" cy="' + FORE + '" r="4.6" fill="' + color + '"/>' +
+      '</g></g></g></g>';
+  const leg = (side, hx) =>
+    '<g transform="translate(' + hx + ',0)"><g id="' + prefix + side + 'thigh">' +
+      '<line x1="0" y1="0" x2="0" y2="' + THIGH + '" stroke-width="10" ' + st + '/>' +
+      '<g transform="translate(0,' + THIGH + ')"><g id="' + prefix + side + 'shin">' +
+        '<line x1="0" y1="0" x2="0" y2="' + SHIN + '" stroke-width="8.5" ' + st + '/>' +
+        '<ellipse cx="0" cy="' + (SHIN + 2) + '" rx="6.5" ry="3.4" fill="' + color + '"/>' +
       '</g></g></g></g>';
   return '<g id="' + prefix + 'root">' +
-    /* legs stay outside the tilt group so the feet keep the floor */
-    '<line x1="-8" y1="-6" x2="-13" y2="92" stroke-width="11" ' + st + '/>' +
-    '<line x1="8"  y1="-6" x2="13"  y2="92" stroke-width="11" ' + st + '/>' +
+    '<ellipse id="' + prefix + 'shadow" cx="0" cy="' + (FLOOR - HIPY) + '" rx="26" ry="4" fill="#000" fill-opacity="0.26"/>' +
+    leg('LA', -HIPX) + leg('LB', HIPX) +
     '<g id="' + prefix + 'up">' +
-      '<line x1="0" y1="2" x2="0" y2="' + SHY + '" stroke-width="20" ' + st + '/>' +
-      '<circle cx="0" cy="-82" r="13" fill="' + color + '"/>' +
+      /* rounded, sloping shoulders so the figure reads relaxed rather than braced */
+      '<path d="M-11.5,' + (SHY + 1) + ' C-11.5,' + (SHY - 6) + ' -6,' + (SHY - 8) + ' 0,' + (SHY - 8) +
+            ' C6,' + (SHY - 8) + ' 11.5,' + (SHY - 6) + ' 11.5,' + (SHY + 1) + ' L8,3 L-8,3 Z" fill="' + color + '"/>' +
+      '<line x1="0" y1="' + (SHY - 6) + '" x2="0" y2="' + (SHY - 15) + '" stroke-width="5.5" ' + st + '/>' +
+      '<circle cx="0" cy="' + (SHY - 24) + '" r="9.5" fill="' + color + '"/>' +
       arm('A', -SHX) + arm('B', SHX) +
     '</g></g>';
 }
@@ -444,13 +469,13 @@ function buildSilo(){
   const el = document.getElementById('silo');
   if(!el) return;
   el.innerHTML =
-    '<line x1="20" y1="244" x2="400" y2="244" stroke="#3a2c3f" stroke-width="1"/>' +
+    '<line x1="16" y1="' + (FLOOR + 2) + '" x2="384" y2="' + (FLOOR + 2) + '" stroke="#3a2c3f" stroke-width="1"/>' +
     figureSVG('L', '#e8a13a') +
     figureSVG('F', '#5ed3c6') +
     '<g id="conns"></g>';
 }
 
-/* local point -> canvas, through the upper-body tilt and the figure offset */
+/* local point -> canvas, through the torso tilt and the figure offset */
 function toCanvas(f, px, py){
   const t = f.tilt * Math.PI / 180;
   const rx = px * Math.cos(t) - py * Math.sin(t);
@@ -470,7 +495,7 @@ function anchor(f, name){
   }
   if(name === 'shA') return toCanvas(f, -SHX, SHY);
   if(name === 'shB') return toCanvas(f,  SHX, SHY);
-  if(name === 'torso') return toCanvas(f, 0, -30);
+  if(name === 'torso') return toCanvas(f, 0, -24);
   return toCanvas(f, 0, 0);
 }
 
@@ -479,17 +504,24 @@ function applyFig(prefix, f){
   if(!root) return;
   root.setAttribute('transform', 'translate(' + f.x.toFixed(1) + ',' + (HIPY + f.yoff).toFixed(1) + ')');
   document.getElementById(prefix + 'up').setAttribute('transform', 'rotate(' + f.tilt.toFixed(1) + ')');
-  document.getElementById(prefix + 'Aup').setAttribute('transform', 'rotate(' + f.Ash.toFixed(1) + ')');
-  document.getElementById(prefix + 'Afore').setAttribute('transform', 'rotate(' + f.Ael.toFixed(1) + ')');
-  document.getElementById(prefix + 'Bup').setAttribute('transform', 'rotate(' + f.Bsh.toFixed(1) + ')');
-  document.getElementById(prefix + 'Bfore').setAttribute('transform', 'rotate(' + f.Bel.toFixed(1) + ')');
+  const set = (id, v) => { const e = document.getElementById(id); if(e) e.setAttribute('transform', 'rotate(' + v.toFixed(1) + ')'); };
+  set(prefix + 'Aup', f.Ash);  set(prefix + 'Afore', f.Ael);
+  set(prefix + 'Bup', f.Bsh);  set(prefix + 'Bfore', f.Bel);
+  set(prefix + 'LAthigh', f.Ahip); set(prefix + 'LAshin', f.Akne);
+  set(prefix + 'LBthigh', f.Bhip); set(prefix + 'LBshin', f.Bkne);
+  /* the ground shadow stays on the floor and shrinks as the figure lifts */
+  const sh = document.getElementById(prefix + 'shadow');
+  if(sh){
+    sh.setAttribute('cy', (FLOOR - HIPY - f.yoff).toFixed(1));
+    sh.setAttribute('rx', (26 - Math.abs(f.tilt) * 0.12).toFixed(1));
+  }
 }
 
 function applyRoleEmphasis(){
   const L = document.getElementById('Lroot'), F = document.getElementById('Froot');
   if(!L || !F) return;
-  L.setAttribute('opacity', danceRole === 'follow' ? '0.38' : '1');
-  F.setAttribute('opacity', danceRole === 'lead' ? '0.38' : '1');
+  L.setAttribute('opacity', danceRole === 'follow' ? '0.34' : '1');
+  F.setAttribute('opacity', danceRole === 'lead' ? '0.34' : '1');
 }
 
 function drawPose(st){
@@ -500,29 +532,33 @@ function drawPose(st){
   const figs = { lead: st.lead, follow: st.follow };
   g.innerHTML = (st.conns || []).map(c => {
     const a = anchor(figs[c[0]], c[1]), b = anchor(figs[c[2]], c[3]);
-    const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2;
+    const gap = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    if(gap < 11) return '';   /* hands already touch, so nothing to draw */
     return '<line x1="' + a[0].toFixed(1) + '" y1="' + a[1].toFixed(1) + '" x2="' + b[0].toFixed(1) + '" y2="' + b[1].toFixed(1) +
-           '" stroke="#f3e9de" stroke-width="2" stroke-linecap="round" stroke-opacity="0.55"/>' +
-           '<circle cx="' + mx.toFixed(1) + '" cy="' + my.toFixed(1) + '" r="4" fill="#f3e9de" fill-opacity="0.9"/>';
+           '" stroke="#f3e9de" stroke-width="1.4" stroke-linecap="round" stroke-opacity="0.3"/>';
   }).join('');
 }
 
 /* ---- tween ---- */
-const FIELDS = ['x','yoff','tilt','Ash','Ael','Bsh','Bel'];
-const TWEEN_MS = 560;
+const FIELDS = ['x','yoff','tilt','Ash','Ael','Bsh','Bel','Ahip','Akne','Bhip','Bkne'];
+const TWEEN_MS = 620;
 let poseCur = null, poseFrom = null, poseTo = null, tStart = 0, tweenRAF = null;
 let danceRole = 'lead';
 
 function clonePose(p){
   return { lead: Object.assign({}, p.lead), follow: Object.assign({}, p.follow), conns: p.conns };
 }
-function easeInOut(t){ return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2; }
+/* gentle ease with a soft settle, so the figures arrive rather than stop dead */
+function easeOutBack(t){
+  const c = 1.10;
+  return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2);
+}
 function nowMs(){ return (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now(); }
 
 function tickTween(){
   let t = (nowMs() - tStart) / TWEEN_MS;
   if(t > 1) t = 1;
-  const e = easeInOut(t);
+  const e = easeOutBack(t);
   const out = { lead:{}, follow:{}, conns: poseTo.conns };
   ['lead','follow'].forEach(who => {
     FIELDS.forEach(k => { out[who][k] = poseFrom[who][k] + (poseTo[who][k] - poseFrom[who][k]) * e; });
@@ -539,13 +575,16 @@ function setPose(id, instant){
   const ttl = document.getElementById('siloTitle');
   if(ttl) ttl.innerHTML = node.label + ' <span>' + node.sub + '</span>';
   const nt = document.getElementById('siloNote');
-  if(nt) nt.textContent = target.note || '';
+  if(nt){
+    nt.innerHTML = (target.flag ? '<span class="siloflag">' + target.flag + '</span><br/>' : '') +
+                   (target.note || '');
+  }
   const rb = document.getElementById('siloRole');
   if(rb){
     if(danceRole === 'both'){
       rb.className = 'yourbit';
       rb.innerHTML = '<b>As leader:</b> ' + (target.roleLead || '') +
-                     '<br/><b style="color:' + '#5ed3c6' + '">As follower:</b> ' + (target.roleFollow || '');
+                     '<br/><b style="color:#5ed3c6">As follower:</b> ' + (target.roleFollow || '');
     } else if(danceRole === 'follow'){
       rb.className = 'yourbit f';
       rb.innerHTML = '<b>As follower:</b> ' + (target.roleFollow || '');

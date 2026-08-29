@@ -77,6 +77,15 @@
   .tool-live:hover, .tool-live:focus-visible { background: #33253a; border-color: #e8a13a; }
   .tool-live:focus-visible { outline: 2px solid #e8a13a; outline-offset: 3px; }
 
+  .refbox { border: 1px solid #4a3a4e; border-radius: 12px; background: transparent;
+            padding: 12px 15px; margin-top: 16px; display: block; text-decoration: none; color: inherit;
+            transition: border-color .15s ease, background .15s ease; }
+  .refbox:hover { border-color: #6b5570; background: #241829; }
+  .refbox .reflabel { font-family: "IBM Plex Mono", monospace; font-size: 9.5px; letter-spacing: .2em;
+            text-transform: uppercase; color: #8a7580; display: block; margin-bottom: 5px; }
+  .refbox .refname { font-family: "Fraunces", Georgia, serif; font-size: 16px; font-weight: 600; color: #cdb9c0; }
+  .refbox:hover .refname { color: #e8a13a; }
+  .refbox .refdesc { font-size: 12px; color: #8a7580; margin: 4px 0 0; line-height: 1.55; }
   .tool-soon { opacity: .62; }
   .tool-soon .tool-name { color: #cdb9c0; }
 
@@ -133,14 +142,6 @@
       <p class="tool-desc">Six footworks with animated feet, side basic, in place, forward &amp; back, the Dominican box step, the syncopated cha-cha triple, and the travelling grapevine. Weight shifts and hip pops marked. Leader or follower, count by count.</p>
       <span class="tool-go">Open the footwork lab &rarr;</span>
     </a>
-    <a class="tool tool-live" href="patterns.html">
-      <div class="tool-top">
-        <span class="tool-name">Pattern reference</span>
-        <span class="chip chip-open">Open</span>
-      </div>
-      <p class="tool-desc">The eight core moves on one page: a diagram of each, the count it takes, and the single lead cue that matters. Made to print or keep open on a phone.</p>
-      <span class="tool-go">See the patterns &rarr;</span>
-    </a>
     <a class="tool tool-live" href="map.html">
       <div class="tool-top">
         <span class="tool-name">Position map</span>
@@ -177,6 +178,12 @@
     </div>
 
   </div>
+
+  <a class="refbox" href="patterns.html">
+    <span class="reflabel">Reference</span>
+    <span class="refname">The eight patterns, on one page &rarr;</span>
+    <p class="refdesc">Not a tool, just a page to read or print: a diagram of each core move, the count it takes, and the single lead cue that matters.</p>
+  </a>
 
   <footer class="credit">
     <div class="rule"></div>

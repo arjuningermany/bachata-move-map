@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<!--
+  Bachata Pattern Reference
+  Created by Arjun · © 2026 Arjun · All rights reserved.
+  Original compilation, structure, and diagram design by Arjun.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pattern reference · Bachata tools by Arjun</title>
+<meta name="author" content="Arjun" />
+<meta name="copyright" content="© 2026 Arjun. All rights reserved." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #1e1520;
+    --surface: #2a1e2e;
+    --surface-2: #241829;
+    --ink: #f3e9de;
+    --muted: #b9a6ae;
+    --rule: #4a3a4e;
+    --lead: #e8a13a;   /* gold  = leader */
+    --follow: #5ed3c6; /* teal = follower */
+    --lead-soft: rgba(232,161,58,0.16);
+    --follow-soft: rgba(230,116,139,0.14);
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: radial-gradient(120% 80% at 50% -10%, #2a1d30 0%, var(--bg) 60%);
+    color: var(--ink);
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    line-height: 1.55;
+    padding: 0 18px 72px;
+  }
+  .wrap { max-width: 560px; margin: 0 auto; }
+
+  header { padding: 46px 0 14px; }
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--lead); margin: 0 0 14px;
+  }
+  h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 900; font-size: clamp(34px, 9vw, 52px);
+    line-height: 1.0; letter-spacing: -0.015em; margin: 0 0 18px;
+  }
+  h1 em { font-style: italic; font-weight: 400; color: var(--follow); }
+  .lede { color: var(--muted); font-size: 15.5px; margin: 0 0 8px; }
+  .lede strong { color: var(--ink); font-weight: 600; }
+  .byline { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: 0.06em; color: var(--lead); margin: 14px 0 6px; }
+  .backlink { margin: 0 0 4px; }
+  .backlink a { font-family: "IBM Plex Mono", monospace; color: var(--muted); font-size: 12.5px; text-decoration: none; border-bottom: 1px solid var(--rule); padding-bottom: 1px; }
+  .backlink a:hover { color: var(--lead); }
+
+  .legend {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    padding: 16px 18px;
+    margin: 26px 0 8px;
+  }
+  .legend h2 {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 12px; font-weight: 500;
+  }
+  .legend ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+  .legend li { display: flex; align-items: center; gap: 11px; font-size: 13.5px; color: var(--muted); }
+  .legend li b { color: var(--ink); font-weight: 600; }
+  .swatch { flex: 0 0 auto; width: 26px; height: 22px; display: grid; place-items: center; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    padding: 22px 20px 24px;
+    margin-top: 20px;
+  }
+  .card-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 4px; }
+  .num {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px; font-weight: 600; color: var(--lead);
+    letter-spacing: 0.05em;
+  }
+  .card h3 {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 600; font-size: 24px; line-height: 1.1; margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .timing {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px; color: var(--muted);
+    margin: 10px 0 4px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+  }
+  .timing .k { color: var(--lead); }
+  .beat {
+    display: inline-grid; place-items: center;
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 1px solid var(--rule); color: var(--muted);
+    font-size: 11px;
+  }
+  .beat.pop { border-color: var(--lead); color: var(--bg); background: var(--lead); font-weight: 600; }
+
+  .diagram { margin: 16px 0 14px; }
+  .diagram svg { width: 100%; height: auto; display: block; border-radius: 14px; background: var(--surface-2); }
+
+  .cue { font-size: 14.5px; color: var(--ink); margin: 0; }
+  .cue::before {
+    content: "Lead"; font-family: "IBM Plex Mono", monospace;
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--lead); display: block; margin-bottom: 5px;
+  }
+  .also { color: var(--muted); font-size: 13.5px; margin: 12px 0 0; }
+
+  .tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px; letter-spacing: 0.06em;
+    color: var(--follow); background: var(--follow-soft);
+    border: 1px solid rgba(230,116,139,0.35);
+    padding: 5px 10px; border-radius: 999px; margin-top: 14px;
+  }
+
+  footer { margin-top: 30px; color: var(--muted); font-size: 13px; text-align: center; }
+  footer .rule { height: 1px; background: var(--rule); margin: 0 auto 18px; max-width: 120px; }
+
+  /* SVG shared text */
+  svg text { font-family: "IBM Plex Mono", monospace; }
+
+  /* content is visible by default; the animation only softens its arrival,
+     so nothing disappears if animations do not run */
+  .fade { opacity: 1; animation: rise .5s ease both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .fade { animation: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="fade">
+    <p class="eyebrow">Bachata · the core vocabulary</p>
+    <h1>The 8 patterns, <em>mapped</em></h1>
+    <p class="lede">Diagrams show the <strong>shape</strong>: where the leader and follower start, travel, and land, plus the count and the one lead cue that matters.</p>
+    <p class="lede">What a still <em style="color:var(--muted)">can't</em> show is the lead and timing of a moving partner. Two moves below are flagged <span style="color:var(--follow)">see it moving</span>, treat the picture there as a map, not a lesson.</p>
+    <p class="byline">Made by Arjun · © 2026</p>
+    <p class="backlink"><a href="./">&larr;&nbsp; All tools</a></p>
+  </header>
+
+  <section class="legend fade" aria-label="Legend">
+    <h2>How to read these</h2>
+    <ul>
+      <li>
+        <span class="swatch"><svg width="24" height="22" viewBox="0 0 24 22"><circle cx="12" cy="11" r="9" fill="#e8a13a"/><text x="12" y="15" text-anchor="middle" font-size="11" font-weight="600" fill="#1e1520">L</text></svg></span>
+        <span><b>Gold disc</b>, the leader</span>
+      </li>
+      <li>
+        <span class="swatch"><svg width="24" height="22" viewBox="0 0 24 22"><circle cx="12" cy="11" r="8.5" fill="none" stroke="#5ed3c6" stroke-width="2"/><text x="12" y="15" text-anchor="middle" font-size="11" font-weight="600" fill="#5ed3c6">F</text></svg></span>
+        <span><b>Teal ring</b>, the follower</span>
+      </li>
+      <li>
+        <span class="swatch"><svg width="24" height="22" viewBox="0 0 24 22"><path d="M6 11 L18 11 M14 7 L18 11 L14 15" fill="none" stroke="#b9a6ae" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 3"/></svg></span>
+        <span><b>Dashed arrow</b>, travel path across the floor</span>
+      </li>
+      <li>
+        <span class="swatch"><svg width="24" height="22" viewBox="0 0 24 22"><path d="M17 6 A8 8 0 1 1 6 9" fill="none" stroke="#5ed3c6" stroke-width="1.8" stroke-linecap="round"/><path d="M4 6 L6 9 L9 8" fill="none" stroke="#5ed3c6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span><b>Curved arrow</b>, a turn / rotation on the spot</span>
+      </li>
+      <li>
+        <span class="swatch"><svg width="26" height="22" viewBox="0 0 26 22"><ellipse cx="8" cy="11" rx="4.5" ry="7" fill="#e8a13a"/><ellipse cx="18" cy="11" rx="4.5" ry="7" fill="none" stroke="#5ed3c6" stroke-width="1.8"/></svg></span>
+        <span><b>L is gold, R is teal</b>, always &middot; <b>solid</b> = weight on it &middot; <b>hollow</b> = tap / no weight</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- 01 BASIC -->
+  <article class="card fade">
+    <div class="card-head"><span class="num">01</span><h3>The basic</h3></div>
+    <div class="timing">
+      <span class="k">count</span>
+      <span class="beat">1</span><span class="beat">2</span><span class="beat">3</span><span class="beat pop">4</span>
+      <span style="color:var(--rule)">·</span>
+      <span class="beat">5</span><span class="beat">6</span><span class="beat">7</span><span class="beat pop">8</span>
+      <span style="margin-left:2px">4 &amp; 8 = hip pop</span>
+    </div>
+    <div class="diagram">
+      <!-- footwork filmstrip: counts 1-4 (mirrors right for 5-8) -->
+      <svg viewBox="0 0 480 210" role="img" aria-label="Footwork for the side basic, counts one to four">
+        <!-- travel arrow -->
+        <path d="M40 26 L440 26" stroke="#4a3a4e" stroke-width="1" />
+        <path d="M420 20 L440 26 L420 32" fill="none" stroke="#e8a13a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="44" y="18" font-size="11" fill="#b9a6ae">travels left on 1-4</text>
+        <text x="330" y="18" font-size="11" fill="#e8a13a">then mirror RIGHT on 5-8</text>
+
+        <!-- 4 cells -->
+        <g>
+          <!-- cell 1: L steps left -->
+          <rect x="24" y="44" width="100" height="120" rx="12" fill="#1e1520" stroke="#3a2c3f"/>
+          <ellipse cx="52" cy="104" rx="10" ry="17" fill="#e8a13a"/>
+          <text x="52" y="138" text-anchor="middle" font-size="10" fill="#8a7580">L</text>
+          <ellipse cx="96" cy="112" rx="10" ry="17" fill="none" stroke="#5ed3c6" stroke-width="1.6"/>
+          <text x="96" y="146" text-anchor="middle" font-size="10" fill="#8a7580">R</text>
+          <text x="74" y="184" text-anchor="middle" font-size="13" fill="#f3e9de" font-weight="600">1</text>
+
+          <!-- cell 2: R closes -->
+          <rect x="140" y="44" width="100" height="120" rx="12" fill="#1e1520" stroke="#3a2c3f"/>
+          <ellipse cx="184" cy="112" rx="10" ry="17" fill="none" stroke="#e8a13a" stroke-width="1.6"/>
+          <text x="184" y="146" text-anchor="middle" font-size="10" fill="#8a7580">L</text>
+          <ellipse cx="212" cy="104" rx="10" ry="17" fill="#5ed3c6"/>
+          <text x="212" y="138" text-anchor="middle" font-size="10" fill="#8a7580">R</text>
+          <text x="190" y="184" text-anchor="middle" font-size="13" fill="#f3e9de" font-weight="600">2</text>
+
+          <!-- cell 3: L steps left again -->
+          <rect x="256" y="44" width="100" height="120" rx="12" fill="#1e1520" stroke="#3a2c3f"/>
+          <ellipse cx="284" cy="104" rx="10" ry="17" fill="#e8a13a"/>
+          <text x="284" y="138" text-anchor="middle" font-size="10" fill="#8a7580">L</text>
+          <ellipse cx="328" cy="112" rx="10" ry="17" fill="none" stroke="#5ed3c6" stroke-width="1.6"/>
+          <text x="328" y="146" text-anchor="middle" font-size="10" fill="#8a7580">R</text>
+          <text x="306" y="184" text-anchor="middle" font-size="13" fill="#f3e9de" font-weight="600">3</text>
+
+          <!-- cell 4: R taps + pop -->
+          <rect x="372" y="44" width="100" height="120" rx="12" fill="#241829" stroke="#e8a13a" stroke-opacity="0.5"/>
+          <ellipse cx="416" cy="104" rx="10" ry="17" fill="#e8a13a"/>
+          <text x="416" y="138" text-anchor="middle" font-size="10" fill="#8a7580">L</text>
+          <ellipse cx="444" cy="112" rx="10" ry="17" fill="none" stroke="#5ed3c6" stroke-width="1.8" stroke-dasharray="3 3"/>
+          <text x="444" y="146" text-anchor="middle" font-size="10" fill="#5ed3c6">R tap</text>
+          <text x="404" y="72" font-size="12" fill="#e8a13a" font-weight="600">pop!</text>
+          <text x="422" y="184" text-anchor="middle" font-size="13" fill="#e8a13a" font-weight="600">4</text>
+        </g>
+      </svg>
+    </div>
+    <p class="cue">Stay soft in the knees the whole time, the hip pop on 4 and 8 is a <em>result</em> of bending and straightening the knees, not something forced from the hips.</p>
+    <p class="also">The same rhythm gives two variations: step nearly <b>in place</b> to hold the spot, or step <b>forward-and-back</b> to travel, swapping between all three is most of a song.</p>
+  </article>
+
+  <!-- 02 CROSS BODY -->
+  <article class="card fade">
+    <div class="card-head"><span class="num">02</span><h3>Cross-body lead</h3></div>
+    <div class="timing"><span class="k">timing</span><span>8-count, prep, travel across, resolve · the glue between everything</span></div>
+    <div class="diagram">
+      <svg viewBox="0 0 480 210" role="img" aria-label="Top-down cross-body lead: partner travels across the slot, positions swap">
+        <!-- START panel -->
+        <rect x="18" y="30" width="200" height="150" rx="14" fill="#1e1520" stroke="#3a2c3f"/>
+        <text x="34" y="52" font-size="11" fill="#b9a6ae">START, facing</text>
+        <!-- L left, facing right -->
+        <circle cx="70" cy="112" r="17" fill="#e8a13a"/>
+        <text x="70" y="117" text-anchor="middle" font-size="12" font-weight="600" fill="#1e1520">L</text>
+        <path d="M88 112 l14 0 M98 106 l6 6 l-6 6" fill="none" stroke="#e8a13a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- F right, facing left -->
+        <circle cx="168" cy="112" r="16" fill="none" stroke="#5ed3c6" stroke-width="2.4"/>
+        <text x="168" y="117" text-anchor="middle" font-size="12" font-weight="600" fill="#5ed3c6">F</text>
+        <path d="M150 112 l-14 0 M146 106 l-6 6 l6 6" fill="none" stroke="#5ed3c6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+
+        <!-- middle transition -->
+        <text x="240" y="100" text-anchor="middle" font-size="11" fill="#8a7580">leader</text>
+        <text x="240" y="114" text-anchor="middle" font-size="11" fill="#8a7580">opens</text>
+        <text x="240" y="128" text-anchor="middle" font-size="11" fill="#8a7580">&amp; pivots</text>
+
+        <!-- END panel -->
+        <rect x="262" y="30" width="200" height="150" rx="14" fill="#241829" stroke="#3a2c3f"/>
+        <text x="278" y="52" font-size="11" fill="#b9a6ae">END, spots swapped</text>
+        <!-- F now left, facing right -->
+        <circle cx="312" cy="112" r="16" fill="none" stroke="#5ed3c6" stroke-width="2.4"/>
+        <text x="312" y="117" text-anchor="middle" font-size="12" font-weight="600" fill="#5ed3c6">F</text>
+        <path d="M330 112 l14 0 M340 106 l6 6 l-6 6" fill="none" stroke="#5ed3c6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- L now right, facing left -->
+        <circle cx="410" cy="112" r="17" fill="#e8a13a"/>
+        <text x="410" y="117" text-anchor="middle" font-size="12" font-weight="600" fill="#1e1520">L</text>
+        <path d="M392 112 l-14 0 M388 106 l-6 6 l6 6" fill="none" stroke="#e8a13a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- travel path of follower across -->
+        <path d="M168 150 C 220 178, 262 178, 312 150" fill="none" stroke="#5ed3c6" stroke-width="1.8" stroke-dasharray="4 4" stroke-linecap="round"/>
+        <path d="M300 150 l14 -2 l-6 10" fill="none" stroke="#5ed3c6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <p class="cue">The leader opens the lane and pivots out of the way, giving a clear forward lead so the follower walks straight across the slot. Both dancers end facing each other again, spots swapped.</p>
+  </article>
+
+  <!-- 03 RIGHT TURN -->
+  <article class="card fade">
+    <div class="card-head"><span class="num">03</span><h3>Follower's right turn</h3></div>
+    <div class="timing"><span class="k">timing</span><span>led over a 4-count (e.g. prep on 4, turn 5-6-7, land on 8)</span></div>
+    <div class="diagram">
+      <svg viewBox="0 0 480 200" role="img" aria-label="Top-down: follower spot-turns 360 degrees clockwise while leader keeps the basic">
+        <rect x="18" y="24" width="444" height="152" rx="14" fill="#1e1520" stroke="#3a2c3f"/>
+        <!-- L staying on basic -->
+        <circle cx="150" cy="104" r="17" fill="#e8a13a"/>
+        <text x="150" y="109" text-anchor="middle" font-size="12" font-weight="600" fill="#1e1520">L</text>
+        <text x="150" y="146" text-anchor="middle" font-size="10.5" fill="#8a7580">leader keeps the basic</text>
+        <!-- raised hand hint -->
+        <path d="M150 84 q0 -18 22 -18" fill="none" stroke="#e8a13a" stroke-width="1.4" stroke-dasharray="3 3"/>
+        <text x="176" y="62" font-size="10" fill="#e8a13a">hand up</text>
+
+        <!-- F turning clockwise -->
+        <circle cx="330" cy="104" r="16" fill="none" stroke="#5ed3c6" stroke-width="2.4"/>
+        <text x="330" y="109" text-anchor="middle" font-size="12" font-weight="600" fill="#5ed3c6">F</text>
+        <!-- clockwise 360 arrow -->
+        <path d="M330 74 A30 30 0 1 1 303 90" fill="none" stroke="#5ed3c6" stroke-width="2" stroke-linecap="round"/>
+        <path d="M298 84 l5 6 l7 -3" fill="none" stroke="#5ed3c6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="330" y="150" text-anchor="middle" font-size="10.5" fill="#5ed3c6">360° to the follower's right ↻</text>
+      </svg>
+    </div>
+    <p class="cue">The leader raises the left hand into a loose ceiling and preps a beat early, so the turn is expected. The follower spot-turns underneath. Guide the arm, never crank it.</p>
+  </article>
+
+  <!-- 04 LEFT TURN -->
+  <article class="card fade">
+    <div class="card-head"><span class="num">04</span><h3>Follower's left turn</h3></div>
+    <div class="timing"><span class="k">timing</span><span>same 4-count feel, turning the other way</span></div>
+    <div class="diagram">
+      <svg viewBox="0 0 480 200" role="img" aria-label="Top-down: follower spot-turns 360 degrees counter-clockwise">
+        <rect x="18" y="24" width="444" height="152" rx="14" fill="#1e1520" stroke="#3a2c3f"/>
+        <circle cx="150" cy="104" r="17" fill="#e8a13a"/>
+        <text x="150" y="109" text-anchor="middle" font-size="12" font-weight="600" fill="#1e1520">L</text>
+        <text x="150" y="146" text-anchor="middle" font-size="10.5" fill="#8a7580">clear prep first</text>
+
+        <circle cx="330" cy="104" r="16" fill="none" stroke="#5ed3c6" stroke-width="2.4"/>
+        <text x="330" y="109" text-anchor="middle" font-size="12" font-weight="600" fill="#5ed3c6">F</text>
+        <!-- counter-clockwise 360 arrow -->
+        <path d="M330 74 A30 30 0 1 0 357 90" fill="none" stroke="#5ed3c6" stroke-width="2" stroke-linecap="round"/>
+        <path d="M362 84 l-5 6 l-7 -3" fill="none" stroke="#5ed3c6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="330" y="150" text-anchor="middle" font-size="10.5" fill="#5ed3c6">360° to the follower's left ↺</text>
+      </svg>
+    </div>
+    <p class="cue">Prep in the opposite direction first, then indicate the turn clearly, the left turn feels less natural to a follower, so the signal has to be a touch stronger and earlier.</p>
+  </article>
+
+  <!-- 05 CLOSED / OPEN -->
+  <article class="card fade">
+    <div class="card-head"><span class="num">05</span><h3>Closed ↔ open</h3></div>
+    <div class="timing"><span class="k">timing</span><span>over any basic, this is how the "room" changes</span></div>
+    <div class="diagram">
+      <svg viewBox="0 0 480 210" role="img" aria-label="Open position versus closed position, with a two-way transition">
+        <!-- OPEN -->
+        <rect x="18" y="30" width="200" height="150" rx="14" fill="#1e1520" stroke="#3a2c3f"/>
+        <text x="34" y="52" font-size="11" fill="#b9a6ae">OPEN</text>
+        <circle cx="74" cy="112" r="17" fill="#e8a13a"/>
+        <text x="74" y="117" text-anchor="middle" font-size="12" font-weight="600" fill="#1e1520">L</text>
+        <circle cx="164" cy="112" r="16" fill="none" stroke="#5ed3c6" stroke-width="2.4"/>
+        <text x="164" y="117" text-anchor="middle" font-size="12" font-weight="600" fill="#5ed3c6">F</text>
+        <!-- two hand connections -->
+        <line x1="90" y1="104" x2="149" y2="104" stroke="#7a6a72" stroke-width="1.6"/>
+        <line x1="90" y1="122" x2="149" y2="122" stroke="#7a6a72" stroke-width="1.6"/>
+
+        <!-- transition arrow -->
+        <path d="M226 106 l28 0 M226 106 l6 -5 M226 106 l6 5" fill="none" stroke="#8a7580" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M254 122 l-28 0 M254 122 l-6 -5 M254 122 l-6 5" fill="none" stroke="#8a7580" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+
+        <!-- CLOSED -->
+        <rect x="262" y="30" width="200" height="150" rx="14" fill="#241829" stroke="#3a2c3f"/>
+        <text x="278" y="52" font-size="11" fill="#b9a6ae">CLOSED</text>
+        <!-- offset, close -->
+        <circle cx="352" cy="118" r="17" fill="#e8a13a"/>
+        <text x="352" y="123" text-anchor="middle" font-size="12" font-weight="600" fill="#1e1520">L</text>
+        <circle cx="386" cy="100" r="16" fill="none" stroke="#5ed3c6" stroke-width="2.4"/>
+        <text x="386" y="105" text-anchor="middle" font-size="12" font-weight="600" fill="#5ed3c6">F</text>
+        <!-- contact dots -->
+        <circle cx="374" cy="112" r="3.4" fill="#e8a13a"/>
+        <text x="356" y="150" font-size="9.5" fill="#e8a13a">leader R hand → follower back</text>
+        <circle cx="366" cy="106" r="3.4" fill="#5ed3c6"/>
+        <!-- lead hand to the side -->
+        <line x1="336" y1="118" x2="316" y2="108" stroke="#7a6a72" stroke-width="1.6"/>
+      </svg>
+    </div>
+    <p class="cue">The leader's right hand sits on the follower's shoulder blade, left hand out to the side, bodies close and slightly offset. Lead <em>in</em> to close the frame, and open back up to send the follower out to arm's length.</p>
+    <p class="also">From closed, raising the left hand leads a simple underarm turn: a clean, high-value move that costs nothing new.</p>
+  </article>
+
+  <!-- 06 HAMMERLOCK -->
+  <article class="card fade">
+    <div class="card-head"><span class="num">06</span><h3>Armlock / sombrero</h3></div>
+    <div class="timing"><span class="k">timing</span><span>a turn with a wrapped exit</span></div>
+    <div class="diagram">
+      <svg viewBox="0 0 480 200" role="img" aria-label="Schematic of a wrapped-arm ending: hammerlock behind the back or sombrero over the heads">
+        <rect x="18" y="24" width="444" height="152" rx="14" fill="#1e1520" stroke="#3a2c3f"/>
+        <!-- pair, close -->
+        <circle cx="196" cy="104" r="17" fill="#e8a13a"/>
+        <text x="196" y="109" text-anchor="middle" font-size="12" font-weight="600" fill="#1e1520">L</text>
+        <circle cx="244" cy="104" r="16" fill="none" stroke="#5ed3c6" stroke-width="2.4"/>
+        <text x="244" y="109" text-anchor="middle" font-size="12" font-weight="600" fill="#5ed3c6">F</text>
+        <!-- hammerlock: arm folded behind the follower's back -->
+        <path d="M244 118 q-22 26 -46 6" fill="none" stroke="#5ed3c6" stroke-width="2" stroke-linecap="round" stroke-dasharray="1 0"/>
+        <text x="150" y="150" font-size="10" fill="#5ed3c6">arm folds behind (hammerlock)</text>
+        <!-- sombrero arc over heads -->
+        <path d="M180 88 q40 -46 80 0" fill="none" stroke="#e8a13a" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="4 4"/>
+        <text x="300" y="60" font-size="10" fill="#e8a13a">…or hands arc over the heads (sombrero)</text>
+      </svg>
+    </div>
+    <p class="cue">Lead a turn and, instead of releasing, let the arm wrap: either folding behind the small of the follower's back, or both hands arcing up and over the heads like putting on a hat.</p>
+    <span class="tag">see it moving, the entry is all in the timing</span>
+  </article>
+
+  <!-- 07 SHADOW -->
+  <article class="card fade">
+    <div class="card-head"><span class="num">07</span><h3>Shadow position</h3></div>
+    <div class="timing"><span class="k">timing</span><span>led out of a turn that doesn't resolve to face</span></div>
+    <div class="diagram">
+      <svg viewBox="0 0 480 200" role="img" aria-label="Top-down: follower ends in front of leader, both facing the same direction">
+        <rect x="18" y="24" width="200" height="152" rx="14" fill="#1e1520" stroke="#3a2c3f"/>
+        <text x="34" y="46" font-size="11" fill="#8a7580">normal, facing</text>
+        <circle cx="80" cy="112" r="15" fill="#e8a13a" opacity="0.5"/>
+        <text x="80" y="117" text-anchor="middle" font-size="11" font-weight="600" fill="#1e1520">L</text>
+        <circle cx="156" cy="112" r="14" fill="none" stroke="#5ed3c6" stroke-width="2.2" opacity="0.5"/>
+        <text x="156" y="117" text-anchor="middle" font-size="11" font-weight="600" fill="#5ed3c6">F</text>
+
+        <rect x="262" y="24" width="200" height="152" rx="14" fill="#241829" stroke="#5ed3c6" stroke-opacity="0.35"/>
+        <text x="278" y="46" font-size="11" fill="#b9a6ae">SHADOW, same way</text>
+        <!-- L behind, F in front, both facing up -->
+        <circle cx="362" cy="126" r="17" fill="#e8a13a"/>
+        <text x="362" y="131" text-anchor="middle" font-size="12" font-weight="600" fill="#1e1520">L</text>
+        <path d="M362 106 l0 -14 M356 98 l6 -6 l6 6" fill="none" stroke="#e8a13a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="362" cy="88" r="16" fill="none" stroke="#5ed3c6" stroke-width="2.4"/>
+        <text x="362" y="93" text-anchor="middle" font-size="12" font-weight="600" fill="#5ed3c6">F</text>
+        <path d="M362 70 l0 -12 M356 63 l6 -6 l6 6" fill="none" stroke="#5ed3c6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="300" y="160" font-size="10" fill="#8a7580">follower in front, leader behind</text>
+      </svg>
+    </div>
+    <p class="cue">Lead a turn but keep the follower turned away instead of resolving to face. The follower ends directly in front, both dancers facing the same direction, with the frame over the follower's shoulders.</p>
+  </article>
+
+  <!-- 08 BODY WAVE -->
+  <article class="card fade">
+    <div class="card-head"><span class="num">08</span><h3>Body roll / wave</h3></div>
+    <div class="timing"><span class="k">timing</span><span>on a pause or a slow phrase, yours alone, no partner</span></div>
+    <div class="diagram">
+      <svg viewBox="0 0 480 200" role="img" aria-label="Side view: a wave rippling down the body from chest through ribs to hips">
+        <rect x="18" y="20" width="444" height="160" rx="14" fill="#1e1520" stroke="#3a2c3f"/>
+        <!-- simple side figure -->
+        <circle cx="150" cy="52" r="13" fill="none" stroke="#8a7580" stroke-width="1.8"/>
+        <path d="M150 65 C 150 90, 168 100, 150 120 C 134 140, 150 150, 150 168" fill="none" stroke="#8a7580" stroke-width="2.2" stroke-linecap="round"/>
+        <!-- wave arrow travelling down -->
+        <path d="M215 48 C 250 60, 215 84, 250 96 C 285 108, 250 132, 250 150" fill="none" stroke="#5ed3c6" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M244 140 l6 12 l7 -8" fill="none" stroke="#5ed3c6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="300" y="58" font-size="12" fill="#e8a13a">1 · chest leads</text>
+        <text x="300" y="104" font-size="12" fill="#e8a13a">2 · ripple through ribs</text>
+        <text x="300" y="150" font-size="12" fill="#e8a13a">3 · finish in the hips</text>
+      </svg>
+    </div>
+    <p class="cue">Initiate at the chest, let the movement roll down through the ribs, stomach and hips in one continuous wave. This is styling, and it is what reads as dancing.</p>
+    <span class="tag">see it moving, drill it slow in the mirror first</span>
+  </article>
+
+  <footer class="fade">
+    <div class="rule"></div>
+    <p style="margin:0 0 14px">Master these eight and any song is danceable. Everything else is decoration on top.</p>
+    <p style="margin:0 0 8px;font-size:13px;color:var(--ink)"><strong>Made by Arjun.</strong> &copy; 2026 Arjun &middot; All rights reserved.</p>
+    <p style="margin:0;font-size:11.5px;color:var(--muted);line-height:1.55">This compilation, structure, and diagram design are the original work of Arjun. The underlying bachata moves are common dance knowledge; this particular arrangement is mine.</p>
+  </footer>
+
+</div>
+</body>
+</html>

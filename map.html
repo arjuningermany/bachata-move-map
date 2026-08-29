@@ -75,15 +75,17 @@
   .newhere a { color: #8fd6ac; text-decoration: none; border-bottom: 1px solid rgba(143,214,172,.45); }
   .newhere b { color: #f3e9de; font-weight: 600; }
   .silo { border: 1px solid #4a3a4e; border-radius: 16px; background: #241829; margin-top: 14px; padding: 9px 10px 10px; }
-  .silo svg { width: 100%; height: auto; display: block; }
-  .silo-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 1px 4px 6px; flex-wrap: wrap; }
+  .silo svg { width: 100%; max-width: 400px; height: auto; display: block; margin: 0 auto; }
+  .silo-head { padding: 1px 4px 5px; }
   .silo-title { font-family: "Fraunces", Georgia, serif; font-size: 15.5px; font-weight: 600; color: #f3e9de; }
   .silo-title span { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: #b9a6ae; font-weight: 400; margin-left: 7px; }
-  .silo-key { font-size: 10.5px; color: #8a7580; letter-spacing: .04em; }
+  .silo-key { font-size: 10.5px; color: #8a7580; letter-spacing: .04em; white-space: nowrap; }
+  .silo-ctrls { display: flex; align-items: center; justify-content: space-between;
+                gap: 10px; flex-wrap: wrap; padding: 0 4px 8px; }
   .silo-key b.l { color: #e8a13a; font-weight: 600; }
   .silo-key b.f { color: #5ed3c6; font-weight: 600; }
   .silo-note { font-size: 11px; color: #8a7580; padding: 5px 4px 0; line-height: 1.5; }
-  .rolebar { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding: 0 4px 7px; }
+  .rolebar { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
   .rolebar .rl { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: #8a7580; margin-right: 2px; }
   .rolebtn { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; cursor: pointer; border-radius: 999px;
              padding: 5px 11px; border: 1.5px solid #4a3a4e; background: transparent; color: #b9a6ae; }
@@ -140,13 +142,15 @@
   <div class="silo">
     <div class="silo-head">
       <div class="silo-title" id="siloTitle">Open <span>one hand</span></div>
-      <div class="silo-key"><b class="l">&#9679; leader</b> &nbsp; <b class="f">&#9679; follower</b></div>
     </div>
-    <div class="rolebar" id="rolebar">
-      <span class="rl">I dance</span>
-      <button class="rolebtn on" data-r="lead">Leader</button>
-      <button class="rolebtn" data-r="follow">Follower</button>
-      <button class="rolebtn" data-r="both">Both</button>
+    <div class="silo-ctrls">
+      <div class="rolebar" id="rolebar">
+        <span class="rl">I dance</span>
+        <button class="rolebtn on" data-r="lead">Leader</button>
+        <button class="rolebtn" data-r="follow">Follower</button>
+        <button class="rolebtn" data-r="both">Both</button>
+      </div>
+      <div class="silo-key"><b class="l">&#9679; leader</b> &nbsp; <b class="f">&#9679; follower</b></div>
     </div>
     <svg id="silo" viewBox="0 0 400 184" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Silhouettes of leader and follower in the selected position"></svg>
     <p class="silo-note" id="siloNote"></p>
@@ -425,14 +429,14 @@ const POSES = {
   dip: {
     roleLead:'Support the upper back and steady only, never take the weight. If the preparation does not feel solid, simply do not go into the drop.',
     roleFollow:'Your own legs carry you the whole way. Go only as far as your own balance allows, and decline any drop you have not been taught.',
-    /* Deliberately drawn as the PREPARATION, both dancers upright.
-       A flat front-on view cannot distinguish leaning back from bending
-       sideways, so drawing the drop itself always reads wrong.          */
-    lead:  P(188, 0, 0, -60, -18,  14,   8,   7, 2,  -7, 2),
-    follow:P(232, 0, 0,  16,  10, -14,  -7,   9, 3, -11, 4),
+    /* Drawn SIDE-ON, unlike the other eight. Splitting the legs
+       forward/back rather than splaying them sideways is what makes a
+       backward lean read as a lean instead of a sideways bend.          */
+    lead:  P(186, 0,  6, -70,  -8, -46, -14,  24, 0, -12, 32),
+    follow:P(238, 0, 42,  26,  30,  16,  26,  40, 4, -10, 48),
     conns:[['lead','A','follow','torso']],
-    flag:'preparation shown, not the drop itself',
-    note:'Shown here as the preparation: upright, close, with the leader\u2019s hand supporting the upper back. The drop itself is a finishing move that carries real injury risk, so learn it from a teacher in person rather than from a diagram.'
+    flag:'shown side-on',
+    note:'The follower leans back over a bent supporting leg while the leader takes a stable lunge and supports the upper back. A finish, not a transition. It carries real injury risk, so learn it from a teacher in person before trying it on a social floor.'
   }
 };
 

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-  Bachata — Combo Generator
+  Bachata Combo Generator
   Created by Arjun · © 2026 Arjun · All rights reserved.
   Original compilation, structure, and interactive design by Arjun.
 -->
@@ -8,7 +8,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Combo generator — Bachata tools by Arjun</title>
+<title>Combo generator · Bachata tools by Arjun</title>
 <meta name="author" content="Arjun" />
 <meta name="copyright" content="© 2026 Arjun. All rights reserved." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -108,7 +108,7 @@
 
   <p class="eyebrow">Bachata · combo generator</p>
   <h1>A fresh combo, <em>every time.</em></h1>
-  <p class="lede">Built by walking the position map — so every combo is actually danceable. It opens with a basic, moves through real transitions, and resolves back home.</p>
+  <p class="lede">Built by walking the position map, so every combo is actually danceable. Each one opens with a basic, moves through real transitions, and resolves back home. The sequence describes the couple, so it reads the same whichever role you dance.</p>
   <p class="byline">Made by Arjun · © 2026</p>
   <p class="backlink"><a href="./">&larr;&nbsp; All tools</a></p>
 
@@ -158,8 +158,8 @@ const NODES = [
   {id:'hammer', label:'HAMMERLOCK',  sub:'arm wrapped behind',   x:180, y:588},
   {id:'closed', label:'CLOSED',      sub:'bodies close',         x:660, y:158},
   {id:'semi',   label:'SEMI-CLOSED', sub:'promenade / travel',   x:858, y:238},
-  {id:'shadow', label:'SHADOW',      sub:'you behind her',       x:688, y:422},
-  {id:'cuddle', label:'CUDDLE',      sub:'wrapped at your side', x:445, y:560},
+  {id:'shadow', label:'SHADOW',      sub:'leader behind',       x:688, y:422},
+  {id:'cuddle', label:'CUDDLE',      sub:'wrapped at leader side', x:445, y:560},
   {id:'dip',    label:'DIP / DROP',  sub:'a finish',             x:878, y:540},
 ];
 
@@ -186,9 +186,9 @@ const EDGES = [
 ];
 
 const INPLACE = {
-  open1:  [['basic \u2014 mark time & reset',1],['cross-body lead (swap places)',1],['right / left / underarm turn',1],['cross-body with inside or outside turn',2],['double & travelling turns',2],['continuous / triple spins',3]],
-  open2:  [['basic \u2014 two-hand',1],['hand tosses / arm styling',2]],
-  hshake: [['switch which turn you set up',2]],
+  open1:  [['basic, mark time and reset',1],['cross-body lead (swap places)',1],['right / left / underarm turn',1],['cross-body with inside or outside turn',2],['double & travelling turns',2],['continuous / triple spins',3]],
+  open2:  [['basic, two-hand',1],['hand tosses / arm styling',2]],
+  hshake: [['switch which turn comes next',2]],
   hammer: [['double hammerlock (deeper wrap)',3]],
   closed: [['basic + body movement',1],['body waves / contra-body',2],['sensual lean',2]],
   semi:   [['travelling basic around the floor',1]],
@@ -240,7 +240,7 @@ function routeTo(from, to, allowed){
 function generate(){
   const allowed = allowedTiers();
   let cur = startPos, prev = null, lastLabel = null;
-  const seq = [{ l:'Basic — settle in, find the beat', tier:1, at:cur, to:cur, kind:'inplace' }];
+  const seq = [{ l:'Basic, settle in and find the beat', tier:1, at:cur, to:cur, kind:'inplace' }];
 
   for(let i = 0; i < steps; i++){
     let outs = outsFrom(cur, allowed);
@@ -270,7 +270,7 @@ function generate(){
 
   let finisher = false;
   if(cur === 'dip'){
-    seq.push({ l:'Hold it, then recover up — that\'s your ending', tier:1, at:cur, to:cur, kind:'inplace' });
+    seq.push({ l:'Hold it, then recover up. This is the ending', tier:1, at:cur, to:cur, kind:'inplace' });
     finisher = true;
   } else {
     if(cur !== 'open1'){
@@ -281,7 +281,7 @@ function generate(){
         cur = 'open1';
       }
     }
-    seq.push({ l:'Basic — resolve and breathe', tier:1, at:cur, to:cur, kind:'inplace' });
+    seq.push({ l:'Basic, resolve and breathe', tier:1, at:cur, to:cur, kind:'inplace' });
   }
   return { seq, finisher };
 }
@@ -302,19 +302,19 @@ function render(){
   const out = document.getElementById('out');
   const tip = document.getElementById('tip');
   if(!current){
-    out.innerHTML = '<div class="empty">Pick your level and length, then hit generate.</div>';
+    out.innerHTML = '<div class="empty">Pick a level and length, then hit generate.</div>';
     tip.textContent = '';
     return;
   }
   const { seq, finisher } = current;
-  let html = '<div class="route"><span class="rl">Where it takes you</span>' + routeLine(seq) + '</div>';
+  let html = '<div class="route"><span class="rl">Where it leads</span>' + routeLine(seq) + '</div>';
 
   seq.forEach((s, i) => {
     const a = i * 8 + 1, b = i * 8 + 8;
     const moved = s.to !== s.at;
     const isFin = finisher && i === seq.length - 1;
     html += '<div class="step' + (isFin ? ' finish' : '') + '">';
-    html += '<div class="cnt">' + a + '&ndash;' + b + '<small>counts</small></div>';
+    html += '<div class="cnt">' + a + '-' + b + '<small>counts</small></div>';
     html += '<div class="sbody"><div class="smove">' + s.l + tagFor(s.tier) + '</div>';
     html += '<div class="sto">' + (moved
         ? 'lands in <b>' + byId[s.to].label + '</b> · ' + byId[s.to].sub
@@ -327,7 +327,7 @@ function render(){
   html += '<span class="said" id="said"></span></div>';
   out.innerHTML = html;
 
-  tip.textContent = 'That\'s ' + (seq.length * 8) + ' counts — about ' + seq.length +
+  tip.textContent = 'That is ' + (seq.length * 8) + ' counts, about ' + seq.length +
     ' eight-counts. Walk it slow without music first, then run it at tempo.';
 
   document.getElementById('again').addEventListener('click', run);
@@ -358,7 +358,7 @@ function copyText(){
       ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
       document.body.appendChild(ta); ta.select(); document.execCommand('copy');
       document.body.removeChild(ta); done();
-    } catch(err){ if(said) said.textContent = 'Copy failed — select it manually'; }
+    } catch(err){ if(said) said.textContent = 'Copy failed. Select it manually'; }
   }
 }
 

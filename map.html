@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-  Bachata — The Full Move Map
+  Bachata Position Map
   Created by Arjun · © 2026 Arjun · All rights reserved.
   Original compilation, structure, and interactive design by Arjun.
 -->
@@ -8,7 +8,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Position map — Bachata tools by Arjun</title>
+<title>Position map · Bachata tools by Arjun</title>
 <meta name="author" content="Arjun" />
 <meta name="copyright" content="© 2026 Arjun. All rights reserved." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -70,6 +70,26 @@
   .placeholder { color:#b9a6ae; font-size: 13.5px; }
   .placeholder b { color:#f3e9de; }
   .note { color:#8a7580; font-size: 12px; margin-top: 18px; }
+  .silo { border: 1px solid #4a3a4e; border-radius: 18px; background: #241829; margin-top: 16px; padding: 12px 10px 14px; }
+  .silo svg { width: 100%; height: auto; display: block; }
+  .silo-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 2px 6px 8px; flex-wrap: wrap; }
+  .silo-title { font-family: "Fraunces", Georgia, serif; font-size: 17px; font-weight: 600; color: #f3e9de; }
+  .silo-title span { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: #b9a6ae; font-weight: 400; margin-left: 7px; }
+  .silo-key { font-size: 10.5px; color: #8a7580; letter-spacing: .04em; }
+  .silo-key b.l { color: #e8a13a; font-weight: 600; }
+  .silo-key b.f { color: #5ed3c6; font-weight: 600; }
+  .silo-note { font-size: 11.5px; color: #8a7580; padding: 7px 6px 0; line-height: 1.55; }
+  .rolebar { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; padding: 0 6px 10px; }
+  .rolebar .rl { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: #8a7580; margin-right: 2px; }
+  .rolebtn { font-family: "IBM Plex Mono", monospace; font-size: 12px; cursor: pointer; border-radius: 999px;
+             padding: 6px 13px; border: 1.5px solid #4a3a4e; background: transparent; color: #b9a6ae; }
+  .rolebtn.on[data-r="lead"] { border-color: #e8a13a; background: #e8a13a; color: #1e1520; font-weight: 600; }
+  .rolebtn.on[data-r="follow"] { border-color: #5ed3c6; background: #5ed3c6; color: #12201e; font-weight: 600; }
+  .rolebtn.on[data-r="both"] { border-color: #cdb9c0; background: #cdb9c0; color: #1e1520; font-weight: 600; }
+  .yourbit { font-size: 12px; color: #f3e9de; padding: 8px 6px 0; line-height: 1.6; }
+  .yourbit b { color: #e8a13a; font-weight: 600; }
+  .yourbit.f b { color: #5ed3c6; }
+
   .byline { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: 0.06em; color: #e8a13a; margin: 0 0 10px; }
   .backlink { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; margin: 0 0 18px; }
   .backlink a { color: #b9a6ae; text-decoration: none; border-bottom: 1px solid #4a3a4e; padding-bottom: 1px; }
@@ -87,7 +107,7 @@
   <h1>How one position opens the next</h1>
   <p class="byline">Made by Arjun · © 2026</p>
   <p class="backlink"><a href="./">&larr;&nbsp; All tools</a></p>
-  <p class="sub"><b>Tap any position</b> to see what it lets you do and where it leads. Positions are the states you can be in; the moves between them are the arrows. Use the filters to layer in harder material.</p>
+  <p class="sub"><b>Pick a role, then tap any position</b> to see what it opens up and where it leads. Positions are the states you can be in; the moves between them are the arrows. Use the filters to layer in harder material.</p>
 
   <div class="controls">
     <span class="lbl">Show:</span>
@@ -109,9 +129,25 @@
     </div>
   </div>
 
+  <div class="silo">
+    <div class="silo-head">
+      <div class="silo-title" id="siloTitle">Open <span>one hand</span></div>
+      <div class="silo-key"><b class="l">&#9679; leader</b> &nbsp; <b class="f">&#9679; follower</b></div>
+    </div>
+    <div class="rolebar" id="rolebar">
+      <span class="rl">I dance</span>
+      <button class="rolebtn on" data-r="lead">Leader</button>
+      <button class="rolebtn" data-r="follow">Follower</button>
+      <button class="rolebtn" data-r="both">Both</button>
+    </div>
+    <svg id="silo" viewBox="0 0 420 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Silhouettes of leader and follower in the selected position"></svg>
+    <p class="silo-note" id="siloNote"></p>
+    <p class="yourbit" id="siloRole"></p>
+  </div>
+
   <div class="panel" id="panel"></div>
 
-  <p class="note">A mental model, not gospel — names for these moves vary by teacher and scene (sensual, Dominican, moderna). What matters is the structure: get into a position, and it opens a specific set of options.</p>
+  <p class="note">A mental model, not gospel. Names for these moves vary by teacher and scene (sensual, Dominican, moderna). What matters is the structure: get into a position, and it opens a specific set of options. Either role can be danced by anyone, so set the role above to whichever you dance.</p>
 
   <footer class="credit">
     <div class="rule"></div>
@@ -128,8 +164,8 @@ const NODES = [
   {id:'hammer', label:'HAMMERLOCK',  sub:'arm wrapped behind',   x:180, y:588},
   {id:'closed', label:'CLOSED',      sub:'bodies close',         x:660, y:158},
   {id:'semi',   label:'SEMI-CLOSED', sub:'promenade / travel',   x:858, y:238},
-  {id:'shadow', label:'SHADOW',      sub:'you behind her',       x:688, y:422},
-  {id:'cuddle', label:'CUDDLE',      sub:'wrapped at your side', x:445, y:560},
+  {id:'shadow', label:'SHADOW',      sub:'leader behind',       x:688, y:422},
+  {id:'cuddle', label:'CUDDLE',      sub:'wrapped at leader side', x:445, y:560},
   {id:'dip',    label:'DIP / DROP',  sub:'a finish',             x:878, y:540},
 ];
 
@@ -156,9 +192,9 @@ const EDGES = [
 ];
 
 const INPLACE = {
-  open1:  [['basic \u2014 mark time & reset',1],['cross-body lead (swap places)',1],['right / left / underarm turn',1],['cross-body with inside or outside turn',2],['double & travelling turns',2],['continuous / triple spins',3]],
-  open2:  [['basic \u2014 two-hand',1],['hand tosses / arm styling',2]],
-  hshake: [['switch which turn you set up',2]],
+  open1:  [['basic, mark time and reset',1],['cross-body lead (swap places)',1],['right / left / underarm turn',1],['cross-body with inside or outside turn',2],['double & travelling turns',2],['continuous / triple spins',3]],
+  open2:  [['basic, two-hand',1],['hand tosses / arm styling',2]],
+  hshake: [['switch which turn comes next',2]],
   hammer: [['double hammerlock (deeper wrap)',3]],
   closed: [['basic + body movement',1],['body waves / contra-body',2],['sensual lean',2]],
   semi:   [['travelling basic around the floor',1]],
@@ -252,7 +288,7 @@ function tagFor(tier){ return `<span class="tag t${tier}">${TNAME[tier]}</span>`
 
 function buildPanel(){
   if(!selected){
-    return `<p class="placeholder"><b>Tap a position</b> to see the moves you can do there and where each one takes you. Start with <b>OPEN · one hand</b> — it's the hub almost everything flows through. Then follow a chain: OPEN &rarr; HANDSHAKE &rarr; HAMMERLOCK, or OPEN &rarr; SHADOW &rarr; CUDDLE.</p>`;
+    return `<p class="placeholder"><b>Tap a position</b> to see the moves available there and where each one leads. Start with <b>OPEN · one hand</b>, the hub almost everything flows through. Then follow a chain: OPEN &rarr; HANDSHAKE &rarr; HAMMERLOCK, or OPEN &rarr; SHADOW &rarr; CUDDLE.</p>`;
   }
   const n = byId[selected];
   const inplace = (INPLACE[selected] || []).filter(x => active.has(x[1]));
@@ -265,11 +301,11 @@ function buildPanel(){
 
   html += `<div class="sect">In place here</div>`;
   html += inplace.length ? '<ul>' + inplace.map(x => `<li>${tagFor(x[1])}<span>${x[0]}</span></li>`).join('') + '</ul>'
-                         : `<p class="placeholder">Nothing at the visible levels — try enabling more.</p>`;
+                         : `<p class="placeholder">Nothing at the visible levels. Try enabling more.</p>`;
 
   html += `<div class="sect">Opens up &rarr;</div>`;
   html += outs.length ? '<ul>' + outs.map(o => `<li>${tagFor(o.tier)}<span>${o.l} <span class="arrow">&rarr;</span> <span class="to">${byId[o.to].label} · ${byId[o.to].sub}</span></span></li>`).join('') + '</ul>'
-                      : `<p class="placeholder">A finishing position — recover and start again.</p>`;
+                      : `<p class="placeholder">A finishing position. Recover and start again.</p>`;
 
   if(ins.length){
     html += `<div class="sect">Get here from</div>`;
@@ -288,17 +324,262 @@ function sizeGraph(){
   svg.style.height = Math.round(w * 660 / 1000) + 'px';
 }
 
+
+/* ============================================================
+   SILHOUETTES: two parametric figures, tweened between poses.
+
+   Geometry notes (learned the hard way):
+   * SVG rotate() is CLOCKWISE for positive angles in screen space.
+     A limb drawn pointing DOWN therefore swings toward the viewer's
+     LEFT on a positive angle, and toward the RIGHT on a negative one.
+     So the leader (drawn on the left) reaches the follower with
+     NEGATIVE angles, and the follower reaches back with POSITIVE ones.
+   * Legs sit outside the tilt group, so leaning the torso doesn't
+     swing the feet off the floor.
+   * Both figures face the viewer, the standard dance-diagram
+     convention. The joining lines and dots show how hands connect.
+   ============================================================ */
+const HIPY = 150, UPPER = 34, FORE = 30, SHX = 18, SHY = -58;
+
+function P(x, yoff, tilt, Ash, Ael, Bsh, Bel){
+  return { x:x, yoff:yoff, tilt:tilt, Ash:Ash, Ael:Ael, Bsh:Bsh, Bel:Bel };
+}
+
+const POSES = {
+  open2: {
+    roleLead:'Both arms stay live. Keep a light, even tone so a change of direction reads instantly.',
+    roleFollow:'Two connections mean two sources of information. Follow the one that moves first and let the other stay soft.',
+    lead:  P(150, 0, 0, -46, -34, -54, -28),
+    follow:P(270, 0, 0,  54,  28,  46,  34),
+    conns:[['lead','A','follow','A'],['lead','B','follow','B']],
+    note:'Both hands joined at arm\u2019s length. The widest, safest shape: easy to see each other, and the clearest place to read a lead.'
+  },
+  open1: {
+    roleLead:'The single hand carries everything. Prep early, then move, so the signal arrives before the beat.',
+    roleFollow:'One connection only, so the rest of the information comes from the body. Keep the arm springy, not rigid.',
+    lead:  P(125, 0, 0,  14,   8, -50, -30),
+    follow:P(295, 0, 0,  50,  30, -14,  -8),
+    conns:[['lead','B','follow','A']],
+    note:'One connection: the leader\u2019s left hand to the follower\u2019s right. Home base, since almost everything starts and resolves here.'
+  },
+  hshake: {
+    roleLead:'The unusual grip is the point. Set it up on a clear beat or it reads as a mistake.',
+    roleFollow:'Expect the hand to feel wrong. It normally means a wrap or hammerlock is coming, so keep the elbow soft.',
+    lead:  P(132, 0, 0, -58, -26,  -8,  -5),
+    follow:P(288, 0, 0,  58,  26,   8,   5),
+    conns:[['lead','A','follow','A']],
+    note:'Same-hand hold: the leader\u2019s right hand to the follower\u2019s right. It feels awkward on purpose, since it sets up hammerlocks and wraps the normal hold cannot reach.'
+  },
+  hammer: {
+    roleLead:'Lead it gently and stop where the shoulder stops. Never push past the natural range.',
+    roleFollow:'The arm folds behind the back. Keep it relaxed and speak up straight away if the angle pinches.',
+    lead:  P(168, 0, 0,  12,   7, -40, -30),
+    follow:P(252, 0, 0,  20, -40, -10,  -6),
+    conns:[['lead','B','follow','A']],
+    note:'The follower\u2019s forearm folds behind their own back, with the leader\u2019s hand holding it there. Comfortable only when led gently. Never force the angle.'
+  },
+  closed: {
+    roleLead:'The hand on the shoulder blade steers. Move the chest and the couple moves with it.',
+    roleFollow:'Close contact means the lead comes from the torso, not the arms. Stay tall and keep the frame there to be felt.',
+    lead:  P(182, 0, 0, -62, -22, -78,  -6),
+    follow:P(244, 0, 0, -58, -22,  48,  30),
+    conns:[['lead','A','follow','torso'],['lead','B','follow','A']],
+    note:'Bodies close and slightly offset. The leader\u2019s right hand on the follower\u2019s shoulder blade is the steering wheel, the follower\u2019s left hand rests on the leader\u2019s shoulder, and the lead hand stays out to the side.'
+  },
+  semi: {
+    roleLead:'Both point the same way, so this is where the couple covers ground. Watch the floor ahead.',
+    roleFollow:'Travelling position, so expect to walk rather than turn. Match the stride instead of holding a spot.',
+    lead:  P(140, 0, 11,  12,   7, -50, -30),
+    follow:P(280, 0, 11,  50,  30, -12,  -7),
+    conns:[['lead','B','follow','A']],
+    note:'Promenade. Both dancers angled the same way, so the couple travels together across the floor instead of turning on the spot.'
+  },
+  shadow: {
+    roleLead:'No eye contact here, so leads must be clearer and softer than usual.',
+    roleFollow:'Nothing is visible behind, so everything arrives through the hands and frame. Trust it and stay upright.',
+    lead:  P(205, 0, 0, -34, -48,  34,  48),
+    follow:P(205, 18, 0, -34, -48,  34,  48),
+    conns:[['lead','A','follow','A'],['lead','B','follow','B']],
+    note:'The follower is in front, the leader behind, both facing the same way. The frame comes over the follower\u2019s shoulders. The follower cannot see the leader here, so leads have to be clear and gentle.'
+  },
+  cuddle: {
+    roleLead:'A resting shape. Use it in a slow passage, then unwrap on a clean phrase.',
+    roleFollow:'A wrapped, close shape. Keep your own balance rather than leaning into the wrap.',
+    lead:  P(180, 0, 0,  12,   7, -70, -16),
+    follow:P(234, 8, 0,  20, -10, -10,  -6),
+    conns:[['lead','B','follow','torso'],['follow','A','lead','torso']],
+    note:'The follower is wrapped in at the leader\u2019s side. A resting shape, good for a slow passage before unwrapping back out to open.'
+  },
+  dip: {
+    roleLead:'Steady, never catch. If the weight is not already supported, do not start it.',
+    roleFollow:'Your own bent leg carries you. Only go as far as your own balance allows.',
+    lead:  P(196, 0, -8, -54, -26, -70, -14),
+    follow:P(252, 0, 42,  34,  22, -18,  -8),
+    conns:[['lead','A','follow','torso']],
+    note:'A finish, not a transition. The follower carries their own weight on a bent supporting leg. The leader steadies, never catches.'
+  }
+};
+
+function figureSVG(prefix, color){
+  const st = 'stroke-linecap="round" fill="none" stroke="' + color + '"';
+  const arm = (side, sx) =>
+    '<g transform="translate(' + sx + ',' + SHY + ')"><g id="' + prefix + side + 'up">' +
+      '<line x1="0" y1="0" x2="0" y2="' + UPPER + '" stroke-width="9" ' + st + '/>' +
+      '<g transform="translate(0,' + UPPER + ')"><g id="' + prefix + side + 'fore">' +
+        '<line x1="0" y1="0" x2="0" y2="' + FORE + '" stroke-width="8" ' + st + '/>' +
+        '<circle cx="0" cy="' + FORE + '" r="5.5" fill="' + color + '"/>' +
+      '</g></g></g></g>';
+  return '<g id="' + prefix + 'root">' +
+    /* legs stay outside the tilt group so the feet keep the floor */
+    '<line x1="-8" y1="-6" x2="-13" y2="92" stroke-width="11" ' + st + '/>' +
+    '<line x1="8"  y1="-6" x2="13"  y2="92" stroke-width="11" ' + st + '/>' +
+    '<g id="' + prefix + 'up">' +
+      '<line x1="0" y1="2" x2="0" y2="' + SHY + '" stroke-width="20" ' + st + '/>' +
+      '<circle cx="0" cy="-82" r="13" fill="' + color + '"/>' +
+      arm('A', -SHX) + arm('B', SHX) +
+    '</g></g>';
+}
+
+function buildSilo(){
+  const el = document.getElementById('silo');
+  if(!el) return;
+  el.innerHTML =
+    '<line x1="20" y1="244" x2="400" y2="244" stroke="#3a2c3f" stroke-width="1"/>' +
+    figureSVG('L', '#e8a13a') +
+    figureSVG('F', '#5ed3c6') +
+    '<g id="conns"></g>';
+}
+
+/* local point -> canvas, through the upper-body tilt and the figure offset */
+function toCanvas(f, px, py){
+  const t = f.tilt * Math.PI / 180;
+  const rx = px * Math.cos(t) - py * Math.sin(t);
+  const ry = px * Math.sin(t) + py * Math.cos(t);
+  return [f.x + rx, HIPY + f.yoff + ry];
+}
+
+/* forward kinematics. Note the MINUS on the sin terms, to match
+   SVG's clockwise rotation of a downward-pointing limb */
+function anchor(f, name){
+  if(name === 'A' || name === 'B'){
+    const sx = (name === 'A' ? -SHX : SHX);
+    const a1 = f[name + 'sh'] * Math.PI / 180;
+    const a2 = (f[name + 'sh'] + f[name + 'el']) * Math.PI / 180;
+    const ex = sx - Math.sin(a1) * UPPER, ey = SHY + Math.cos(a1) * UPPER;
+    return toCanvas(f, ex - Math.sin(a2) * FORE, ey + Math.cos(a2) * FORE);
+  }
+  if(name === 'shA') return toCanvas(f, -SHX, SHY);
+  if(name === 'shB') return toCanvas(f,  SHX, SHY);
+  if(name === 'torso') return toCanvas(f, 0, -30);
+  return toCanvas(f, 0, 0);
+}
+
+function applyFig(prefix, f){
+  const root = document.getElementById(prefix + 'root');
+  if(!root) return;
+  root.setAttribute('transform', 'translate(' + f.x.toFixed(1) + ',' + (HIPY + f.yoff).toFixed(1) + ')');
+  document.getElementById(prefix + 'up').setAttribute('transform', 'rotate(' + f.tilt.toFixed(1) + ')');
+  document.getElementById(prefix + 'Aup').setAttribute('transform', 'rotate(' + f.Ash.toFixed(1) + ')');
+  document.getElementById(prefix + 'Afore').setAttribute('transform', 'rotate(' + f.Ael.toFixed(1) + ')');
+  document.getElementById(prefix + 'Bup').setAttribute('transform', 'rotate(' + f.Bsh.toFixed(1) + ')');
+  document.getElementById(prefix + 'Bfore').setAttribute('transform', 'rotate(' + f.Bel.toFixed(1) + ')');
+}
+
+function applyRoleEmphasis(){
+  const L = document.getElementById('Lroot'), F = document.getElementById('Froot');
+  if(!L || !F) return;
+  L.setAttribute('opacity', danceRole === 'follow' ? '0.38' : '1');
+  F.setAttribute('opacity', danceRole === 'lead' ? '0.38' : '1');
+}
+
+function drawPose(st){
+  applyFig('L', st.lead);
+  applyFig('F', st.follow);
+  const g = document.getElementById('conns');
+  if(!g) return;
+  const figs = { lead: st.lead, follow: st.follow };
+  g.innerHTML = (st.conns || []).map(c => {
+    const a = anchor(figs[c[0]], c[1]), b = anchor(figs[c[2]], c[3]);
+    const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2;
+    return '<line x1="' + a[0].toFixed(1) + '" y1="' + a[1].toFixed(1) + '" x2="' + b[0].toFixed(1) + '" y2="' + b[1].toFixed(1) +
+           '" stroke="#f3e9de" stroke-width="2" stroke-linecap="round" stroke-opacity="0.55"/>' +
+           '<circle cx="' + mx.toFixed(1) + '" cy="' + my.toFixed(1) + '" r="4" fill="#f3e9de" fill-opacity="0.9"/>';
+  }).join('');
+}
+
+/* ---- tween ---- */
+const FIELDS = ['x','yoff','tilt','Ash','Ael','Bsh','Bel'];
+const TWEEN_MS = 560;
+let poseCur = null, poseFrom = null, poseTo = null, tStart = 0, tweenRAF = null;
+let danceRole = 'lead';
+
+function clonePose(p){
+  return { lead: Object.assign({}, p.lead), follow: Object.assign({}, p.follow), conns: p.conns };
+}
+function easeInOut(t){ return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2; }
+function nowMs(){ return (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now(); }
+
+function tickTween(){
+  let t = (nowMs() - tStart) / TWEEN_MS;
+  if(t > 1) t = 1;
+  const e = easeInOut(t);
+  const out = { lead:{}, follow:{}, conns: poseTo.conns };
+  ['lead','follow'].forEach(who => {
+    FIELDS.forEach(k => { out[who][k] = poseFrom[who][k] + (poseTo[who][k] - poseFrom[who][k]) * e; });
+  });
+  poseCur = out;
+  drawPose(out);
+  if(t < 1){ tweenRAF = requestAnimationFrame(tickTween); }
+  else { tweenRAF = null; poseCur = clonePose(poseTo); }
+}
+
+function setPose(id, instant){
+  const target = POSES[id] || POSES.open1;
+  const node = byId[id] || byId.open1;
+  const ttl = document.getElementById('siloTitle');
+  if(ttl) ttl.innerHTML = node.label + ' <span>' + node.sub + '</span>';
+  const nt = document.getElementById('siloNote');
+  if(nt) nt.textContent = target.note || '';
+  const rb = document.getElementById('siloRole');
+  if(rb){
+    if(danceRole === 'both'){
+      rb.className = 'yourbit';
+      rb.innerHTML = '<b>As leader:</b> ' + (target.roleLead || '') +
+                     '<br/><b style="color:' + '#5ed3c6' + '">As follower:</b> ' + (target.roleFollow || '');
+    } else if(danceRole === 'follow'){
+      rb.className = 'yourbit f';
+      rb.innerHTML = '<b>As follower:</b> ' + (target.roleFollow || '');
+    } else {
+      rb.className = 'yourbit';
+      rb.innerHTML = '<b>As leader:</b> ' + (target.roleLead || '');
+    }
+  }
+  applyRoleEmphasis();
+  if(tweenRAF){ cancelAnimationFrame(tweenRAF); tweenRAF = null; }
+  if(!poseCur || instant){
+    poseCur = clonePose(target);
+    drawPose(poseCur);
+    return;
+  }
+  poseFrom = clonePose(poseCur);
+  poseTo = clonePose(target);
+  tStart = nowMs();
+  tickTween();
+}
+
 function render(){
   const g = document.getElementById('graph');
   if(g) g.innerHTML = buildSVG();
   const p = document.getElementById('panel');
   if(p) p.innerHTML = buildPanel();
+  setPose(selected || 'open1');
   const hint = document.getElementById('hint');
   if(hint) hint.textContent = selected ? (byId[selected].label + ' selected · tap again to clear') : 'swipe to pan · tap a position';
   sizeGraph();
 }
 
 function init(){
+  buildSilo();
   const g = document.getElementById('graph');
   g.addEventListener('click', ev => {
     const grp = ev.target.closest('[data-node]');
@@ -306,6 +587,15 @@ function init(){
     const id = grp.getAttribute('data-node');
     selected = (selected === id) ? null : id;
     render();
+  });
+  const rbar = document.getElementById('rolebar');
+  if(rbar) rbar.addEventListener('click', ev => {
+    const b = ev.target.closest('.rolebtn');
+    if(!b) return;
+    rbar.querySelectorAll('.rolebtn').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    danceRole = b.getAttribute('data-r');
+    setPose(selected || 'open1', true);
   });
   document.querySelectorAll('.pill[data-tier]').forEach(btn => {
     btn.addEventListener('click', () => {

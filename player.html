@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-  Bachata — Practice Player
+  Bachata Practice Player
   Created by Arjun · © 2026 Arjun · All rights reserved.
   Original compilation, structure, and interactive design by Arjun.
 -->
@@ -8,7 +8,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Practice player — Bachata tools by Arjun</title>
+<title>Practice player · Bachata tools by Arjun</title>
 <meta name="author" content="Arjun" />
 <meta name="copyright" content="© 2026 Arjun. All rights reserved." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -102,7 +102,7 @@
 
   <p class="eyebrow">Bachata · practice player</p>
   <h1>Dance it <em>in time.</em></h1>
-  <p class="lede">Generates a combo, counts you in, then calls each move on the beat. The 4 and the 8 are marked — that's where your hip pop lands.</p>
+  <p class="lede">Generates a combo, counts it in, then calls each move on the beat. The 4 and the 8 are marked, which is where the hip pop lands. The sequence describes the couple, so it works for either role.</p>
   <p class="byline">Made by Arjun · © 2026</p>
   <p class="backlink"><a href="./">&larr;&nbsp; All tools</a></p>
 
@@ -151,9 +151,9 @@
 
   <div class="stage" id="stage" style="margin-top:16px">
     <div class="phase" id="phase">ready</div>
-    <div class="bigcount" id="big">&ndash;</div>
+    <div class="bigcount" id="big">-</div>
     <div class="dots" id="dots"></div>
-    <div class="hipnote">4 and 8 are your hip accents</div>
+    <div class="hipnote">4 and 8 are the hip accents</div>
     <div class="nowbox">
       <div class="nowlbl">Now</div>
       <div class="nowmove" id="now">Press play</div>
@@ -165,7 +165,7 @@
 
   <div class="list" id="list"></div>
 
-  <p class="tip">Start slow — around 80 BPM — and only speed up once the transitions feel automatic. Real bachata songs sit near 120–130.</p>
+  <p class="tip">Start slow, around 80 BPM, and only speed up once the transitions feel automatic. Real bachata songs sit near 120 to 130.</p>
 
   <footer class="credit">
     <div class="rule"></div>
@@ -183,8 +183,8 @@ const NODES = [
   {id:'hammer', label:'HAMMERLOCK',  sub:'arm wrapped behind',   x:180, y:588},
   {id:'closed', label:'CLOSED',      sub:'bodies close',         x:660, y:158},
   {id:'semi',   label:'SEMI-CLOSED', sub:'promenade / travel',   x:858, y:238},
-  {id:'shadow', label:'SHADOW',      sub:'you behind her',       x:688, y:422},
-  {id:'cuddle', label:'CUDDLE',      sub:'wrapped at your side', x:445, y:560},
+  {id:'shadow', label:'SHADOW',      sub:'leader behind',       x:688, y:422},
+  {id:'cuddle', label:'CUDDLE',      sub:'wrapped at leader side', x:445, y:560},
   {id:'dip',    label:'DIP / DROP',  sub:'a finish',             x:878, y:540},
 ];
 
@@ -211,9 +211,9 @@ const EDGES = [
 ];
 
 const INPLACE = {
-  open1:  [['basic \u2014 mark time & reset',1],['cross-body lead (swap places)',1],['right / left / underarm turn',1],['cross-body with inside or outside turn',2],['double & travelling turns',2],['continuous / triple spins',3]],
-  open2:  [['basic \u2014 two-hand',1],['hand tosses / arm styling',2]],
-  hshake: [['switch which turn you set up',2]],
+  open1:  [['basic, mark time and reset',1],['cross-body lead (swap places)',1],['right / left / underarm turn',1],['cross-body with inside or outside turn',2],['double & travelling turns',2],['continuous / triple spins',3]],
+  open2:  [['basic, two-hand',1],['hand tosses / arm styling',2]],
+  hshake: [['switch which turn comes next',2]],
   hammer: [['double hammerlock (deeper wrap)',3]],
   closed: [['basic + body movement',1],['body waves / contra-body',2],['sensual lean',2]],
   semi:   [['travelling basic around the floor',1]],
@@ -265,7 +265,7 @@ function routeTo(from, to, allowed){
 function generate(){
   const allowed = allowedTiers();
   let cur = startPos, prev = null, lastLabel = null;
-  const seq = [{ l:'Basic — settle in, find the beat', tier:1, at:cur, to:cur, kind:'inplace' }];
+  const seq = [{ l:'Basic, settle in and find the beat', tier:1, at:cur, to:cur, kind:'inplace' }];
 
   for(let i = 0; i < steps; i++){
     let outs = outsFrom(cur, allowed);
@@ -295,7 +295,7 @@ function generate(){
 
   let finisher = false;
   if(cur === 'dip'){
-    seq.push({ l:'Hold it, then recover up — that\'s your ending', tier:1, at:cur, to:cur, kind:'inplace' });
+    seq.push({ l:'Hold it, then recover up. This is the ending', tier:1, at:cur, to:cur, kind:'inplace' });
     finisher = true;
   } else {
     if(cur !== 'open1'){
@@ -306,7 +306,7 @@ function generate(){
         cur = 'open1';
       }
     }
-    seq.push({ l:'Basic — resolve and breathe', tier:1, at:cur, to:cur, kind:'inplace' });
+    seq.push({ l:'Basic, resolve and breathe', tier:1, at:cur, to:cur, kind:'inplace' });
   }
   return { seq, finisher };
 }
@@ -329,7 +329,7 @@ let bpm = 100, loopOn = true, soundOn = true;
 let combo = null;
 const COUNT_IN = 8;
 
-/* pure timing plan — testable */
+/* pure timing plan, testable */
 function planBeat(n, countIn, moveCount){
   if(n < countIn) return { phase:'countin', beatInBar: n % 8, moveIndex: -1 };
   const k = n - countIn;
@@ -445,14 +445,14 @@ function renderList(){
   if(!combo){ list.innerHTML = ''; return; }
   const names = {1:'FUND',2:'INT',3:'ADV'};
   list.innerHTML = combo.seq.map((s, i) =>
-    '<div class="li"><span class="n">' + (i*8+1) + '&ndash;' + (i*8+8) + '</span>' +
+    '<div class="li"><span class="n">' + (i*8+1) + '-' + (i*8+8) + '</span>' +
     '<span>' + s.l + '<span class="tag t' + s.tier + '">' + names[s.tier] + '</span></span></div>'
   ).join('');
 }
 
 function resetStage(){
   document.getElementById('phase').textContent = 'ready';
-  document.getElementById('big').textContent = '\u2013';
+  document.getElementById('big').textContent = '-';
   document.getElementById('big').className = 'bigcount';
   document.getElementById('dots').innerHTML = dotsHtml(-1, 'idle');
   document.getElementById('now').textContent = combo ? 'Press play' : 'Press play';
@@ -506,10 +506,10 @@ function setBpm(v){
   if(r && parseInt(r.value, 10) !== bpm) r.value = bpm;
   const note = document.getElementById('bpmnote');
   if(note){
-    note.textContent = bpm < 85 ? 'slow — good for learning the transitions'
-                    : bpm < 110 ? 'moderate — building it up'
+    note.textContent = bpm < 85 ? 'slow, good for learning the transitions'
+                    : bpm < 110 ? 'moderate, building it up'
                     : bpm < 130 ? 'close to real song tempo'
-                    : 'fast — social floor speed';
+                    : 'fast, social floor speed';
   }
 }
 

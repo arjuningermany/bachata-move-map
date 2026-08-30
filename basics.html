@@ -29,8 +29,17 @@
   h1 em { font-style: italic; font-weight: 400; color: #e6748b; }
   .lede { color: #b9a6ae; font-size: 13.5px; margin: 0 0 12px; }
   .byline { font-size: 12.5px; letter-spacing: 0.06em; color: #e8a13a; margin: 0 0 6px; }
-  .backlink { margin: 0 0 22px; }
-  .backlink a { color: #b9a6ae; font-size: 12.5px; text-decoration: none; border-bottom: 1px solid #4a3a4e; padding-bottom: 1px; }
+  .backlink { margin: 0 0 20px; }
+  .backlink a {
+    display: inline-flex; align-items: center;
+    font-family: "IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: 0.05em;
+    color: #f3e9de; text-decoration: none;
+    border: 1px solid rgba(232,161,58,.38); border-radius: 999px;
+    padding: 7px 17px 7px 13px; background: rgba(232,161,58,.09);
+    transition: border-color .15s ease, color .15s ease, background .15s ease; }
+  .backlink a:hover, .backlink a:focus-visible { border-color: #e8a13a; color: #e8a13a; background: rgba(232,161,58,.17); }
+  .backlink a:focus-visible { outline: 2px solid rgba(232,161,58,.45); outline-offset: 2px; }
+  .backlink .arw { color: #e8a13a; font-size: 14px; line-height: 1; margin-right: 9px; }
 
   h2 { font-family: "Fraunces", Georgia, serif; font-size: 19px; font-weight: 600; margin: 20px 0 8px; }
   .card { border: 1px solid #4a3a4e; border-radius: 14px; background: #241829; padding: 13px; margin-bottom: 11px; }
@@ -135,7 +144,7 @@
   <h1>Six footworks, <em>count by count.</em></h1>
   <p class="lede">From the plain basic to Dominican box steps, syncopated cha-cha triples and travelling grapevines. Watch the feet, or tap through one count at a time, leader or follower.</p>
   <p class="byline">Made by Arjun · © 2026</p>
-  <p class="backlink"><a href="./">&larr;&nbsp; All tools</a></p>
+  <p class="backlink"><a href="./"><span class="arw">&larr;</span>All tools</a></p>
 
   <div class="card">
     <div id="pickerHost"></div>

@@ -54,9 +54,17 @@
   .lede { color: var(--muted); font-size: 15.5px; margin: 0 0 8px; }
   .lede strong { color: var(--ink); font-weight: 600; }
   .byline { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: 0.06em; color: var(--lead); margin: 14px 0 6px; }
-  .backlink { margin: 0 0 4px; }
-  .backlink a { font-family: "IBM Plex Mono", monospace; color: var(--muted); font-size: 12.5px; text-decoration: none; border-bottom: 1px solid var(--rule); padding-bottom: 1px; }
-  .backlink a:hover { color: var(--lead); }
+  .backlink { margin: 0 0 6px; }
+  .backlink a {
+    display: inline-flex; align-items: center;
+    font-family: "IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: 0.05em;
+    color: #f3e9de; text-decoration: none;
+    border: 1px solid rgba(232,161,58,.38); border-radius: 999px;
+    padding: 7px 17px 7px 13px; background: rgba(232,161,58,.09);
+    transition: border-color .15s ease, color .15s ease, background .15s ease; }
+  .backlink a:hover, .backlink a:focus-visible { border-color: #e8a13a; color: #e8a13a; background: rgba(232,161,58,.17); }
+  .backlink a:focus-visible { outline: 2px solid rgba(232,161,58,.45); outline-offset: 2px; }
+  .backlink .arw { color: #e8a13a; font-size: 14px; line-height: 1; margin-right: 9px; }
 
   .legend {
     background: var(--surface);
@@ -151,7 +159,7 @@
     <p class="lede">Diagrams show the <strong>shape</strong>: where the leader and follower start, travel, and land, plus the count and the one lead cue that matters.</p>
     <p class="lede">What a still <em style="color:var(--muted)">can't</em> show is the lead and timing of a moving partner. Two moves below are flagged <span style="color:var(--follow)">see it moving</span>, treat the picture there as a map, not a lesson.</p>
     <p class="byline">Made by Arjun · © 2026</p>
-    <p class="backlink"><a href="./">&larr;&nbsp; All tools</a></p>
+    <p class="backlink"><a href="./"><span class="arw">&larr;</span>All tools</a></p>
   </header>
 
   <section class="legend fade" aria-label="Legend">

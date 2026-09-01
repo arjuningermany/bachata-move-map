@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<!--
+  Bachata Musicality Trainer
+  Created by Arjun · © 2026 Arjun · All rights reserved.
+  Original compilation, structure, and interactive design by Arjun.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Musicality · Bachata tools by Arjun</title>
+<meta name="author" content="Arjun" />
+<meta name="copyright" content="© 2026 Arjun. All rights reserved." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: radial-gradient(120% 70% at 50% -10%, #2a1d30 0%, #1e1520 55%);
+    color: #f3e9de;
+    font-family: "IBM Plex Mono", ui-monospace, "Courier New", monospace;
+    line-height: 1.5; padding: 30px 16px 56px;
+    -webkit-user-select: none; user-select: none;
+  }
+  .wrap { max-width: 660px; margin: 0 auto; }
+  .eyebrow { font-size: 11.5px; letter-spacing: 0.22em; text-transform: uppercase; color: #e8a13a; margin: 0 0 10px; }
+  h1 { font-family: "Fraunces", Georgia, serif; font-weight: 900; font-size: 30px; line-height: 1.05; letter-spacing: -0.015em; margin: 0 0 10px; }
+  h1 em { font-style: italic; font-weight: 400; color: #5ed3c6; }
+  .lede { color: #b9a6ae; font-size: 13.5px; margin: 0 0 12px; }
+  .byline { font-size: 12.5px; letter-spacing: 0.06em; color: #e8a13a; margin: 0 0 6px; }
+  .backlink { margin: 0 0 20px; }
+  .backlink a {
+    display: inline-flex; align-items: center;
+    font-family: "IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: 0.05em;
+    color: #f3e9de; text-decoration: none;
+    border: 1px solid rgba(232,161,58,.38); border-radius: 999px;
+    padding: 7px 17px 7px 13px; background: rgba(232,161,58,.09);
+    transition: border-color .15s ease, color .15s ease, background .15s ease; }
+  .backlink a:hover, .backlink a:focus-visible { border-color: #e8a13a; color: #e8a13a; background: rgba(232,161,58,.17); }
+  .backlink .arw { color: #e8a13a; font-size: 14px; line-height: 1; margin-right: 9px; }
+
+  h2 { font-family: "Fraunces", Georgia, serif; font-size: 19px; font-weight: 600; margin: 22px 0 8px; }
+  .card { border: 1px solid #4a3a4e; border-radius: 14px; background: #241829; padding: 13px; margin-bottom: 11px; }
+  .lbl { display: block; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #8a7580; margin-bottom: 7px; }
+  .row { margin-bottom: 11px; } .row:last-child { margin-bottom: 0; }
+  .opts { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+  .opt { font-family: inherit; font-size: 12.5px; cursor: pointer; border-radius: 999px; padding: 7px 14px;
+         border: 1.5px solid #4a3a4e; background: transparent; color: #b9a6ae; }
+  .opt.on { border-color: #e8a13a; background: #e8a13a; color: #1e1520; font-weight: 600; }
+  .bpmrow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .bpmbtn { font-family: inherit; font-size: 17px; cursor: pointer; border: 1.5px solid #4a3a4e; background: transparent; color: #e8a13a; border-radius: 10px; width: 40px; height: 36px; }
+  .bpmval { font-family: "Fraunces", Georgia, serif; font-size: 25px; font-weight: 600; min-width: 58px; text-align: center; }
+  .bpmval small { font-family: "IBM Plex Mono", monospace; font-size: 9.5px; color: #8a7580; display: block; letter-spacing: .12em; margin-top: -3px; }
+  input[type=range] { flex: 1 1 150px; min-width: 130px; accent-color: #e8a13a; }
+
+  .stage { border: 1px solid #4a3a4e; border-radius: 16px; background: #2a1e2e; padding: 13px 12px 15px; text-align: center; margin-bottom: 12px; }
+  .phase { font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #8a7580; min-height: 14px; }
+
+  .phrase { display: flex; justify-content: center; gap: 5px; margin: 9px 0 3px; }
+  .pbar { width: 46px; height: 7px; border-radius: 4px; background: #3a2c3f; }
+  .pbar.on { background: #5ed3c6; }
+  .pbar.first { background: #4a3a4e; }
+  .pbar.first.on { background: #e8a13a; }
+  .phrasenote { font-size: 10.5px; color: #6b5570; margin-bottom: 6px; }
+
+  .beatrow { display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
+  .bigcount { font-family: "Fraunces", Georgia, serif; font-size: 46px; line-height: 1; font-weight: 900; min-width: 46px; }
+  .bigcount.one { color: #e8a13a; }
+  .dots { display: flex; gap: 6px; }
+  .dot { width: 23px; height: 23px; border-radius: 50%; border: 1.5px solid #4a3a4e; display: grid; place-items: center; font-size: 10px; color: #8a7580; }
+  .dot.one { border-color: #6b5570; }
+  .dot.on { background: #f3e9de; border-color: #f3e9de; color: #1e1520; font-weight: 600; }
+  .dot.on.one { background: #e8a13a; border-color: #e8a13a; }
+  .hidden { visibility: hidden; }
+
+  .go { width: 100%; font-family: "Fraunces", Georgia, serif; font-size: 19px; font-weight: 600;
+        background: #e8a13a; color: #1e1520; border: 0; border-radius: 13px; padding: 13px; cursor: pointer; margin-top: 11px; }
+  .go.stop { background: #e6748b; }
+  .tap {
+    width: 100%; margin-top: 9px; font-family: "Fraunces", Georgia, serif; font-size: 22px; font-weight: 600;
+    background: rgba(94,211,198,.14); color: #5ed3c6; border: 2px solid #5ed3c6;
+    border-radius: 14px; padding: 20px 13px; cursor: pointer; letter-spacing: .02em;
+    transition: transform .06s ease, background .1s ease; }
+  .tap:active { transform: scale(.985); background: rgba(94,211,198,.28); }
+  .tap:disabled { opacity: .35; cursor: default; border-color: #4a3a4e; color: #8a7580; background: transparent; }
+
+  .verdict { min-height: 46px; margin-top: 11px; }
+  .vbig { font-family: "Fraunces", Georgia, serif; font-size: 21px; font-weight: 600; }
+  .vbig.good { color: #6cc08a; } .vbig.close { color: #e8a13a; } .vbig.off { color: #e6748b; }
+  .vsub { font-size: 11.5px; color: #8a7580; margin-top: 2px; }
+
+  .score { display: flex; justify-content: center; gap: 18px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #3a2c3f; }
+  .sc { text-align: center; }
+  .sc b { display: block; font-family: "Fraunces", Georgia, serif; font-size: 19px; font-weight: 600; color: #f3e9de; }
+  .sc span { font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: #8a7580; }
+
+  ul.plain { list-style: none; margin: 0; padding: 0; }
+  ul.plain li { padding: 7px 0 7px 24px; position: relative; font-size: 13.5px; color: #cdb9c0; border-bottom: 1px solid #3a2c3f; }
+  ul.plain li:last-child { border-bottom: 0; }
+  ul.plain li::before { content: "\2022"; position: absolute; left: 4px; color: #e8a13a; }
+  ul.plain li b { color: #f3e9de; font-weight: 600; }
+  .tip { color: #8a7580; font-size: 12px; margin-top: 12px; line-height: 1.6; }
+
+  details.fold { border: 1px solid #4a3a4e; border-radius: 14px; background: #241829; margin-bottom: 9px; }
+  details.fold > summary { list-style: none; cursor: pointer; padding: 11px 14px;
+    font-family: "Fraunces", Georgia, serif; font-size: 16px; font-weight: 600; color: #f3e9de;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  details.fold > summary::-webkit-details-marker { display: none; }
+  details.fold > summary::after { content: "+"; font-family: "IBM Plex Mono", monospace; font-size: 15px; color: #e8a13a; }
+  details.fold[open] > summary::after { content: "\2212"; }
+  details.fold .card { border: 0; background: transparent; margin: 0; padding: 0 14px 13px; }
+
+  footer.credit { margin-top: 30px; }
+  footer.credit .rule { height: 1px; background: #4a3a4e; margin: 0 0 16px; }
+  footer.credit p { margin: 0 0 8px; font-size: 13px; color: #cdb9c0; }
+  footer.credit p strong { color: #f3e9de; font-weight: 600; }
+  footer.credit .fine { font-size: 11.5px; color: #8a7580; line-height: 1.55; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">Bachata · musicality</p>
+  <h1>Hear the <em>one.</em></h1>
+  <p class="lede">Every other tool here counts. This one listens. A bachata groove instead of a click, so the ear learns where the beat lives before the feet commit to it.</p>
+  <p class="byline">Made by Arjun · © 2026</p>
+  <p class="backlink"><a href="./"><span class="arw">&larr;</span>All tools</a></p>
+
+  <div class="card">
+    <div class="row">
+      <span class="lbl">Mode</span>
+      <div class="opts" id="mode">
+        <button class="opt on" data-v="listen">Just listen</button>
+        <button class="opt" data-v="find">Find the 1</button>
+      </div>
+    </div>
+    <div class="row">
+      <span class="lbl">Tempo</span>
+      <div class="bpmrow">
+        <button class="bpmbtn" id="bdn">&minus;</button>
+        <span class="bpmval" id="bpmv">120<small>BPM</small></span>
+        <button class="bpmbtn" id="bup">+</button>
+        <input type="range" id="bpmr" min="70" max="150" step="1" value="120" />
+      </div>
+      <p class="tip" id="bpmnote" style="margin-top:7px"></p>
+    </div>
+    <div class="row">
+      <span class="lbl">Help</span>
+      <div class="opts">
+        <button class="opt on" id="guide">Show the counts</button>
+        <button class="opt" id="cold">Start mid-phrase</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="phase" id="phase">ready</div>
+
+    <div class="phrase" id="phrase"></div>
+    <p class="phrasenote">one musical phrase = four eight-counts</p>
+
+    <div class="beatrow">
+      <div class="bigcount" id="big">&ndash;</div>
+      <div class="dots" id="dots"></div>
+    </div>
+
+    <button class="go" id="play">Play the groove</button>
+    <button class="tap" id="tapbtn" disabled>Tap on the 1</button>
+
+    <div class="verdict" id="verdict"></div>
+    <div class="score" id="score" style="display:none">
+      <div class="sc"><b id="scHit">0</b><span>on it</span></div>
+      <div class="sc"><b id="scTry">0</b><span>taps</span></div>
+      <div class="sc"><b id="scAvg">&ndash;</b><span>avg off</span></div>
+    </div>
+  </div>
+
+  <details class="fold">
+    <summary>What you are hearing</summary>
+    <div class="card">
+      <ul class="plain">
+        <li><b>The güira</b> is the metal scraper running underneath everything. It is the steadiest thing in the mix, which is why dancers use it to hold the tempo rather than the melody.</li>
+        <li><b>The bongo</b> marks the accents. The open hit that lands on 4 and 8 is the same place the tap and hip movement go, so the music is telling the body where the accent belongs.</li>
+        <li><b>The bass</b> lands on the downbeats and is the loudest clue to where the 1 sits.</li>
+        <li><b>The 1 is marked strongest</b> here on purpose. In a real song it is subtler, so treat this as training wheels and then go and test yourself on actual music.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="fold">
+    <summary>Why phrases matter more than counts</summary>
+    <div class="card">
+      <ul class="plain">
+        <li><b>Music comes in phrases</b>, usually four eight-counts long. The bar above shows where you are in one, with the first block gold.</li>
+        <li><b>Start moves at the start of a phrase</b> and they feel intentional. Start them halfway through and the same move feels like it arrived by accident.</li>
+        <li><b>Resolve at the end of a phrase.</b> Land back in open position as the phrase closes and a partner feels the dance breathe.</li>
+        <li><b>Leave the last eight alone sometimes.</b> A held pause on a phrase ending reads as far more musical than another turn.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="fold">
+    <summary>How to practise this</summary>
+    <div class="card">
+      <ul class="plain">
+        <li><b>Listen first, do nothing.</b> Two or three phrases with no movement, just locating the 1.</li>
+        <li><b>Then hide the counts.</b> Turn off "show the counts" and find the 1 by ear alone. This is the actual skill.</li>
+        <li><b>Then start mid-phrase.</b> With that on, the groove begins at a random point, so you cannot count from the top and have to hear it.</li>
+        <li><b>Then go to real music.</b> Put on any bachata track and tap the 1 with no help at all. That is the transfer test.</li>
+      </ul>
+    </div>
+  </details>
+
+  <p class="tip">Bachata sits around 120 to 130 BPM. Slower is easier to hear; faster is closer to a social floor.</p>
+
+  <footer class="credit">
+    <div class="rule"></div>
+    <p><strong>Made by Arjun.</strong> &copy; 2026 Arjun &middot; All rights reserved.</p>
+    <p class="fine">This compilation, structure, and interactive design are the original work of Arjun. The underlying bachata rhythms are common musical knowledge; this particular arrangement and these tools are mine.</p>
+  </footer>
+
+</div>
+
+<script>
+/* =========================================================
+   A bachata groove, synthesised.
+   Three voices, scheduled on sixteenths against the audio clock:
+     guira  - filtered noise, the steady scrape that holds tempo
+     bongo  - pitched membrane hits, accenting 1 and the 4 / 8
+     bass   - low tone on the downbeats
+   ========================================================= */
+const SUB = 4;                  /* sixteenths per beat */
+let bpm = 120, mode = 'listen', guided = true, coldStart = false;
+let actx = null, master = null, noiseBuf = null;
+let playing = false, step16 = 0, nextTime = 0, timer = null, raf = null;
+const queue = [], downbeats = [];
+let taps = 0, hits = 0, errSum = 0;
+
+function buildNoise(){
+  const len = Math.floor(actx.sampleRate * 0.2);
+  const b = actx.createBuffer(1, len, actx.sampleRate);
+  const d = b.getChannelData(0);
+  for(let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+  return b;
+}
+
+function guira(t, gain){
+  const src = actx.createBufferSource(); src.buffer = noiseBuf;
+  const bp = actx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 7200; bp.Q = 0.9;
+  const hp = actx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 3200;
+  const g = actx.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(gain, t + 0.002);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.042);
+  src.connect(bp); bp.connect(hp); hp.connect(g); g.connect(master);
+  src.start(t); src.stop(t + 0.07);
+}
+
+function bongo(t, freq, gain){
+  const o = actx.createOscillator(); o.type = 'sine';
+  o.frequency.setValueAtTime(freq * 1.9, t);
+  o.frequency.exponentialRampToValueAtTime(freq, t + 0.035);
+  const g = actx.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(gain, t + 0.004);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
+  o.connect(g); g.connect(master);
+  o.start(t); o.stop(t + 0.2);
+}
+
+function bass(t, freq, gain){
+  const o = actx.createOscillator(); o.type = 'triangle';
+  o.frequency.value = freq;
+  const g = actx.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(gain, t + 0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
+  o.connect(g); g.connect(master);
+  o.start(t); o.stop(t + 0.26);
+}
+
+/* the pattern, as data: what each sixteenth of an eight-count plays */
+const GUIRA_VEL = [0.13, 0.045, 0.075, 0.045];   /* by position inside a beat */
+function playStep(t, beat, sub){
+  guira(t, GUIRA_VEL[sub] * (beat === 0 && sub === 0 ? 1.5 : 1));
+  if(sub !== 0) return;
+  if(beat === 0){ bass(t, 82, 0.30); bongo(t, 115, 0.26); }        /* the 1, marked hardest */
+  else if(beat === 4){ bass(t, 82, 0.20); bongo(t, 115, 0.17); }   /* the 5, a softer downbeat */
+  else if(beat === 2 || beat === 6){ bass(t, 110, 0.13); }
+  if(beat === 3 || beat === 7) bongo(t, 250, 0.22);                /* the accent on 4 and 8 */
+}
+
+function schedule(){
+  if(!playing || !actx) return;
+  const spb = 60 / bpm;
+  while(nextTime < actx.currentTime + 0.16){
+    const beat = Math.floor(step16 / SUB) % 8;
+    const sub = step16 % SUB;
+    const eight = Math.floor(step16 / (SUB * 8));
+    playStep(nextTime, beat, sub);
+    if(beat === 0 && sub === 0){
+      downbeats.push(nextTime);
+      while(downbeats.length > 24) downbeats.shift();
+    }
+    if(sub === 0) queue.push({ t: nextTime, beat: beat, phrase: eight % 4 });
+    nextTime += spb / SUB;
+    step16++;
+  }
+  timer = setTimeout(schedule, 25);
+}
+
+function draw(){
+  if(!playing) return;
+  const now = actx ? actx.currentTime : 0;
+  let cur = null;
+  while(queue.length && queue[0].t <= now) cur = queue.shift();
+  if(cur) paint(cur.beat, cur.phrase);
+  raf = requestAnimationFrame(draw);
+}
+
+function paint(beat, phrase){
+  const big = document.getElementById('big');
+  big.textContent = guided ? (beat + 1) : '\u00b7';
+  big.className = 'bigcount' + (guided && beat === 0 ? ' one' : '');
+  let d = '';
+  for(let i = 0; i < 8; i++){
+    d += '<div class="dot' + (i === 0 ? ' one' : '') + (guided && i === beat ? ' on' : '') + '">' +
+         (guided ? (i + 1) : '') + '</div>';
+  }
+  document.getElementById('dots').innerHTML = d;
+  let ph = '';
+  for(let i = 0; i < 4; i++){
+    ph += '<div class="pbar' + (i === 0 ? ' first' : '') + (i === phrase ? ' on' : '') + '"></div>';
+  }
+  document.getElementById('phrase').innerHTML = ph;
+}
+
+function blankStage(){
+  document.getElementById('big').textContent = '\u2013';
+  document.getElementById('big').className = 'bigcount';
+  let d = '';
+  for(let i = 0; i < 8; i++) d += '<div class="dot' + (i === 0 ? ' one' : '') + '">' + (guided ? (i + 1) : '') + '</div>';
+  document.getElementById('dots').innerHTML = d;
+  let ph = '';
+  for(let i = 0; i < 4; i++) ph += '<div class="pbar' + (i === 0 ? ' first' : '') + '"></div>';
+  document.getElementById('phrase').innerHTML = ph;
+}
+
+/* ---------- transport ---------- */
+function start(){
+  try {
+    if(!actx){
+      actx = new (window.AudioContext || window.webkitAudioContext)();
+      master = actx.createGain(); master.gain.value = 0.9; master.connect(actx.destination);
+      noiseBuf = buildNoise();
+    }
+    if(actx.state === 'suspended') actx.resume();
+  } catch(e){ actx = null; }
+  playing = true;
+  queue.length = 0; downbeats.length = 0;
+  /* cold start drops you at a random point in the phrase so counting from
+     the top is not an option */
+  step16 = coldStart ? Math.floor(Math.random() * 4) * SUB * 8 + Math.floor(Math.random() * 8) * SUB : 0;
+  nextTime = actx ? actx.currentTime + 0.1 : 0;
+  const p = document.getElementById('play');
+  p.textContent = 'Stop'; p.classList.add('stop');
+  document.getElementById('phase').textContent = mode === 'find' ? 'listening for your taps' : 'playing';
+  document.getElementById('tapbtn').disabled = (mode !== 'find');
+  schedule(); raf = requestAnimationFrame(draw);
+}
+
+function stop(){
+  playing = false;
+  if(timer) clearTimeout(timer);
+  if(raf) cancelAnimationFrame(raf);
+  timer = null; raf = null;
+  queue.length = 0; downbeats.length = 0;
+  const p = document.getElementById('play');
+  p.textContent = 'Play the groove'; p.classList.remove('stop');
+  document.getElementById('phase').textContent = 'ready';
+  document.getElementById('tapbtn').disabled = true;
+  blankStage();
+}
+
+/* ---------- find the 1 ---------- */
+function nearestDownbeat(t){
+  let best = null, bestAbs = Infinity;
+  for(const d of downbeats){
+    const diff = t - d;
+    if(Math.abs(diff) < bestAbs){ bestAbs = Math.abs(diff); best = diff; }
+  }
+  return best;   /* seconds: negative = early, positive = late */
+}
+
+function judge(diff){
+  const ms = Math.round(diff * 1000);
+  const a = Math.abs(ms);
+  if(a <= 110) return { cls:'good', word:'On it', ms:ms };
+  if(a <= 260) return { cls:'close', word:'Close', ms:ms };
+  return { cls:'off', word:'Off the 1', ms:ms };
+}
+
+function onTap(){
+  if(!playing || mode !== 'find' || !actx) return;
+  const diff = nearestDownbeat(actx.currentTime);
+  if(diff === null) return;
+  const v = judge(diff);
+  taps++; errSum += Math.abs(v.ms);
+  if(v.cls === 'good') hits++;
+  const dir = v.ms === 0 ? 'exactly on the beat' : (v.ms < 0 ? Math.abs(v.ms) + 'ms early' : v.ms + 'ms late');
+  document.getElementById('verdict').innerHTML =
+    '<div class="vbig ' + v.cls + '">' + v.word + '</div><div class="vsub">' + dir + '</div>';
+  document.getElementById('scHit').textContent = hits;
+  document.getElementById('scTry').textContent = taps;
+  document.getElementById('scAvg').textContent = Math.round(errSum / taps) + 'ms';
+}
+
+function resetScore(){
+  taps = 0; hits = 0; errSum = 0;
+  document.getElementById('scHit').textContent = '0';
+  document.getElementById('scTry').textContent = '0';
+  document.getElementById('scAvg').textContent = '\u2013';
+  document.getElementById('verdict').innerHTML = '';
+}
+
+/* ---------- controls ---------- */
+function setBpm(v){
+  bpm = Math.max(70, Math.min(150, v));
+  const el = document.getElementById('bpmv');
+  if(el) el.innerHTML = bpm + '<small>BPM</small>';
+  const r = document.getElementById('bpmr');
+  if(r && parseInt(r.value, 10) !== bpm) r.value = bpm;
+  const n = document.getElementById('bpmnote');
+  if(n) n.textContent = bpm < 100 ? 'slower than a real song, easier to hear'
+                      : bpm < 118 ? 'a slow bachata'
+                      : bpm < 132 ? 'typical song tempo' : 'fast, a busy social floor';
+}
+
+function setMode(v){
+  mode = v;
+  document.getElementById('score').style.display = (v === 'find') ? 'flex' : 'none';
+  document.getElementById('tapbtn').disabled = !(v === 'find' && playing);
+  resetScore();
+  if(playing) document.getElementById('phase').textContent = v === 'find' ? 'listening for your taps' : 'playing';
+}
+
+function init(){
+  setBpm(120); blankStage(); setMode('listen');
+
+  document.getElementById('mode').addEventListener('click', ev => {
+    const b = ev.target.closest('.opt'); if(!b) return;
+    document.querySelectorAll('#mode .opt').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    setMode(b.getAttribute('data-v'));
+  });
+  document.getElementById('play').addEventListener('click', () => { playing ? stop() : start(); });
+  document.getElementById('tapbtn').addEventListener('click', onTap);
+  document.getElementById('bup').addEventListener('click', () => setBpm(bpm + 2));
+  document.getElementById('bdn').addEventListener('click', () => setBpm(bpm - 2));
+  document.getElementById('bpmr').addEventListener('input', e => setBpm(parseInt(e.target.value, 10)));
+
+  const g = document.getElementById('guide');
+  g.addEventListener('click', () => {
+    guided = !guided;
+    g.classList.toggle('on', guided);
+    g.textContent = guided ? 'Show the counts' : 'Counts hidden';
+    if(!playing) blankStage();
+  });
+  const c = document.getElementById('cold');
+  c.addEventListener('click', () => {
+    coldStart = !coldStart;
+    c.classList.toggle('on', coldStart);
+    c.textContent = coldStart ? 'Starting mid-phrase' : 'Start mid-phrase';
+  });
+
+  window.addEventListener('keydown', e => {
+    if(e.code === 'Space'){ e.preventDefault(); if(mode === 'find' && playing) onTap(); }
+  });
+}
+
+if (typeof document !== 'undefined' && document.getElementById('play')) {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+}
+</script>
+</body>
+</html>

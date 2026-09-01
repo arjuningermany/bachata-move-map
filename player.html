@@ -113,7 +113,7 @@
 
   <p class="eyebrow">Bachata · practice player</p>
   <h1>Dance it <em>in time.</em></h1>
-  <p class="lede">Generates a combo, counts it in, then calls each move on the beat. The 4 and the 8 are marked, which is where the hip pop lands. The sequence describes the couple, so it works for either role.</p>
+  <p class="lede">Generates a combo, counts it in, then calls each move on the beat. The 4 and the 8 are marked, which is where the hip pop lands. The sequence describes the couple, so it works for either role, and it runs over a bachata groove rather than a click.</p>
   <p class="byline">Made by Arjun · © 2026</p>
   <p class="backlink"><a href="./"><span class="arw">&larr;</span>All tools</a></p>
 
@@ -153,6 +153,7 @@
       <div class="opts">
         <button class="opt on" id="loop">Loop</button>
         <button class="opt on" id="snd">Sound</button>
+        <button class="opt on" id="grv">Bachata groove</button>
         <button class="opt" id="newc">New combo</button>
       </div>
     </div>
@@ -351,24 +352,84 @@ function planBeat(n, countIn, moveCount){
 function isHip(beatInBar){ return beatInBar === 3 || beatInBar === 7; }
 function isOne(beatInBar){ return beatInBar === 0; }
 
-/* ---------- audio ---------- */
-let actx = null, playing = false, globalBeat = 0, nextTime = 0, timerId = null, rafId = null;
+/* ---------- audio: a bachata groove, not a click ----------
+   Guira on every sixteenth holds the tempo, bongo accents the 4 and 8
+   where the tap lands, bass marks the downbeats. A plain click stays
+   available for practising somewhere quiet.                          */
+let actx = null, master = null, noiseBuf = null;
+let playing = false, globalBeat = 0, nextTime = 0, timerId = null, rafId = null;
 const queue = [];
 const LOOKAHEAD = 25, AHEAD = 0.12;
+let groove = true;
 
-function clickAt(time, kind){
-  if(!soundOn || !actx) return;
+function buildNoise(){
+  const len = Math.floor(actx.sampleRate * 0.2);
+  const b = actx.createBuffer(1, len, actx.sampleRate);
+  const d = b.getChannelData(0);
+  for(let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+  return b;
+}
+function guira(t, gain){
+  if(!actx || !noiseBuf) return;
+  const src = actx.createBufferSource(); src.buffer = noiseBuf;
+  const bp = actx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 7200; bp.Q = 0.9;
+  const hp = actx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 3200;
+  const g = actx.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(gain, t + 0.002);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.042);
+  src.connect(bp); bp.connect(hp); hp.connect(g); g.connect(master);
+  src.start(t); src.stop(t + 0.07);
+}
+function bongo(t, freq, gain){
+  if(!actx) return;
+  const o = actx.createOscillator(); o.type = 'sine';
+  o.frequency.setValueAtTime(freq * 1.9, t);
+  o.frequency.exponentialRampToValueAtTime(freq, t + 0.035);
+  const g = actx.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(gain, t + 0.004);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
+  o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.2);
+}
+function bassNote(t, freq, gain){
+  if(!actx) return;
+  const o = actx.createOscillator(); o.type = 'triangle';
+  o.frequency.value = freq;
+  const g = actx.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(gain, t + 0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
+  o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.26);
+}
+function beep(t, kind){
+  if(!actx) return;
   const o = actx.createOscillator(), g = actx.createGain();
   let f = 620, peak = 0.16, dur = 0.045;
   if(kind === 'one'){ f = 1250; peak = 0.34; dur = 0.07; }
   else if(kind === 'hip'){ f = 880; peak = 0.28; dur = 0.075; }
   else if(kind === 'countin'){ f = 500; peak = 0.2; dur = 0.05; }
   o.type = 'square'; o.frequency.value = f;
-  g.gain.setValueAtTime(0.0001, time);
-  g.gain.exponentialRampToValueAtTime(peak, time + 0.005);
-  g.gain.exponentialRampToValueAtTime(0.0001, time + dur);
-  o.connect(g); g.connect(actx.destination);
-  o.start(time); o.stop(time + dur + 0.02);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(peak, t + 0.005);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(master); o.start(t); o.stop(t + dur + 0.02);
+}
+
+const GUIRA_VEL = [0.13, 0.045, 0.075, 0.045];
+/* one beat of the groove, including its sixteenth subdivisions */
+function playBeat(t, beat, countIn){
+  if(!soundOn || !actx) return;
+  const spb = 60.0 / bpm;
+  if(!groove){ beep(t, countIn ? 'countin' : (isOne(beat) ? 'one' : (isHip(beat) ? 'hip' : 'tick'))); return; }
+  for(let sub = 0; sub < 4; sub++){
+    guira(t + sub * spb / 4, GUIRA_VEL[sub] * (isOne(beat) && sub === 0 ? 1.5 : 1) * (countIn ? 0.6 : 1));
+  }
+  if(countIn){ bongo(t, 250, 0.16); return; }
+  if(isOne(beat)){ bassNote(t, 82, 0.30); bongo(t, 115, 0.26); }
+  else if(beat === 4){ bassNote(t, 82, 0.20); bongo(t, 115, 0.17); }
+  else if(beat === 2 || beat === 6){ bassNote(t, 110, 0.13); }
+  if(isHip(beat)) bongo(t, 250, 0.22);
 }
 
 function scheduler(){
@@ -379,11 +440,7 @@ function scheduler(){
       if(loopOn){ globalBeat = COUNT_IN; continue; }
       stop(true); return;
     }
-    let kind = 'tick';
-    if(p.phase === 'countin') kind = 'countin';
-    else if(isOne(p.beatInBar)) kind = 'one';
-    else if(isHip(p.beatInBar)) kind = 'hip';
-    clickAt(nextTime, kind);
+    playBeat(nextTime, p.beatInBar, p.phase === 'countin');
     queue.push({ t: nextTime, p: p });
     nextTime += 60.0 / bpm;
     globalBeat++;
@@ -477,7 +534,11 @@ function resetStage(){
 function start(){
   if(!combo) newCombo();
   try {
-    if(!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    if(!actx){
+      actx = new (window.AudioContext || window.webkitAudioContext)();
+      master = actx.createGain(); master.gain.value = 0.9; master.connect(actx.destination);
+      noiseBuf = buildNoise();
+    }
     if(actx.state === 'suspended') actx.resume();
   } catch(e){ actx = null; }
   playing = true;
@@ -561,6 +622,12 @@ function init(){
   lp.addEventListener('click', () => { loopOn = !loopOn; lp.classList.toggle('on', loopOn); });
   const sd = document.getElementById('snd');
   sd.addEventListener('click', () => { soundOn = !soundOn; sd.classList.toggle('on', soundOn); });
+  const gv = document.getElementById('grv');
+  gv.addEventListener('click', () => {
+    groove = !groove;
+    gv.classList.toggle('on', groove);
+    gv.textContent = groove ? 'Bachata groove' : 'Plain click';
+  });
   document.getElementById('newc').addEventListener('click', () => { if(playing) stop(false); newCombo(); });
 
   document.getElementById('play').addEventListener('click', () => { playing ? stop(false) : start(); });

@@ -141,8 +141,8 @@
 <div class="wrap">
 
   <p class="eyebrow">Bachata · footwork lab</p>
-  <h1>Six footworks, <em>count by count.</em></h1>
-  <p class="lede">From the plain basic to Dominican box steps, syncopated cha-cha triples and travelling grapevines. Watch the feet, or tap through one count at a time, leader or follower.</p>
+  <h1>Nine footworks, <em>count by count.</em></h1>
+  <p class="lede">From the plain basic through Dominican box steps and syncopated triples to travelling grapevines and pivot turns. Watch the feet, or tap through one count at a time, leader or follower.</p>
   <p class="byline">Made by Arjun · © 2026</p>
   <p class="backlink"><a href="./"><span class="arw">&larr;</span>All tools</a></p>
 
@@ -157,12 +157,18 @@
     <svg id="feet" viewBox="0 46 400 168" role="img" aria-label="Top-down animated view of bachata footwork">
       <line x1="24" y1="208" x2="376" y2="208" stroke="#3a2c3f" stroke-width="1"/>
       <g id="gL" class="foot">
-        <ellipse cx="0" cy="150" rx="14" ry="24" id="eL" fill="#e8a13a" stroke="#e8a13a" stroke-width="2"/>
-        <text x="0" y="155" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="600" id="tL" fill="#1e1520">L</text>
+        <g id="rL"><path d="M0,-24 C5,-24 8,-16 8.5,-6 C9,5 11.5,14 11.5,19 C11.5,22 6,24 0,24 C-6,24 -11.5,22 -11.5,19 C-11.5,14 -9,5 -8.5,-6 C-8,-16 -5,-24 0,-24 Z" id="eL" fill="#e8a13a" stroke="#e8a13a" stroke-width="2" stroke-linejoin="round"/>
+        </g><text x="0" y="5" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="600" id="tL" fill="#1e1520">L</text>
       </g>
       <g id="gR" class="foot">
-        <ellipse cx="0" cy="150" rx="14" ry="24" id="eR" fill="#5ed3c6" stroke="#5ed3c6" stroke-width="2"/>
-        <text x="0" y="155" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="600" id="tR" fill="#12201e">R</text>
+        <g id="rR"><path d="M0,-24 C5,-24 8,-16 8.5,-6 C9,5 11.5,14 11.5,19 C11.5,22 6,24 0,24 C-6,24 -11.5,22 -11.5,19 C-11.5,14 -9,5 -8.5,-6 C-8,-16 -5,-24 0,-24 Z" id="eR" fill="#5ed3c6" stroke="#5ed3c6" stroke-width="2" stroke-linejoin="round"/>
+        </g><text x="0" y="5" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="600" id="tR" fill="#12201e">R</text>
+      </g>
+      <g id="facing" opacity="0">
+        <g id="facingRot" transform="translate(348,86)">
+          <path d="M0,-11 L8,6 L0,1 L-8,6 Z" fill="#8a7580"/>
+        </g>
+        <text x="348" y="112" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#6b5570">facing</text>
       </g>
       <g id="pop" opacity="0">
         <text x="200" y="62" text-anchor="middle" font-family="Fraunces,Georgia,serif" font-size="16" font-weight="600" fill="#e8a13a">hip pop</text>
@@ -222,6 +228,9 @@
       <li><b>Box and diagonal patterns are the Dominican root.</b> Same count, but the travel is a square instead of a line.</li>
       <li><b>The triple is a rhythm swap, not a new step.</b> Once it is solid, it drops into any of the others wherever a tap falls.</li>
       <li><b>Grapevine travels.</b> Use it when there is floor space to cover.</li>
+      <li><b>The diagonal box</b> is the box turned 45 degrees. Same count, but it opens the floor up in two directions at once.</li>
+      <li><b>Double tap and the triple</b> are both rhythm swaps, not new steps. Learn them once and drop them into any pattern wherever a tap falls.</li>
+      <li><b>The pivot turn</b> is the basic with half a turn between the first three steps. The facing arrow shows which way the body points.</li>
     </ul>
   </div>
   </details>
@@ -248,6 +257,7 @@
   </details>
 
   <div class="card">
+    <p class="src"><b style="color:#cdb9c0">What is not here.</b> Some footwork does not survive a top-down diagram. Ochos, boleos and free Dominican footwork depend on body rotation, leg lifts and slides that a two-foot overhead view cannot show honestly. For those, search "bachata ochos tutorial", "bachata boleo" or "Dominican bachata free footwork" and watch a real dancer.</p>
     <p class="src"><b style="color:#cdb9c0">A note on names and variants.</b> Bachata footwork is a living folk tradition, schools disagree on names and on which foot starts. This follows the convention that the leader's basic travels left first (starting left foot) and the follower mirrors it. If a school teaches the opposite, just use the Follower toggle. Pattern descriptions cross-checked against iASO Records' Dominican bachata guide and the Library of Dance bachata syllabus.</p>
   </div>
 
@@ -347,6 +357,50 @@ const VARIATIONS = {
       {label:'&',dur:1,act:'R',dir:'quick',L:[-13,0], R:[ 13,0], w:'R',tap:false}
     ]
   },
+  diagbox: {
+    name:'Diagonal box', note:'the box, travelling on the diagonals', family:'Dominican',
+    hint:'forward on a diagonal for 1-4, back on the other for 5-8', rhythm:'', ox:225, cross:false,
+    steps:[
+      {label:'1',dur:2,act:'L',dir:'diagFwd', L:[-45,-26],R:[ 13,  0],w:'L',tap:false},
+      {label:'2',dur:2,act:'R',dir:'in',      L:[-45,-26],R:[-19,-26],w:'R',tap:false},
+      {label:'3',dur:2,act:'L',dir:'forward', L:[-45,-52],R:[-19,-26],w:'L',tap:false},
+      {label:'4',dur:2,act:'R',dir:'tap',     L:[-45,-52],R:[-19,-52],w:'L',tap:true },
+      {label:'5',dur:2,act:'R',dir:'diagBack',L:[-45,-52],R:[ 13,-26],w:'R',tap:false},
+      {label:'6',dur:2,act:'L',dir:'in',      L:[-13,-26],R:[ 13,-26],w:'L',tap:false},
+      {label:'7',dur:2,act:'R',dir:'back',    L:[-13,-26],R:[ 13,  0],w:'R',tap:false},
+      {label:'8',dur:2,act:'L',dir:'tap',     L:[-13,  0],R:[ 13,  0],w:'R',tap:true }
+    ]
+  },
+  doubletap: {
+    name:'Double tap', note:'the tap splits into two quick touches', family:'Advanced',
+    hint:'a styling variation you can drop into any pattern', rhythm:'1 &middot; 2 &middot; 3 &middot; 4-and &middot; 5 &middot; 6 &middot; 7 &middot; 8-and', ox:250, cross:false,
+    steps:[
+      {label:'1',dur:2,act:'L',dir:'left',    L:[-63,0], R:[ 13,0], w:'L',tap:false},
+      {label:'2',dur:2,act:'R',dir:'in',      L:[-63,0], R:[-37,0], w:'R',tap:false},
+      {label:'3',dur:2,act:'L',dir:'left',    L:[-113,0],R:[-37,0], w:'L',tap:false},
+      {label:'4',dur:1,act:'R',dir:'tap',     L:[-113,0],R:[-95,0], w:'L',tap:true },
+      {label:'&',dur:1,act:'R',dir:'tapAgain',L:[-113,0],R:[-87,0], w:'L',tap:true },
+      {label:'5',dur:2,act:'R',dir:'right',   L:[-113,0],R:[-37,0], w:'R',tap:false},
+      {label:'6',dur:2,act:'L',dir:'in',      L:[-63,0], R:[-37,0], w:'L',tap:false},
+      {label:'7',dur:2,act:'R',dir:'right',   L:[-63,0], R:[ 13,0], w:'R',tap:false},
+      {label:'8',dur:1,act:'L',dir:'tap',     L:[-21,0], R:[ 13,0], w:'R',tap:true },
+      {label:'&',dur:1,act:'L',dir:'tapAgain',L:[-13,0], R:[ 13,0], w:'R',tap:true }
+    ]
+  },
+  pivot: {
+    name:'Pivot turn', note:'the basic, turning as it goes', family:'Advanced',
+    hint:'half a turn between each of the first three steps', rhythm:'', ox:225, cross:false,
+    steps:[
+      {label:'1',dur:2,act:'L',dir:'pivotStep',L:[-30,0],R:[ 13,0],w:'L',tap:false,rot:0},
+      {label:'2',dur:2,act:'R',dir:'pivotStep',L:[-30,0],R:[ -4,0],w:'R',tap:false,rot:180},
+      {label:'3',dur:2,act:'L',dir:'pivotStep',L:[-47,0],R:[ -4,0],w:'L',tap:false,rot:360},
+      {label:'4',dur:2,act:'R',dir:'tap',      L:[-47,0],R:[-21,0],w:'L',tap:true, rot:360},
+      {label:'5',dur:2,act:'R',dir:'pivotStep',L:[-47,0],R:[ -4,0],w:'R',tap:false,rot:540},
+      {label:'6',dur:2,act:'L',dir:'pivotStep',L:[-30,0],R:[ -4,0],w:'L',tap:false,rot:540},
+      {label:'7',dur:2,act:'R',dir:'pivotStep',L:[-30,0],R:[ 13,0],w:'R',tap:false,rot:720},
+      {label:'8',dur:2,act:'L',dir:'tap',      L:[-13,0],R:[ 13,0],w:'R',tap:true, rot:720}
+    ]
+  },
   grape: {
     name:'Grapevine', note:'crossing steps that cover ground', family:'Travelling',
     hint:'side, cross, side, tap, crossing behind, then in front', rhythm:'', ox:253, cross:true,
@@ -363,22 +417,25 @@ const VARIATIONS = {
   }
 };
 
-const ORDER = ['side','place','fwd','box','triple','grape'];
-const FAMILIES = ['Foundation','Dominican','Travelling'];
+const ORDER = ['side','place','fwd','box','diagbox','triple','grape','doubletap','pivot'];
+const FAMILIES = ['Foundation','Dominican','Travelling','Advanced'];
 const FOOTNAME = { L:'Left', R:'Right' };
 const DIRTEXT = {
   right:'steps right', left:'steps left', forward:'steps forward', back:'steps back',
   in:'closes in', place:'steps in place', tap:'taps beside', quick:'quick step',
-  crossBehind:'crosses behind', crossFront:'crosses in front'
+  crossBehind:'crosses behind', crossFront:'crosses in front',
+  diagFwd:'steps diagonally forward', diagBack:'steps diagonally back',
+  tapAgain:'taps again', pivotStep:'steps and pivots'
 };
 const MIRDIR = {
   right:'left', left:'right', forward:'back', back:'forward', in:'in',
-  place:'place', tap:'tap', quick:'quick', crossBehind:'crossBehind', crossFront:'crossFront'
+  place:'place', tap:'tap', quick:'quick', crossBehind:'crossBehind', crossFront:'crossFront',
+  diagFwd:'diagFwd', diagBack:'diagBack', tapAgain:'tapAgain', pivotStep:'pivotStep'
 };
 
 function mirrorStep(s){
   return {
-    label:s.label, dur:s.dur,
+    label:s.label, dur:s.dur, rot:(s.rot ? -s.rot : 0),
     act: s.act === 'L' ? 'R' : 'L',
     dir: MIRDIR[s.dir],
     L: [-s.R[0], -s.R[1]],
@@ -456,9 +513,18 @@ function paint(i){
   const ox = VARIATIONS[variation].ox;
 
   const place = (id, pos) => {
-    document.getElementById(id).style.transform = 'translate(' + (ox + pos[0]) + 'px,' + pos[1] + 'px)';
+    document.getElementById(id).style.transform = 'translate(' + (ox + pos[0]) + 'px,' + (150 + pos[1]) + 'px)';
   };
   place('gL', s.L); place('gR', s.R);
+
+  /* body facing: both feet turn together, and the arrow shows which way */
+  const turn = s.rot || 0;
+  document.getElementById('rL').setAttribute('transform', 'rotate(' + turn + ')');
+  document.getElementById('rR').setAttribute('transform', 'rotate(' + turn + ')');
+  const turns = list.some(x => x.rot);
+  const fac = document.getElementById('facing');
+  fac.setAttribute('opacity', turns ? '1' : '0');
+  if(turns) document.getElementById('facingRot').setAttribute('transform', 'translate(348,86) rotate(' + turn + ')');
 
   /* Each foot keeps its own colour for the whole pattern, so you never lose
      track of which is which. Weight is shown by fill instead of hue: the
